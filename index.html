@@ -311,6 +311,17 @@ details.pp-past summary{cursor:pointer;font-size:13px;font-weight:700;color:var(
 .pw-kakao-to small{font-size:11px;color:#4A3F00;}
 .pw-kakao-btn{width:100%;margin-top:10px;border:none;border-radius:12px;background:#FEE500;color:#191600;font:inherit;font-size:16px;font-weight:800;padding:15px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.12);}
 .pw-kakao-steps{margin:10px 0 0;padding-left:18px;font-size:12px;line-height:1.7;color:var(--pp-soft);}
+.pw-photo-btn{display:block;width:100%;margin:0 0 10px;border:2px dashed var(--pp-coral);background:var(--pp-coral-s);color:var(--pp-coral);border-radius:12px;padding:12px;font:inherit;font-size:14.5px;font-weight:800;cursor:pointer;}
+.pw-bar button.ph{background:#fff;color:var(--pp-ink);border:1px solid var(--pp-line);}
+.pw-photo-acts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.pw-cam{display:flex;align-items:center;justify-content:center;border-radius:12px;background:var(--pp-wine);color:#fff;font-weight:800;font-size:14.5px;padding:16px 8px;cursor:pointer;}
+.pw-cam.alt{background:#fff;color:var(--pp-ink);border:1px solid var(--pp-line);}
+.pw-cam input{display:none;}
+.pw-thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;}
+.pw-thumb{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;background:#ddd;}
+.pw-thumb img{width:100%;height:100%;object-fit:cover;}
+.pw-thumb button{position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;border:none;background:rgba(0,0,0,.6);color:#fff;font-size:11px;cursor:pointer;}
+.pw-kakao-btn:disabled{opacity:.45;cursor:default;}
 
 /* ================= 접속 메인화면 (모먼트웍스 로고) ================= */
 .mw-entry{position:fixed;inset:0;z-index:500;overflow-y:auto;background:#F7F5F0;background-image:radial-gradient(ellipse at 50% 38%, #FFFFFF 0%, #F7F5F0 55%, #EFEBE3 100%);color:#1A1618;
@@ -391,29 +402,29 @@ function pvDefaultSettings(){
 /* 당일 업무 순서 (예식 시작 기준 분 · at=null이면 시간 표시 없음) */
 function pvDefaultWorkflow(){
   return [
-    {id:'w01', title:'출발 보고 (대표)', when:'예식장 출발할 때', at:null, detail:'예식장으로 출발하면서 대표에게 출발 보고를 보내요.', msgs:['m_depart']},
+    {id:'w01', title:'출발 보고 (대표)', when:'예식장 출발할 때', at:null, detail:'예식장으로 출발하면서 출발 보고를 카카오톡 톡방에 공유해요.', msgs:['m_depart']},
     {id:'w02', title:'예식장 도착', at:-90, detail:'예식 시작 1시간 30분 전까지 도착해요. 도착하면 현장 도착 체크인을 눌러주세요.', checkin:true},
-    {id:'w03', title:'도착 보고 (대표)', at:-90, detail:'예식장에 도착하면 대표에게 도착 보고를 보내요.', msgs:['m_arrive']},
+    {id:'w03', title:'도착 보고 (대표)', at:-90, detail:'예식장에 도착하면 도착 보고를 카카오톡 톡방에 공유해요.', msgs:['m_arrive']},
     {id:'w04', title:'예식장 전경 · 내부 사진 촬영', at:-85, photo:true, detail:'예식장 외부 전경과 로비·홀 내부를 촬영해요.'},
     {id:'w05', title:'빈 축의대 사진 촬영', at:-80, photo:true, detail:'셋팅 전 빈 축의대를 촬영해요.'},
-    {id:'w06', title:'식권전달자 연락 · 식권 수령', at:-80, detail:'파트너 안내카드에 적힌 식권전달자 분께 연락해 식권을 수령하고, 대표에게 수령 보고를 보내요.', msgs:['m_ticket']},
+    {id:'w06', title:'식권전달자 연락 · 식권 수령', at:-80, detail:'파트너 안내카드에 적힌 식권전달자 분께 연락해 식권을 수령하고, 수령 보고를 카카오톡 톡방에 공유해요.', msgs:['m_ticket']},
     {id:'w07', title:'축의대 셋팅', at:-75, detail:'방명록, 노트북, 필기구, 고무줄, 축의봉투함, 클립 등 기본 셋팅을 해요.'},
     {id:'w08', title:'동영상 촬영 셋팅', at:-60, detail:'예식 1시간 전부터 동영상 촬영을 시작해요. 녹화 중인지 꼭 확인!'},
     {id:'w09', title:'식권 실수량 카운팅', at:-55, detail:'받은 식권 수량이 안내받은 수량과 맞는지 실수량을 세어 확인해요.'},
     {id:'w10', title:'화환 · 웨딩포토존 사진 촬영', at:-50, photo:true, detail:'화환과 웨딩포토존을 촬영해요.'},
     {id:'w11', title:'축의대 운영 시작', at:-45, detail:'하객 맞이를 시작해요. 밝은 인사와 함께 방명록·축의금 접수를 안내해요.'},
     {id:'w12', title:'A · B조 역할에 따라 운영', at:null, when:'운영 중', detail:'A조·B조 역할에 맞춰 운영해요. 역할은 대표 안내(전달사항)를 확인해주세요.'},
-    {id:'w13', title:'중간 특이사항 보고', at:null, when:'운영 중 수시로', detail:'특이사항이 생기면 대표에게 바로 보고해요. 아래 "특이사항 보고" 양식을 이용하세요.', msgs:['m_mid'], report:true},
+    {id:'w13', title:'중간 특이사항 보고', at:null, when:'운영 중 수시로', detail:'특이사항이 생기면 카카오톡 톡방에 바로 보고해요. 아래 "특이사항 보고" 양식을 이용하세요.', msgs:['m_mid'], report:true},
     {id:'w14', title:'축의대 마감', at:null, when:'하객 입장 마무리 후', detail:'하객 접수가 끝나면 축의대를 마감해요.'},
     {id:'w15', title:'축의금 봉인 · 식권 잔량 · 정리 사진', at:null, photo:true, detail:'축의금 봉인 상태, 남은 식권 수량, 정리된 축의대를 촬영해요.'},
     {id:'w16', title:'축의금 인계', at:null, detail:'지정된 분께 축의금을 인계하고 인계받은 분 성함을 기록해요.'},
     {id:'w17', title:'동영상 종료 및 확인', at:null, detail:'동영상 촬영을 종료하고 파일이 정상 저장됐는지 확인해요.'},
-    {id:'w18', title:'마감 보고 (대표)', at:null, detail:'대표에게 마감 보고 메시지를 보내요.', msgs:['m_close']},
+    {id:'w18', title:'마감 보고 (대표)', at:null, detail:'마감 보고를 카카오톡 톡방에 공유해요.', msgs:['m_close']},
     {id:'w19', title:'업무 종료', at:null, detail:'오늘도 수고 많으셨어요! 업무 종료를 체크하면 대표에게 공유돼요.'}
   ];
 }
 /* 메시지 양식 · to: client(계약자) / owner(대표) / both(둘 다) / ticket(식권전달자 · 번호 직접 입력) */
-/* 보고 양식 (모든 보고는 모먼트웍스 공식 카카오톡 채널로만 대표에게 전달) */
+/* 보고 양식 (휴대폰 공유하기로 카카오톡 개인 톡방에 공유) */
 function pvDefaultMessages(){
   return [
     {id:'m_depart', label:'출발 보고', to:'owner', kind:'step', body:'[출발 보고] {날짜} {예식장} {계약자}님 예식\n{파트너} 지금 출발합니다. {도착시간}까지 도착 예정입니다.'},
@@ -520,8 +531,7 @@ function buildPartnerView(records, db, code, todayStr){
     workflow: (db.settings && Array.isArray(db.settings.workflow) && db.settings.workflow.length) ? db.settings.workflow : pvDefaultWorkflow(),
     messages: (db.settings && Array.isArray(db.settings.msgTemplates) && db.settings.msgTemplates.length) ? db.settings.msgTemplates : pvDefaultMessages(),
     owners: members.filter(function(m){ return m.active!==false && (m.kind==='owner' || m.title==='대표'); }).map(function(m){ return {name: m.name, phone: m.phone||''}; }),
-    reportPhone: (db.settings && db.settings.reportPhone) || '',
-    kakaoUrl: (db.settings && db.settings.kakaoChannelUrl) || 'https://pf.kakao.com/_FbIfX/chat',
+    reportPhone: (db.settings && db.settings.reportPhone) || '010-5730-0614', // 대표 전화
     availability: (db.availability||{})[member.id] || {},
     settings: {minWage: settings.minWage, availabilityLockDays: settings.availabilityLockDays, workMinutes: settings.workMinutes, callOffset: settings.callOffset},
     generatedAt: new Date().toISOString()
@@ -723,10 +733,11 @@ const PartnerPortal = (function(){
     return String(body||'').replace(/\{([^}]+)\}/g, (m,k)=> map[k]!==undefined ? map[k] : m);
   }
   function ownerContacts(){
-    if(view.reportPhone) return [{label:'대표', phone:view.reportPhone}];
+    return [{label:'대표', phone: view.reportPhone || '010-5730-0614'}]; // 대표 전화 (기본 010-5730-0614)
     return (view.owners||[]).filter(o=>o.phone).map(o=>({label:'대표 '+o.name, phone:o.phone}));
   }
-  function kakaoUrl(){ return (view && view.kakaoUrl) || 'https://pf.kakao.com/_FbIfX/chat'; }
+  let photoFiles = []; // 촬영한 사진 (공유 전까지 이 화면에만 보관)
+  const canShareFiles = (f)=>{ try{ return !!(navigator.canShare && navigator.canShare({files:f})); }catch(e){ return false; } };
   async function copyText(t){ try{ await navigator.clipboard.writeText(t); return true; }catch(e){ const ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); let ok=false; try{ ok=document.execCommand('copy'); }catch(_){} ta.remove(); return ok; } }
   function todayEvents(){ const t=today(); return view.events.filter(ev=> ev.date===t); }
   function workEvent(){
@@ -756,7 +767,7 @@ const PartnerPortal = (function(){
         <div class="pw-cur-top"><span>STEP ${curIdx+1} / ${steps.length}</span>${stepTime(ev,cur)?`<b>목표 ${stepTime(ev,cur)}</b>`:(cur.when?`<b>${e(cur.when)}</b>`:'')}</div>
         <h3>${e(cur.title)}</h3>
         <p>${e(cur.detail||'')}</p>
-        ${cur.photo?'<div class="pw-tag">📷 사진을 촬영해 대표에게 공유해주세요</div>':''}
+        ${cur.photo?`<button class="pw-photo-btn" data-pp="photo" data-v="${e(cur.id)}">📷 사진 촬영 · 카톡 공유</button>`:''}
         <div class="pw-acts">
           ${(cur.msgs||[]).map(id=>{ const m=msgById(id); return m?`<button class="pp-btn gold" data-pp="compose" data-v="${e(m.id)}">💬 ${e(m.label)}</button>`:''; }).join('')}
           ${cur.report?'<button class="pp-btn" data-pp="reports">🚨 특이사항 보고</button>':''}
@@ -777,7 +788,7 @@ const PartnerPortal = (function(){
       <div class="pp-h">전체 순서 <small>눌러서 완료/취소</small></div>
       <div class="pw-list">${steps.map((st,i)=> stepRow(ev, st, i, i===curIdx, true)).join('')}</div>
       ${(ev.reports||[]).length?`<div class="pp-h">보낸 보고 <small>${ev.reports.length}건</small></div><div class="pp-box">${ev.reports.slice().reverse().map(r=>`<div class="pp-list-row"><span><b>${e(r.label)}</b><div style="font-size:11.5px;color:var(--pp-slate);white-space:pre-line;">${e(r.text)}</div></span><span style="font-size:11px;color:var(--pp-slate);white-space:nowrap;">${r.at?pd(new Date(r.at).getHours())+':'+pd(new Date(r.at).getMinutes()):''}</span></div>`).join('')}</div>`:''}
-      <div class="pw-bar"><button data-pp="reports">🚨 특이사항 보고</button>${ownerContacts()[0]?`<a href="tel:${e(ownerContacts()[0].phone)}">📞 대표 전화</a>`:''}</div>`;
+      <div class="pw-bar"><button data-pp="reports">🚨 특이사항 보고</button><button class="ph" data-pp="photo" data-v="">📷 사진 공유</button>${ownerContacts()[0]?`<a href="tel:${e(ownerContacts()[0].phone)}">📞 대표 전화</a>`:''}</div>`;
   }
   /* ---------- 메시지 작성 시트 ---------- */
   function sheetHTML(){
@@ -786,16 +797,28 @@ const PartnerPortal = (function(){
     if(sheet.mode==='reports'){
       const rs = msgs().filter(m=> m.kind==='report' || m.id==='m_mid');
       return `<div class="pw-sheet-bg" data-pp="sheetClose"></div><div class="pw-sheet"><div class="pw-sheet-h"><b>🚨 특이사항 보고</b><button data-pp="sheetClose">✕</button></div>
-        <p class="pw-sheet-sub">상황을 고르면 양식이 채워져요. 빈칸만 채워서 대표에게 바로 보내세요.</p>
-        <div class="pw-rgrid">${rs.map(m=>`<button data-pp="compose" data-v="${e(m.id)}"><b>${e(m.label)}</b><small>대표에게 보고</small></button>`).join('')}</div></div>`;
+        <p class="pw-sheet-sub">상황을 고르면 양식이 채워져요. 빈칸만 채워서 카카오톡 톡방에 바로 공유하세요.</p>
+        <div class="pw-rgrid">${rs.map(m=>`<button data-pp="compose" data-v="${e(m.id)}"><b>${e(m.label)}</b><small>카톡으로 공유</small></button>`).join('')}</div></div>`;
+    }
+    if(sheet.mode==='photo'){
+      const st = wf().find(x=> x.id===sheet.step);
+      const thumbs = photoFiles.map((f,i)=>`<div class="pw-thumb"><img src="${URL.createObjectURL(f)}" alt=""><button data-pp="photoDel" data-v="${i}">✕</button></div>`).join('');
+      return `<div class="pw-sheet-bg" data-pp="sheetClose"></div><div class="pw-sheet"><div class="pw-sheet-h"><b>📷 ${e(st ? st.title : '사진 공유')}</b><button data-pp="sheetClose">✕</button></div>
+        <div class="pw-photo-acts">
+          <label class="pw-cam">📷 촬영하기<input type="file" accept="image/*" capture="environment" data-ppfile="cam"></label>
+          <label class="pw-cam alt">🖼 앨범에서 선택<input type="file" accept="image/*" multiple data-ppfile="album"></label>
+        </div>
+        ${photoFiles.length? `<div class="pw-thumbs">${thumbs}</div>` : '<div class="pp-empty" style="padding:14px;">촬영한 사진이 여기에 모여요 · 여러 장 찍은 뒤 한 번에 공유할 수 있어요</div>'}
+        <textarea id="pwMsg" rows="2">${e(sheet.text)}</textarea>
+        <button class="pw-kakao-btn" data-pp="sharePhotos" ${photoFiles.length?'':'disabled'}>카카오톡으로 사진 ${photoFiles.length? photoFiles.length+'장 ':''}공유하기</button>
+        <p class="pw-sheet-sub">공유하기 창에서 <b>카카오톡 → 보고할 개인 톡방</b>을 선택하세요. 공유가 끝나면 사진은 이 화면에서 지워져요 (휴대폰 앨범에는 촬영 앱 설정에 따라 저장돼요).</p></div>`;
     }
     const m = msgById(sheet.mid); if(!m || !ev) return '';
     return `<div class="pw-sheet-bg" data-pp="sheetClose"></div><div class="pw-sheet"><div class="pw-sheet-h"><b>💬 ${e(m.label)}</b><button data-pp="sheetClose">✕</button></div>
-      <div class="pw-kakao-to"><span class="pw-kk">TALK</span><div><b>모먼트웍스 공식 카카오톡 채널</b><small>모든 보고는 카톡 채널로만 대표에게 전달돼요</small></div></div>
       <textarea id="pwMsg" rows="7">${e(sheet.text)}</textarea>
-      <button class="pw-kakao-btn" data-pp="sendKakao">카카오톡 채널로 보고하기</button>
-      <ol class="pw-kakao-steps"><li>버튼을 누르면 보고 내용이 <b>자동 복사</b>되고 채널 채팅창이 열려요</li><li>채팅 입력창을 길게 눌러 <b>붙여넣기</b> 후 전송해주세요</li><li>사진이 있으면 같은 채팅방에 함께 보내주세요</li></ol>
-      <button class="pp-btn" data-pp="copyMsg" style="width:100%;margin-top:8px;">내용만 복사하기</button></div>`;
+      <button class="pw-kakao-btn" data-pp="shareText">카카오톡으로 공유하기</button>
+      <ol class="pw-kakao-steps"><li>버튼을 누르면 휴대폰 <b>공유하기</b> 창이 열려요</li><li><b>카카오톡</b>을 고르고 보고할 <b>개인 톡방</b>을 선택해 전송하세요</li><li>공유 창이 안 열리면 '내용 복사' 후 톡방에 붙여넣어 주세요</li></ol>
+      <button class="pp-btn" data-pp="copyMsg" style="width:100%;margin-top:8px;">내용 복사</button></div>`;
   }
   function openCompose(mid){
     const {ev} = workEvent(); const rid = (sheet && sheet.rid) || (ev && ev.recordId); const x = eventById(rid);
@@ -1031,17 +1054,42 @@ const PartnerPortal = (function(){
     if(act==='reports'){ const {ev}=workEvent(); sheet = {mode:'reports', rid: ev? ev.recordId : null}; render(); return; }
     if(act==='compose'){ openCompose(v); return; }
     if(act==='sheetClose'){ sheet=null; render(); return; }
-    if(act==='copyMsg' || act==='sendKakao'){
+    if(act==='photo'){
+      const {ev} = workEvent(); if(!ev){ toast('예식 정보를 찾지 못했어요'); return; }
+      const st = wf().find(x=> x.id===v);
+      sheet = {mode:'photo', rid: ev.recordId, step: v||'', text: `[사진] ${fdate(ev.date)} ${ev.venueName||''} ${ev.clientName||''}님 예식${st?' · '+st.title:''}`};
+      render(); return;
+    }
+    if(act==='photoDel'){ photoFiles.splice(Number(v),1); render(); return; }
+    if(act==='sharePhotos'){
+      const ta = document.getElementById('pwMsg'); const text = ta ? ta.value : (sheet && sheet.text) || '';
+      if(!photoFiles.length){ toast('먼저 사진을 촬영해주세요'); return; }
+      const x = eventById(sheet && sheet.rid);
+      if(navigator.share && canShareFiles(photoFiles)){
+        try{
+          await navigator.share({files: photoFiles, text});
+          if(x) logReport(x.recordId, {label:'사진 공유', to:'share'}, `${text} (${photoFiles.length}장)`);
+          photoFiles = []; sheet = null; render(); toast('사진을 공유했어요');
+        }catch(err){ if(err && err.name!=='AbortError') toast('공유하지 못했어요. 앨범에서 카카오톡으로 직접 보내주세요'); }
+      } else {
+        toast('이 브라우저는 사진 공유를 지원하지 않아요. 휴대폰 앨범에서 카카오톡으로 보내주세요');
+      }
+      return;
+    }
+    if(act==='copyMsg' || act==='shareText'){
       const ta = document.getElementById('pwMsg'); const text = ta ? ta.value : (sheet && sheet.text) || '';
       if(sheet) sheet.text = text;
       const m = msgById(sheet && sheet.mid); const x = eventById(sheet && sheet.rid);
-      if(act==='copyMsg'){ if(await copyText(text)) toast('복사했어요. 원하는 곳에 붙여넣어 보내주세요'); return; }
-      if(act==='sendKakao'){ // 모먼트웍스 공식 카카오톡 채널 채팅으로 보고 (내용은 복사 후 붙여넣기)
-        const w = window.open(kakaoUrl(), '_blank');
-        const copied = await copyText(text);
-        toast(copied ? '보고 내용을 복사했어요. 카톡 채팅창에 붙여넣어 보내주세요' : '카톡 채팅창이 열려요. 내용을 입력해 보내주세요');
-        if(m && x) logReport(x.recordId, m, text);
-        if(!w) setTimeout(()=>{ location.href = kakaoUrl(); }, 600);
+      if(act==='copyMsg'){ if(await copyText(text)) toast('복사했어요. 카카오톡 톡방에 붙여넣어 보내주세요'); return; }
+      if(act==='shareText'){ // 휴대폰 공유하기 → 카카오톡 개인 톡방
+        if(navigator.share){
+          try{ await navigator.share({text}); if(m && x) logReport(x.recordId, m, text); sheet = null; render(); toast('공유했어요'); }
+          catch(err){ if(err && err.name!=='AbortError'){ await copyText(text); toast('공유 창을 열지 못해 내용을 복사했어요. 톡방에 붙여넣어 주세요'); } }
+        } else {
+          const ok = await copyText(text);
+          if(m && x) logReport(x.recordId, m, text);
+          toast(ok ? '내용을 복사했어요. 카카오톡 톡방에 붙여넣어 보내주세요' : '카카오톡 톡방에 직접 입력해 보내주세요');
+        }
         return;
       }
     }
@@ -1078,6 +1126,8 @@ const PartnerPortal = (function(){
     if(ev.target.id==='pwTicketPhone') sheet.ticket = ev.target.value;
   }
   function onChange(ev){
+    const fi = ev.target.closest && ev.target.closest('[data-ppfile]');
+    if(fi){ const ta=document.getElementById('pwMsg'); if(ta && sheet) sheet.text = ta.value; photoFiles = photoFiles.concat([...(fi.files||[])]).slice(0, 20); render(); return; }
     const cb = ev.target.closest('[data-ppcheck]');
     if(cb){ runOp({type:'check', recordId:selRecord, itemId:cb.dataset.ppcheck, value:cb.checked}); return; }
     const sel = ev.target.closest('[data-ppsel]');
@@ -1094,7 +1144,7 @@ const PartnerPortal = (function(){
     root.addEventListener('input', onInput);
     render();
   }
-  function update(v){ view=v; qGet().forEach(applyLocal); if(!(sheet && document.activeElement && document.activeElement.id==='pwMsg')) render(); }
+  function update(v){ if(sheet && sheet.mode==='photo'){ view=v; return; } view=v; qGet().forEach(applyLocal); if(!(sheet && document.activeElement && document.activeElement.id==='pwMsg')) render(); }
   function unmount(){ if(root){ root.removeEventListener('click', onClick); root.removeEventListener('change', onChange); root.removeEventListener('input', onInput); root.innerHTML=''; } root=null; view=null; }
   return {mount, update, unmount, toast, buildIcs};
 })();
