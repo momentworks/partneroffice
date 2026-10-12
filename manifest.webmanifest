@@ -1,0 +1,21 @@
+{
+ "name": "모먼트웍스 파트너스오피스",
+ "short_name": "MW 파트너스",
+ "display": "standalone",
+ "background_color": "#F7F5F0",
+ "theme_color": "#5C1F29",
+ "lang": "ko",
+ "icons": [
+  {
+   "src": "mw-icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "mw-icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any maskable"
+  }
+ ]
+}

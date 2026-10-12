@@ -622,6 +622,81 @@ function applyPartnerUpdate(db, records, code, op, todayStr){
   return {ok:false, error:'알 수 없는 요청입니다'};
 }
 
+/* =========================================================
+   고객 전용 페이지 (계약자별 접속코드)
+   - 고객 설정은 파트너 데이터의 referralPay['client:'+계약id]에 보관 {code, youtube, giftUrl, contractUrl, memo}
+   - 서버(Apps Script)와 관리 페이지 미리보기가 똑같이 사용 → 자기완결형
+========================================================= */
+function buildCustomerView(records, db, code, todayStr){
+  function norm(c){ return String(c||'').toUpperCase().replace(/[^A-Z0-9]/g,''); }
+  function mask(name){ name=String(name||''); if(name.length<2) return name; if(name.length===2) return name[0]+'*'; return name[0]+new Array(name.length-1).join('*')+name[name.length-1]; }
+  function n(v){ return Number(v)||0; }
+  db = db || {};
+  var target = norm(code);
+  if(!target) return {ok:false, error:'접속코드를 입력해주세요'};
+  var rp = db.referralPay || {};
+  var recordId = null, client = null;
+  Object.keys(rp).forEach(function(k){ if(k.indexOf('client:')===0 && rp[k] && norm(rp[k].code)===target && rp[k].active!==false){ recordId = k.slice(7); client = rp[k]; } });
+  if(!recordId) return {ok:false, error:'접속코드가 올바르지 않아요. 모먼트웍스에서 받은 코드를 확인해주세요'};
+  var all = (records||[]).filter(function(r){ return r && r.type==='contract'; });
+  var r = null;
+  for(var i=0;i<all.length;i++){ if(all[i].id===recordId){ r = all[i]; break; } }
+  if(!r && client.key){ for(var j=0;j<all.length;j++){ var c0=String(all[j].contractCode||'').trim(); if((c0 && 'C:'+c0===client.key)){ r = all[j]; break; } } }
+  if(!r) return {ok:false, error:'계약 정보를 찾지 못했어요. 모먼트웍스로 문의해주세요'};
+  if(r.cancelled) return {ok:false, error:'취소된 계약이에요. 모먼트웍스로 문의해주세요'};
+  var today = todayStr || '';
+  var s = db.settings || {};
+
+  // 짝꿍코드: 내 코드로 계약한 분들 (본식 종료 건만 확정 · 내 예식 전 확정분은 잔금 할인, 이후는 페이백)
+  var myCode = String(r.contractCode||'').trim();
+  var referred = myCode ? all.filter(function(x){ return x!==r && !x.cancelled && String(x.partnerCode||'').trim()===myCode; }) : [];
+  referred.sort(function(a,b){ return String(a.weddingDate||'').localeCompare(String(b.weddingDate||'')); });
+  var refRows = referred.map(function(x){
+    var done = !!(x.weddingDate && today && x.weddingDate < today);
+    var kind = !done ? 'pending' : (r.weddingDate && x.weddingDate < r.weddingDate ? 'discount' : 'payback');
+    return {name: mask(x.clientName), contractDate: x.contractDate||'', weddingDate: x.weddingDate||'', status: kind};
+  });
+  var UNIT = 10000;
+  var discountCnt = refRows.filter(function(x){ return x.status==='discount'; }).length;
+  var paybackCnt = refRows.filter(function(x){ return x.status==='payback'; }).length;
+  var rkey = 'C:'+myCode;
+  var paidFb = rp['referral:'+rkey] ? n(rp['referral:'+rkey].paid) : 0;
+  var paybackPaid = (r.referralPayback!==undefined && r.referralPayback!==null && r.referralPayback!=='') ? n(r.referralPayback) : paidFb;
+
+  // 정산 금액 (통합관리시스템과 같은 계산)
+  var settle = rp['settle:'+(myCode ? rkey : ('N:'+String(r.clientName||'').trim()+'|'+String(r.weddingDate||'').trim()))] || {};
+  function pick(f){ return r[f]!==undefined ? r[f] : settle[f]; }
+  var pol = s.guestPolicy || {}; var baseMap = Object.assign({'한측':250,'양측':400,'통합':150}, pol.base||{});
+  var unitN = n(pol.unit)||50, price = (pol.price===undefined||pol.price===null||pol.price==='') ? 50000 : n(pol.price);
+  var actual = pick('actualGuests'); actual = (actual===null||actual===undefined||actual==='') ? null : n(actual);
+  var gBase = n(baseMap[r.productType]);
+  var over = (actual!==null && gBase) ? Math.max(0, actual-gBase) : 0;
+  var surOverride = pick('guestSurcharge'); surOverride = (surOverride===null||surOverride===undefined||surOverride==='') ? null : n(surOverride);
+  var sur = surOverride!==null ? surOverride : (over ? Math.ceil(over/unitN)*price : 0);
+  var gsd = pick('guestScaleRemoved') ? 0 : n(pick('guestScaleDiscount'));
+  var base = n(r.baseAmount), eb = r.earlyBird==='O' ? (n(r.earlyBirdDiscount)||20000) : 0;
+  var pd = (r.partnerCode && String(r.partnerCode).trim() && String(r.partnerCode).trim()!=='-') ? n(r.partnerDiscount) : 0;
+  var rd = discountCnt * UNIT, revC = n(r.reviewDiscountContract), deposit = n(r.deposit), travel = n(r.travelFee);
+  var balance = base - eb - pd - rd - revC - gsd - deposit + travel + sur;
+  var revD = n(r.reviewDiscountDay);
+
+  return {
+    ok: true, v: 1,
+    today: today,
+    client: {name: r.clientName||'', code: myCode},
+    wedding: {date: r.weddingDate||'', time: r.weddingTime||'', venue: r.venueName||'', hall: r.hallName||'', region: r.region||'',
+      product: r.productType||'', groomGuests: n(r.groomGuests), brideGuests: n(r.brideGuests), settingsSubmitted: !!r.settingsSubmitted},
+    contract: {date: r.contractDate||'', code: myCode, url: client.contractUrl||'',
+      amounts: {base: base, earlyBird: eb, partnerDiscount: pd, referralDiscount: rd, reviewContract: revC, guestScaleDiscount: gsd, surcharge: sur, deposit: deposit, travel: travel, balance: balance, reviewDay: revD, final: balance - revD},
+      settled: !!r.settlementDone},
+    live: {youtube: client.youtube||'', giftUrl: client.giftUrl||''},
+    referral: {code: myCode, unit: UNIT, rows: refRows, total: refRows.length, discountCount: discountCnt, paybackCount: paybackCnt,
+      discountAmount: discountCnt*UNIT, paybackAmount: paybackCnt*UNIT, paybackPaid: Math.min(paybackPaid, paybackCnt*UNIT)},
+    info: {notice: s.customerNotice || '', settingsFormUrl: s.settingsFormUrl || '', kakao: s.customerKakaoUrl || 'https://pf.kakao.com/_FbIfX/chat', phone: s.reportPhone || '010-5730-0614', memo: client.memo || ''},
+    generatedAt: new Date().toISOString()
+  };
+}
+
 /* ================= 파트너 포털 (통합관리시스템 내장 + 파트너스오피스 공용) =================
    PartnerPortal.mount(rootEl, view, handlers)
    handlers = { onOp(op) -> Promise<view>, onRefresh() -> Promise<view>, onLogout(), preview:boolean, onClosePreview() }
