@@ -450,14 +450,14 @@ function pvDefaultWorkflow(){
     {id:'w01', title:'출발 보고 (대표)', when:'예식장 출발할 때', at:null, detail:'예식장으로 출발하면서 출발 보고를 카카오톡 톡방에 공유해요.', msgs:['m_depart']},
     {id:'w02', title:'예식장 도착', at:-90, detail:'예식 시작 1시간 30분 전까지 도착해요. 도착하면 현장 도착 체크인을 눌러주세요.', checkin:true},
     {id:'w03', title:'도착 보고 (대표)', at:-90, detail:'예식장에 도착하면 도착 보고를 카카오톡 톡방에 공유해요.', msgs:['m_arrive']},
-    {id:'w04', title:'예식장 전경 · 내부 사진 촬영', at:-85, photo:true, detail:'예식장 외부 전경과 로비·홀 내부를 촬영해요.'},
-    {id:'w05', title:'빈 축의대 사진 촬영', at:-80, photo:true, detail:'셋팅 전 빈 축의대를 촬영해요.'},
-    {id:'w06', title:'식권전달자 연락 · 식권 수령', at:-80, detail:'파트너 안내카드에 적힌 식권전달자 분께 연락해 식권을 수령하고, 수령 보고를 카카오톡 톡방에 공유해요.', msgs:['m_ticket']},
-    {id:'w07', title:'축의대 셋팅', at:-75, detail:'방명록, 노트북, 필기구, 고무줄, 축의봉투함, 클립 등 기본 셋팅을 해요.'},
-    {id:'w08', title:'동영상 촬영 셋팅', at:-60, detail:'예식 1시간 전부터 동영상 촬영을 시작해요. 녹화 중인지 꼭 확인!'},
-    {id:'w09', title:'식권 실수량 카운팅', at:-55, detail:'받은 식권을 대인 · 소인으로 나눠 실수량을 세고, 수량을 입력해 카카오톡 톡방에 보고해요.', msgs:['m_ticketcount']},
-    {id:'w10', title:'화환 · 웨딩포토존 사진 촬영', at:-50, photo:true, detail:'화환과 웨딩포토존을 촬영해요.'},
-    {id:'w11', title:'축의대 운영 시작', at:-45, detail:'하객 맞이를 시작해요. 밝은 인사와 함께 방명록·축의금 접수를 안내해요.'},
+    {id:'w04', title:'예식장 전경 · 내부 사진 촬영', at:-88, photo:true, detail:'예식장 외부 전경과 로비·홀 내부를 촬영해요.'},
+    {id:'w05', title:'빈 축의대 사진 촬영', at:-84, photo:true, detail:'셋팅 전 빈 축의대를 촬영해요.'},
+    {id:'w06', title:'식권전달자 연락 · 식권 수령', at:-84, detail:'파트너 안내카드에 적힌 식권전달자 분께 연락해 식권을 수령하고, 수령 보고를 카카오톡 톡방에 공유해요.', msgs:['m_ticket']},
+    {id:'w07', title:'축의대 셋팅', at:-80, detail:'방명록, 노트북, 필기구, 고무줄, 축의봉투함, 클립 등 기본 셋팅을 해요.'},
+    {id:'w08', title:'동영상 촬영 셋팅', at:-72, detail:'축의대 운영을 시작하기 전에 동영상 촬영을 시작해요. 녹화 중인지 꼭 확인!'},
+    {id:'w09', title:'식권 실수량 카운팅', at:-68, detail:'받은 식권을 대인 · 소인으로 나눠 실수량을 세고, 수량을 입력해 카카오톡 톡방에 보고해요.', msgs:['m_ticketcount']},
+    {id:'w10', title:'화환 · 웨딩포토존 사진 촬영', at:-64, photo:true, detail:'화환과 웨딩포토존을 촬영해요.'},
+    {id:'w11', title:'축의대 운영 시작', at:-60, detail:'하객 맞이를 시작해요. 밝은 인사와 함께 방명록·축의금 접수를 안내해요.'},
     {id:'w12', title:'A · B조 역할에 따라 운영', at:null, when:'운영 중', detail:'A조·B조 역할에 맞춰 운영해요. 역할은 대표 안내(전달사항)를 확인해주세요.'},
     {id:'w13', title:'중간 특이사항 보고', at:null, when:'운영 중 수시로', detail:'특이사항이 생기면 카카오톡 톡방에 바로 보고해요. 아래 "특이사항 보고" 양식을 이용하세요.', msgs:['m_mid'], report:true},
     {id:'w14', title:'축의대 마감', at:null, when:'하객 입장 마무리 후', detail:'하객 접수가 끝나면 축의대를 마감해요.'},
@@ -639,6 +639,85 @@ function applyPartnerUpdate(db, records, code, op, todayStr){
 }
 
 /* =========================================================
+   예식 안내문 (축의대 운영설정서 '07 하객 안내사항' 기반)
+   - 운영설정서 제출 시 서버로 전달 → referralPay['guide:'+계약id]에 보관
+   - 하객에게 보여줄 6개 항목만 화이트리스트로 저장 · 전화번호/계좌번호 같은 민감정보는 자동 제거
+========================================================= */
+function guideNormalize(input){
+  var FIELDS = [
+    ['parking','주차 정산',['주차정산','주차','주차안내','주차등록','주차권']],
+    ['atm','ATM 위치',['info_atm','atm위치','atm','현금인출기','atm기','atm안내']],
+    ['banquet','연회장 위치',['info_hall','연회장위치','연회장','식당위치','식당','피로연장','식사장소']],
+    ['bridalRoom','신부대기실',['info_bride_room','신부대기실','신부대기실위치','신부대기실안내','대기실']],
+    ['mealTime','식사 가능 시간',['info_meal_time','식사가능시간','식사시간','식사가능','식사안내']],
+    ['childTicket','소인식권',['child_ticket_age','소인식권','소인','어린이식권','소인식권기준','어린이']]
+  ];
+  var key = function(x){ return String(x||'').toLowerCase().replace(/[\s·\-_:()]/g,''); };
+  var clean = function(v){
+    v = String(v===undefined||v===null ? '' : v).replace(/\r/g,'').trim();
+    v = v.replace(/01[016789][\s.\-]?\d{3,4}[\s.\-]?\d{4}/g, '')          // 휴대폰 번호
+         .replace(/\d{2,6}[\s\-]\d{2,6}[\s\-]\d{2,8}([\s\-]\d{1,6})?/g, '')   // 계좌번호 형식
+         .replace(/\d{10,}/g, '')                                         // 긴 숫자열
+         .replace(/[ \t]{2,}/g,' ').trim();
+    return v.slice(0, 120);
+  };
+  input = input || {};
+  var src = input.guide && typeof input.guide==='object' ? input.guide : input;
+  var flat = {};
+  Object.keys(src).forEach(function(k){ flat[key(k)] = src[k]; });
+  // 운영설정서 원본 데이터(MW-DATA): 주차 = 등록 방법(줄마다) + '무료주차 시간'
+  if(src.parking===undefined && (src.info_parking_way || src.info_parking_time)){
+    var pw = String(src.info_parking_way||'').trim(), pt = String(src.info_parking_time||'').trim();
+    flat[key('주차 정산')] = [pw, pt ? '무료주차 '+pt : ''].filter(function(x){ return x; }).join('\n');
+  }
+  var items = {};
+  FIELDS.forEach(function(f){
+    var v = src[f[0]];
+    if(v===undefined){ var c = [f[1]].concat(f[2]); for(var i=0;i<c.length && v===undefined;i++){ if(flat[key(c[i])]!==undefined) v = flat[key(c[i])]; } }
+    v = clean(v); if(v) items[f[0]] = v;
+  });
+  var nm = function(x){ return String(x||'').replace(/[^가-힣a-zA-Z\s]/g,'').trim().slice(0,20); };
+  var pick = function(keys){ for(var i=0;i<keys.length;i++){ if(input[keys[i]]!==undefined && input[keys[i]]!==null && input[keys[i]]!=='') return input[keys[i]]; var f2 = flat[key(keys[i])]; if(f2!==undefined && f2!=='') return f2; } return ''; };
+  var note = function(x){ return clean(x).slice(0, 200); };
+  return {groomName: nm(input.groomName || input.groom_name || input['신랑성함'] || input['신랑 성함'] || input['신랑']), brideName: nm(input.brideName || input.bride_name || input['신부성함'] || input['신부 성함'] || input['신부']),
+    notes: {groom: note(pick(['noteGroom','신랑측 안내','신랑측안내'])), bride: note(pick(['noteBride','신부측 안내','신부측안내']))},
+    items: items, fields: FIELDS.map(function(f){ return {key:f[0], label:f[1]}; })};
+}
+function applySettingsGuide(records, db, payload, trusted){
+  db = db || {}; payload = payload || {};
+  var digits = function(x){ return String(x||'').replace(/\D/g,''); };
+  var ymd = function(x){ var m = String(x||'').match(/(\d{4})\D{0,3}(\d{1,2})\D{0,3}(\d{1,2})/); return m ? m[1]+'-'+('0'+m[2]).slice(-2)+'-'+('0'+m[3]).slice(-2) : ''; };
+  var code = String(payload.contractCode||payload['계약코드']||'').trim().toUpperCase();
+  var date = ymd(payload.weddingDate||payload.wedding_date||payload['예식일자']||payload['예식일']);
+  var phone = digits(payload.phone||payload.contact_phone||payload.client_phone||payload.contractor_phone||payload['연락처']);
+  var names = [payload.clientName, payload.groomName, payload.brideName, payload.groom_name, payload.bride_name, payload.client_name, payload.contractor_name, payload['계약자명'], payload['신랑성함'], payload['신부성함']].map(function(x){ return String(x||'').replace(/\s/g,''); }).filter(Boolean);
+  if(!trusted && !date) return {ok:false, error:'예식일이 필요해요'};
+  var all = (records||[]).filter(function(r){ return r && r.type==='contract' && !r.cancelled; });
+  var hit = null;
+  if(trusted && payload.recordId) hit = all.filter(function(r){ return r.id===payload.recordId; })[0] || null; // 관리자가 계약을 직접 지정
+  if(!hit && code) hit = all.filter(function(r){ return String(r.contractCode||'').trim().toUpperCase()===code; })[0] || null;
+  if(hit && !trusted && date && hit.weddingDate!==date) hit = null;            // 외부 제출: 코드 + 예식일이 맞아야
+  if(!hit && date){
+    var sameDay = all.filter(function(r){ return r.weddingDate===date; });
+    hit = (phone && sameDay.filter(function(r){ return digits(r.phone)===phone; })[0])
+      || null;
+    if(!hit && names.length){ // 성함 + 예식일: 그날 같은 이름의 계약이 하나뿐일 때만
+      var byName = sameDay.filter(function(r){ return names.indexOf(String(r.clientName||'').replace(/\s/g,''))>=0; });
+      if(byName.length===1) hit = byName[0];
+    }
+  }
+  if(!hit) return {ok:false, error:'일치하는 계약을 찾지 못했어요 (계약코드 · 예식일 · 연락처 또는 성함 확인)'};
+  var g = guideNormalize(payload);
+  if(!Object.keys(g.items).length && !g.groomName && !g.brideName) return {ok:false, error:'하객 안내사항 내용이 없어요'};
+  db.referralPay = db.referralPay || {};
+  var k = 'guide:'+hit.id, prev = db.referralPay[k] || {};
+  db.referralPay[k] = {groomName: g.groomName || prev.groomName || '', brideName: g.brideName || prev.brideName || '', items: g.items,
+    notes: {groom: g.notes.groom || '', bride: g.notes.bride || ''},
+    source: trusted==='admin' ? 'admin' : trusted==='pdf' ? 'pdf' : 'form', key: hit.contractCode ? 'C:'+hit.contractCode : '', updatedAt: new Date().toISOString(), submittedAt: new Date().toISOString()};
+  return {ok:true, db:db, recordId: hit.id, contractCode: hit.contractCode||'', items: Object.keys(g.items).length};
+}
+
+/* =========================================================
    고객 전용 페이지 (계약자별 접속코드)
    - 고객 설정은 파트너 데이터의 referralPay['client:'+계약id]에 보관 {code, youtube, giftCode, giftUrl(구버전), contractUrl, memo}
    - 서버(Apps Script)와 관리 페이지 미리보기가 똑같이 사용 → 자기완결형
@@ -718,11 +797,30 @@ function buildCustomerView(records, db, code, todayStr, withFile){
       var code = String((side && side.giftCode) || client.giftCode || '').trim();
       var custom = String((side && side.giftUrl) || client.giftUrl || '').trim();
       var url = code ? base.split('#')[0] + '#code=' + encodeURIComponent(code) : (custom || base);
-      return {youtube: client.youtube||'', giftUrl: url, giftCode: code, giftBase: base};
+      var yg = String(client.youtubeGroom||'').trim(), yb = String(client.youtubeBride||'').trim(), streams = [];
+      if(String(r.productType||'').trim()==='양측' && (yg || yb)){
+        if(yg) streams.push({key:'groom', label:'신랑측', url: yg});
+        if(yb) streams.push({key:'bride', label:'신부측', url: yb});
+        if(sideKey==='bride') streams.reverse(); // 신부측 코드로 접속하면 신부측 라이브부터
+      } else if(String(client.youtube||'').trim()) streams.push({key:'', label:'', url: String(client.youtube).trim()});
+      return {youtube: streams.length ? streams[0].url : '', streams: streams, giftUrl: url, giftCode: code, giftBase: base};
     })(),
     referral: {code: myCode, unit: UNIT, rows: refRows, total: refRows.length, discountCount: discountCnt, paybackCount: paybackCnt,
       discountAmount: discountCnt*UNIT, paybackAmount: paybackCnt*UNIT, paybackPaid: Math.min(paybackPaid, paybackCnt*UNIT)},
-    info: {notice: s.customerNotice || '', settingsFormUrl: s.settingsFormUrl || '', kakao: s.customerKakaoUrl || 'https://pf.kakao.com/_FbIfX/chat', phone: s.reportPhone || '010-5730-0614', memo: [client.memo||'', (side && side.memo)||''].filter(function(x){ return x; }).join('\n')},
+    info: {home: s.customerHomeUrl || 'https://momentworks.github.io/momentworks.kr/', notice: s.customerNotice || '', settingsFormUrl: s.settingsFormUrl || '', kakao: s.customerKakaoUrl || 'https://pf.kakao.com/_FbIfX/chat', phone: s.reportPhone || '010-5730-0614', memo: [client.memo||'', (side && side.memo)||''].filter(function(x){ return x; }).join('\n')},
+    guide: (function(){
+      var gd = rp['guide:'+r.id] || null;
+      if(!gd || !gd.items) return null;
+      var labels = guideNormalize({}).fields, items = [];
+      labels.forEach(function(f){ if(gd.items[f.key]) items.push({key:f.key, label:f.label, value:gd.items[f.key]}); });
+      if(!items.length) return null;
+      var sides = [], nt = gd.notes || {};
+      if(gd.groomName) sides.push({key:'groom', label:'신랑', en:'GROOM SIDE · 신랑측', name: gd.groomName, note: nt.groom || ''});
+      if(gd.brideName) sides.push({key:'bride', label:'신부', en:'BRIDE SIDE · 신부측', name: gd.brideName, note: nt.bride || ''});
+      if(sideKey==='groom') sides = sides.filter(function(x){ return x.key==='groom'; });
+      if(sideKey==='bride') sides = sides.filter(function(x){ return x.key==='bride'; });
+      return {sides: sides, items: items, updatedAt: gd.updatedAt||''};
+    })(),
     generatedAt: new Date().toISOString(),
     _file: withFile ? String(client.contractUrl||'').trim() : undefined
   };
@@ -1475,7 +1573,7 @@ function deviceKind(){
   const ua = navigator.userAgent || '';
   if(/KAKAOTALK/i.test(ua)) return 'kakao';
   if(/NAVER\(inapp|Instagram|FBAN|FBAV|Line\//i.test(ua)) return 'inapp';
-  if(/iPhone|iPad|iPod/i.test(ua)) return /CriOS|FxiOS|EdgiOS|Whale/i.test(ua) ? 'ios-other' : 'ios';
+  if(/iPhone|iPad|iPod/i.test(ua)) return /CriOS/i.test(ua) ? 'ios-chrome' : /FxiOS|EdgiOS|Whale/i.test(ua) ? 'ios-other' : 'ios';
   if(/Android/i.test(ua)) return /SamsungBrowser/i.test(ua) ? 'samsung' : 'android';
   return 'desktop';
 }
@@ -1488,19 +1586,20 @@ async function installApp(){
 function showInstallGuide(){
   const k = deviceKind();
   const steps = {
-    ios: ['화면 아래(또는 위) <b>공유 버튼 <span class="mw-ico">⬆︎</span></b>을 눌러요', '목록을 내려서 <b>홈 화면에 추가</b>를 눌러요', '오른쪽 위 <b>추가</b>를 누르면 끝!'],
-    'ios-other': ['아이폰은 <b>사파리(Safari)</b>에서만 홈 화면 추가가 돼요', '주소를 복사해 사파리에서 열어주세요', '사파리 <b>공유 버튼 ⬆︎ → 홈 화면에 추가</b>'],
+    ios: ['사파리 화면 아래(또는 위) <b>공유 버튼 <span class="mw-ico">⬆︎</span></b>을 눌러요', '목록을 내려서 <b>홈 화면에 추가</b>를 눌러요', '오른쪽 위 <b>추가</b>를 누르면 끝!'],
+    'ios-chrome': ['크롬 주소창 오른쪽의 <b>공유 버튼 <span class="mw-ico">⬆︎</span></b>을 눌러요', '목록에서 <b>홈 화면에 추가</b>를 눌러요', '오른쪽 위 <b>추가</b>를 누르면 끝!'],
+    'ios-other': ['아이폰은 <b>사파리(Safari)</b> 또는 <b>크롬(Chrome)</b>에서 홈 화면 추가가 돼요', '주소를 복사해 사파리 또는 크롬에서 열어주세요', '<b>공유 버튼 ⬆︎ → 홈 화면에 추가</b>'],
     android: ['오른쪽 위 <b>⋮ 메뉴</b>를 눌러요', '<b>홈 화면에 추가</b> (또는 <b>앱 설치</b>)를 눌러요', '<b>추가 / 설치</b>를 누르면 끝!'],
     samsung: ['아래쪽 <b>≡ 메뉴</b>를 눌러요', '<b>현재 페이지 추가 → 홈 화면</b>을 눌러요', '<b>추가</b>를 누르면 끝!'],
-    kakao: ['카카오톡 안에서는 바로 추가가 안 돼요', '오른쪽 아래(또는 위) <b>⋯ 메뉴 → 다른 브라우저로 열기</b>', '열린 브라우저에서 이 버튼을 다시 눌러주세요'],
-    inapp: ['앱 안 브라우저에서는 바로 추가가 안 돼요', '메뉴에서 <b>기본 브라우저로 열기</b>를 눌러요', '열린 브라우저에서 이 버튼을 다시 눌러주세요'],
-    desktop: ['휴대폰으로 이 주소를 열어주세요', '아이폰은 사파리 <b>공유 ⬆︎ → 홈 화면에 추가</b>', '안드로이드는 크롬 <b>⋮ → 홈 화면에 추가</b>']
+    kakao: ['카카오톡 안에서는 바로 추가가 안 돼요', '오른쪽 아래(또는 위) <b>⋯ 메뉴 → 다른 브라우저로 열기</b>', '열린 브라우저에서 이 버튼을 다시 눌러주세요 (아이폰은 <b>사파리 · 크롬</b> 가능)'],
+    inapp: ['앱 안 브라우저에서는 바로 추가가 안 돼요', '메뉴에서 <b>기본 브라우저로 열기</b>를 눌러요', '열린 브라우저에서 이 버튼을 다시 눌러주세요 (아이폰은 <b>사파리 · 크롬</b> 가능)'],
+    desktop: ['휴대폰으로 이 주소를 열어주세요', '아이폰은 <b>사파리 · 크롬</b>에서 <b>공유 ⬆︎ → 홈 화면에 추가</b>', '안드로이드는 크롬 <b>⋮ → 홈 화면에 추가</b>']
   }[k];
   const old = document.getElementById('mwInstallGuide'); if(old) old.remove();
   const box = document.createElement('div'); box.id = 'mwInstallGuide'; box.className = 'mw-ig';
   box.innerHTML = `<div class="mw-ig-bg"></div><div class="mw-ig-card">
     <img src="data:image/png;base64,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" alt=""><h3>홈 화면에 바로가기 추가</h3>
-    <p class="mw-ig-sub">추가하면 앱처럼 아이콘을 눌러 바로 접속할 수 있어요 (자동 로그인 유지)</p>
+    <p class="mw-ig-sub">추가하면 앱처럼 아이콘을 눌러 바로 접속할 수 있어요 (자동 로그인 유지)${/^ios/.test(k) ? '<br>📱 아이폰은 <b>사파리(Safari)</b>와 <b>크롬(Chrome)</b>에서 추가할 수 있어요' : ''}</p>
     <ol>${steps.map(s=>`<li>${s}</li>`).join('')}</ol>
     ${k==='kakao'||k==='inapp'||k==='ios-other' ? '<button class="mw-btn" type="button" id="mwIgCopy">주소 복사</button>' : ''}
     <button class="mw-link" type="button" id="mwIgClose">닫기</button></div>`;
