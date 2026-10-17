@@ -357,6 +357,35 @@ details.pp-past summary{cursor:pointer;font-size:13px;font-weight:700;color:var(
 .pp-logo-btn{border:none;background:none;padding:0;margin:0;cursor:pointer;display:block;line-height:0;-webkit-tap-highlight-color:transparent;}
 .pp-logo-btn:active img{transform:scale(.95);}
 
+/* 예식 정보 (파트너 안내카드) */
+.pp-info{margin:10px 0 12px;border:1px solid var(--pp-line,#e7dfd3);border-radius:12px;background:#fffdf9;overflow:hidden;}
+.pp-info>summary{cursor:pointer;list-style:none;padding:11px 14px;font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:8px;}
+.pp-info>summary::-webkit-details-marker{display:none;}
+.pp-info>summary::after{content:'▾';margin-left:auto;color:var(--pp-slate);transition:transform .2s;}
+.pp-info[open]>summary::after{transform:rotate(180deg);}
+.pp-info>summary small{font-weight:500;color:var(--pp-slate);font-size:11px;}
+.pp-info-sec{padding:2px 14px 12px;}
+.pp-info-sec h4{margin:10px 0 6px;font-size:12px;letter-spacing:.04em;color:var(--pp-wine,#7a2e3a);border-bottom:1px solid var(--pp-line,#e7dfd3);padding-bottom:4px;}
+.pp-info-kv>div{display:grid;grid-template-columns:96px 1fr;gap:8px;padding:5px 0;font-size:12.5px;line-height:1.55;}
+.pp-info-kv span{color:var(--pp-slate);}
+.pp-info-kv b{font-weight:600;word-break:keep-all;overflow-wrap:anywhere;}
+.pp-info-note{margin:6px 0 0;font-size:12px;color:var(--pp-slate);}
+.pp-info-empty{padding:2px 14px 13px;font-size:12.5px;color:var(--pp-slate);}
+
+/* 현장 연락처 (식권 전달자 · 인계받는 분 · 비상연락망) */
+.pp-contacts{margin:10px 0 12px;border:1.5px solid var(--pp-wine,#7a2e3a);border-radius:12px;background:#fff;overflow:hidden;}
+.pp-contacts-h{padding:9px 14px;background:var(--pp-wine,#7a2e3a);color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;gap:8px;}
+.pp-contacts-h small{font-weight:500;opacity:.8;font-size:11px;margin-left:auto;}
+.pp-ct-group{padding:8px 14px;border-top:1px solid var(--pp-line,#e7dfd3);}
+.pp-ct-group:first-of-type{border-top:0;}
+.pp-ct-title{font-size:11.5px;font-weight:700;color:var(--pp-wine,#7a2e3a);margin-bottom:4px;}
+.pp-ct-row{display:flex;align-items:center;gap:6px;padding:4px 0;}
+.pp-ct-name{flex:1;min-width:0;font-weight:700;font-size:14px;display:flex;flex-direction:column;}
+.pp-ct-name small{font-weight:500;font-size:11.5px;color:var(--pp-slate);}
+.pp-ct-btn{flex:none;text-decoration:none;padding:9px 12px;border-radius:10px;font-size:13px;font-weight:700;border:1px solid var(--pp-line,#d9d0c2);color:var(--pp-ink,#222);background:#faf6ee;}
+.pp-ct-btn.call{background:var(--pp-wine,#7a2e3a);border-color:var(--pp-wine,#7a2e3a);color:#fff;}
+.pp-ct-none{font-size:11.5px;color:var(--pp-slate);}
+
 /* ================= 접속 메인화면 (모먼트웍스 로고) ================= */
 .mw-entry{position:fixed;inset:0;z-index:500;overflow-y:auto;background:#F7F5F0;background-image:radial-gradient(ellipse at 50% 38%, #FFFFFF 0%, #F7F5F0 55%, #EFEBE3 100%);color:#1A1618;
   font-family:'Pretendard',-apple-system,BlinkMacSystemFont,sans-serif;display:flex;align-items:center;justify-content:center;padding:56px 22px;box-sizing:border-box;}
@@ -489,6 +518,45 @@ function pvDefaultMessages(){
   ];
 }
 
+/* 파트너 안내카드의 연락처 3종 — 식권 전달자 · 축의금 인계받는 분 · 비상연락망
+   운영설정서 항목의 이름(키/라벨)으로 찾아 맞추고, 값에서 이름과 전화번호를 나눠 통화·문자 버튼으로 씀 */
+function partnerContacts(rows){
+  var GROUPS = [
+    {id:'ticket', title:'식권 전달자', icon:'🎫', re:/ticket|meal_?coupon|식권/i, not:/child|소인|수량|매수|count|age|나이/i},
+    {id:'handover', title:'축의금 인계받는 분', icon:'💌', re:/hand_?over|take_?over|receiv|인계|인수/i, not:/시간|방법|장소/},
+    {id:'emergency', title:'비상연락망', icon:'🚨', re:/emerg|urgent|비상|긴급/i, not:null}
+  ];
+  var PH = /(?:\+?82[\s\-.]?)?0?1[016789][\s\-.]?\d{3,4}[\s\-.]?\d{4}|0\d{1,2}[\s\-.]\d{3,4}[\s\-.]\d{4}/g;
+  var used = {}, groups = [];
+  GROUPS.forEach(function(G){
+    var mine = [];
+    rows.forEach(function(r, i){ var t = String(r.key||'')+' '+String(r.label||''); if(G.re.test(t) && !(G.not && G.not.test(t)) && !used[i]){ mine.push({r:r, i:i}); } });
+    var people = [], names = [], phones = [];
+    mine.forEach(function(m){
+      var v = String(m.r.value||''), found = v.match(PH) || [];
+      if(found.length){
+        // '이름 010-0000-0000 / 이름 010-…' 처럼 한 칸에 여러 명
+        var parts = v.split(/\n|\/|;|,|·|\|/).map(function(x){ return x.trim(); }).filter(function(x){ return x; });
+        var added = 0;
+        parts.forEach(function(pt){
+          var ph = pt.match(PH); if(!ph) return;
+          var name = pt.replace(PH,'').replace(/[()\[\]:：\-]/g,' ').replace(/\s+/g,' ').trim();
+          people.push({name: name, phone: ph[0].replace(/[^0-9+]/g,''), shown: ph[0]}); added++;
+        });
+        if(!added) found.forEach(function(ph){ people.push({name:'', phone: ph.replace(/[^0-9+]/g,''), shown: ph}); });
+        used[m.i] = true;
+      } else if(v.length<=24 && !/\d{4,}/.test(v)){ names.push({v:v, i:m.i}); }
+    });
+    // 이름 칸과 전화번호 칸이 따로 있을 때 순서대로 짝짓기
+    if(names.length){
+      var nameless = people.filter(function(p){ return !p.name; });
+      if(nameless.length){ nameless.forEach(function(p, k){ if(names[k]){ p.name = names[k].v; used[names[k].i] = true; } }); }
+      else if(!people.length){ /* 이름만 있고 번호가 없으면 연락 버튼 없이 이름만 */ names.forEach(function(n){ people.push({name:n.v, phone:'', shown:''}); used[n.i] = true; }); }
+    }
+    if(people.length){ groups.push({id:G.id, title:G.title, icon:G.icon, people: people.slice(0,6)}); }
+  });
+  return {groups: groups, rest: rows.filter(function(r, i){ return !used[i]; })};
+}
 function buildPartnerView(records, db, code, todayStr){
   function norm(c){ return String(c||'').toUpperCase().replace(/[^A-Z0-9]/g,''); }
   function toMin(s){ var m=/^(\d{1,2}):(\d{2})/.exec(String(s||'')); return m ? (+m[1])*60+(+m[2]) : null; }
@@ -554,6 +622,12 @@ function buildPartnerView(records, db, code, todayStr){
       team: team,
       note: a.note || '',
       confirmed: !!resp.confirmed, confirmedAt: resp.confirmedAt || '',
+      info: (function(){
+        var g = (db.referralPay||{})['guide:'+recordId] || {}, c = (db.referralPay||{})['card:'+recordId] || {};
+        if(!g.items && !g.groomName && !g.brideName && !(c.rows||[]).length) return null;
+        var ct = partnerContacts(c.rows||[]);
+        return {groomName: g.groomName||'', brideName: g.brideName||'', items: g.items||{}, notes: g.notes||{}, rows: ct.rest, contacts: ct.groups};
+      })(),
       checkinAt: resp.checkinAt || '',
       checks: resp.checks || {},
       reports: (resp.reports || []).slice(-30),
@@ -714,6 +788,16 @@ function applySettingsGuide(records, db, payload, trusted){
   db.referralPay[k] = {groomName: g.groomName || prev.groomName || '', brideName: g.brideName || prev.brideName || '', items: g.items,
     notes: {groom: g.notes.groom || '', bride: g.notes.bride || ''},
     source: trusted==='admin' ? 'admin' : trusted==='pdf' ? 'pdf' : 'form', key: hit.contractCode ? 'C:'+hit.contractCode : '', updatedAt: new Date().toISOString(), submittedAt: new Date().toISOString()};
+  // 파트너 안내카드용: 운영설정서의 나머지 입력 항목(라벨 → 값). 파트너스오피스의 배정된 파트너에게만 보임
+  var LAB = {groom_name:'신랑 성함', bride_name:'신부 성함', contractor_name:'계약자', wedding_date:'예식일', wedding_time:'예식 시작시간', venue_name:'예식장', hall_name:'홀 이름', contact_phone:'연락처'};
+  var SKIP = /^(info_|child_ticket_age|note_groom|note_bride|noteGroom|noteBride|groom_name|bride_name|contractor_name|wedding_date|contract_?code|recordId|guide|pdf|signature|image|photo_data)/i;
+  var rows = [];
+  Object.keys(payload).forEach(function(k){
+    var v = payload[k]; if(v===undefined || v===null || v==='' || typeof v==='object' || SKIP.test(k)) return;
+    v = String(v).replace(/\r/g,'').trim(); if(!v || v.length>600 || /^data:/.test(v)) return;
+    rows.push({key: String(k), label: LAB[k] || String(k).replace(/_/g,' ').trim(), value: v});
+  });
+  if(rows.length){ db.referralPay['card:'+hit.id] = {rows: rows.slice(0,80), updatedAt: new Date().toISOString()}; }
   return {ok:true, db:db, recordId: hit.id, contractCode: hit.contractCode||'', items: Object.keys(g.items).length};
 }
 
@@ -770,7 +854,8 @@ function buildCustomerView(records, db, code, todayStr, withFile){
   var settle = rp['settle:'+(myCode ? rkey : ('N:'+String(r.clientName||'').trim()+'|'+String(r.weddingDate||'').trim()))] || {};
   function pick(f){ return r[f]!==undefined ? r[f] : settle[f]; }
   var pol = s.guestPolicy || {}; var baseMap = Object.assign({'한측':250,'양측':400,'통합':150}, pol.base||{});
-  var unitN = n(pol.unit)||50, price = (pol.price===undefined||pol.price===null||pol.price==='') ? 50000 : n(pol.price);
+  var unitN = n(pol.unit)||1, price = (pol.price===undefined||pol.price===null||pol.price==='') ? 1000 : n(pol.price);
+  if(unitN===50 && price===50000){ unitN = 1; price = 1000; }   // 예전 기본값(50명당 5만원) → 1인당 1,000원
   var actual = pick('actualGuests'); actual = (actual===null||actual===undefined||actual==='') ? null : n(actual);
   var gBase = n(baseMap[r.productType]);
   var over = (actual!==null && gBase) ? Math.max(0, actual-gBase) : 0;
@@ -832,9 +917,7 @@ function buildCustomerView(records, db, code, todayStr, withFile){
 ============================================================================================== */
 const PartnerPortal = (function(){
   const WD = ['일','월','화','수','목','금','토'];
-  const TABS = [['home','홈'],['work','오늘 업무'],['schedule','내 일정'],['prep','준비사항'],['pay','근무·급여'],['avail','휴무 신청'],['notice','공지']];
-  const PHASE_ORDER = ['D-7','D-3','D-1','당일','종료 후'];
-  const PHASE_OFFSET = {'D-7':-7,'D-3':-3,'D-1':-1,'당일':0,'종료 후':0};
+  const TABS = [['home','홈'],['work','오늘 업무'],['schedule','내 일정'],['pay','근무·급여'],['avail','휴무 신청'],['notice','공지']];
   let workRid=null, sheet=null, root=null, view=null, H={}, tab='home', selRecord=null, calCursor=null, availCursor=null, payMonth=null, selDay=null, busy=false;
 
   const pd = n => String(n).padStart(2,'0');
@@ -850,8 +933,6 @@ const PartnerPortal = (function(){
   function hours(min){ return (Math.round((Number(min)||0)/6)/10)+'시간'; }
   function upcoming(){ const t=today(); return view.events.filter(ev=>ev.date>=t); }
   function pastEvents(){ const t=today(); return view.events.filter(ev=>ev.date<t).slice().reverse(); }
-  function tpl(){ return view.template||[]; }
-  function progress(ev){ const t=tpl(); const done=t.filter(it=>ev.checks && ev.checks[it.id]).length; return {done,total:t.length,pct: t.length? Math.round(done/t.length*100):0}; }
   function allowanceText(ev){
     const ex=(ev.payDetail||[]).filter(d=>d.allowance);
     return ex.length ? `<small style="color:var(--pp-slate);display:block;width:100%;padding-left:82px;">기본 ${money(ex.reduce((s,d)=>s+d.base,0))} + 추가 ${ex.map(d=>money(d.allowance)+(d.allowanceNote?' ('+e(d.allowanceNote)+')':'')).join(', ')}</small>` : '';
@@ -897,9 +978,39 @@ const PartnerPortal = (function(){
     window.open('https://map.naver.com/v5/search/'+encodeURIComponent(q), '_blank');
   }
 
+  /* ---------- 예식 정보 (파트너 안내카드) ---------- */
+  const INFO_ITEMS = [['parking','주차 정산'],['atm','ATM 위치'],['banquet','연회장 위치'],['bridalRoom','신부대기실'],['mealTime','식사 가능 시간'],['childTicket','소인식권']];
+  const infoOpen = new Set();
+  function contactsHTML(ev){
+    const gs = (ev.info && ev.info.contacts) || [];
+    if(!gs.length) return '';
+    const num = x=> String(x||'').replace(/[^0-9+]/g,'');
+    return `<div class="pp-contacts"><div class="pp-contacts-h">📞 현장 연락처 <small>누르면 바로 통화 · 문자</small></div>${gs.map(g=>`<div class="pp-ct-group"><div class="pp-ct-title">${g.icon||''} ${e(g.title)}</div>${g.people.map(pp=>`<div class="pp-ct-row"><span class="pp-ct-name">${e(pp.name||'이름 미입력')}${pp.shown? `<small>${e(pp.shown)}</small>`:''}</span>${num(pp.phone)? `<a class="pp-ct-btn call" href="tel:${e(num(pp.phone))}" aria-label="${e(pp.name||g.title)} 통화">📞 통화</a><a class="pp-ct-btn sms" href="sms:${e(num(pp.phone))}" aria-label="${e(pp.name||g.title)} 문자">💬 문자</a>`:'<span class="pp-ct-none">연락처 없음</span>'}</div>`).join('')}</div>`).join('')}</div>`;
+  }
+  function infoHTML(ev){
+    const inf = ev.info || {}, items = inf.items || {}, rows = inf.rows || [];
+    const names = (inf.groomName || inf.brideName) ? `${inf.groomName? '신랑 '+e(inf.groomName):''}${inf.groomName&&inf.brideName?' · ':''}${inf.brideName? '신부 '+e(inf.brideName):''}` : '';
+    const has = names || Object.keys(items).length || rows.length || (inf.contacts||[]).length;
+    const kv = (k,v)=> `<div><span>${e(k)}</span><b>${e(v).replace(/\n/g,'<br>')}</b></div>`;
+    const body = has ? `
+      <div class="pp-info-sec"><h4>예식 기본정보</h4><div class="pp-info-kv">
+        ${names? kv('신랑 · 신부', (inf.groomName? '신랑 '+inf.groomName:'')+(inf.groomName&&inf.brideName?' · ':'')+(inf.brideName? '신부 '+inf.brideName:'')) : ''}
+        ${kv('예식 일시', fdate(ev.date,true)+' '+(ev.weddingTime||''))}
+        ${kv('예식장', (ev.venueName||'-')+(ev.hallName? ' · '+ev.hallName:''))}
+        ${ev.region? kv('지역', ev.region):''}
+        ${kv('계약 패키지', '축의대 '+(ev.productType||'-'))}
+        ${kv('예상 하객', '신랑측 '+ev.groomGuests+'명 · 신부측 '+ev.brideGuests+'명')}
+      </div></div>
+      ${Object.keys(items).length? `<div class="pp-info-sec"><h4>하객 안내사항</h4><div class="pp-info-kv">${INFO_ITEMS.filter(x=> items[x[0]]).map(x=> kv(x[1], items[x[0]])).join('')}</div>
+        ${(inf.notes&&inf.notes.groom)? `<p class="pp-info-note">🤵 신랑측 안내 · ${e(inf.notes.groom)}</p>`:''}${(inf.notes&&inf.notes.bride)? `<p class="pp-info-note">👰 신부측 안내 · ${e(inf.notes.bride)}</p>`:''}</div>`:''}
+      ${rows.length? `<div class="pp-info-sec"><h4>운영 설정서 내용</h4><div class="pp-info-kv">${rows.map(r=> kv(r.label, r.value)).join('')}</div></div>`:''}`
+      : `<div class="pp-info-empty">${ev.settingsSubmitted? '운영 설정서가 제출됐어요. 내용이 곧 표시돼요.' : '운영 설정서가 제출되면 이곳에 예식 정보가 표시돼요.'}</div>`;
+    return `<details class="pp-info" data-infoid="${e(ev.recordId)}" ${infoOpen.has(ev.recordId)?'open':''}><summary>📋 예식 정보 <small>파트너 안내카드</small></summary>${body}</details>`;
+  }
+
   /* ---------- 카드 ---------- */
   function eventCard(ev, full){
-    const t=today(), n=diffDays(t, ev.date), pr=progress(ev);
+    const t=today(), n=diffDays(t, ev.date);
     const cls = n<0?'past': n===0?'today': n<=3?'soon':'';
     const team = full && ev.team && ev.team.length>1 ? `<div class="pp-team">${ev.team.map(m=>`<span class="pp-mate ${m.me?'me':''}"><i style="background:${e(m.color)}"></i>${e(m.name)}${m.me?' (나)':''}${m.phone?` <a href="tel:${e(m.phone)}">📞</a>`:''}</span>`).join('')}</div>` : '';
     const checkin = n===0 ? (ev.checkinAt
@@ -925,11 +1036,11 @@ const PartnerPortal = (function(){
         <div><span>근무 예상</span>최대 ${hours(ev.minutes)}${ev.pay? ' · '+money(ev.pay)+(ev.paid?' <b class="ok">지급완료</b>':''):''}${allowanceText(ev)}</div>
       </div>
       ${team}
+      ${full ? contactsHTML(ev) : ""}
+      ${infoHTML(ev)}
       ${full && ev.note ? `<div class="pp-note">📌 ${e(ev.note)}</div>`:''}
-      ${pr.total? `<div class="pp-progress"><div style="width:${pr.pct}%"></div></div><div class="pp-progress-l">준비사항 ${pr.done}/${pr.total} 완료</div>`:''}
       <div class="pp-card-actions">
         ${confirm}${checkin}
-        <button class="pp-btn" data-pp="prep" data-rid="${e(ev.recordId)}">준비사항</button>
         <button class="pp-btn" data-pp="map" data-rid="${e(ev.recordId)}">📍 길찾기</button>
         ${n>=0?`<button class="pp-btn" data-pp="ics" data-rid="${e(ev.recordId)}">📅 캘린더</button>`:''}
       </div>
@@ -1084,15 +1195,36 @@ const PartnerPortal = (function(){
     const x = eventById(op.recordId); if(!x) return;
     if(op.type==='check'){ x.checks = x.checks||{}; if(op.value) x.checks[op.itemId] = new Date().toISOString(); else delete x.checks[op.itemId]; }
     if(op.type==='checkin' && !x.checkinAt) x.checkinAt = new Date().toISOString();
-    if(op.type==='confirm'){ x.confirmed = op.value!==false; x.confirmedAt = x.confirmed ? new Date().toISOString() : ''; }
+    if(op.type==='confirm'){ x.confirmed = op.value!==false; x.confirmedAt = x.confirmed ? new Date().toISOString() : ''; cMark(op.recordId, x.confirmed); }
     if(op.type==='report'){ x.reports = (x.reports||[]).concat([{at:new Date().toISOString(), label:op.label, text:op.text}]); }
+  }
+  /* 한 번 누른 '배정 확인'은 이 기기에도 기억 → 서버에서 늦게 도착한 옛 화면 때문에 확인이 풀리지 않게, 풀려 보이면 다시 확인 처리 */
+  function cKey(){ return 'pp_conf_'+(view && view.member ? view.member.id : ''); }
+  function cGet(){ try{ return JSON.parse(localStorage.getItem(cKey())||'{}')||{}; }catch(e){ return {}; } }
+  function cMark(rid, on){ const m = cGet(); if(on) m[rid] = new Date().toISOString(); else delete m[rid]; try{ localStorage.setItem(cKey(), JSON.stringify(m)); }catch(e){} }
+  const healed = new Set();
+  function reapply(){
+    qGet().forEach(applyLocal);
+    if(!view || !Array.isArray(view.events) || H.preview) return;
+    const m = cGet(), ids = new Set(view.events.map(ev=> ev.recordId));
+    let changed = false;
+    Object.keys(m).forEach(rid=>{ if(!ids.has(rid)){ delete m[rid]; changed = true; } });
+    if(changed){ try{ localStorage.setItem(cKey(), JSON.stringify(m)); }catch(e){} }
+    const q = qGet(), redo = [];
+    view.events.forEach(ev=>{
+      if(ev.confirmed || !m[ev.recordId]) return;
+      if(q.some(o=> o.type==='confirm' && o.recordId===ev.recordId)) return;   // 보내는 중
+      ev.confirmed = true; ev.confirmedAt = m[ev.recordId];
+      if(!healed.has(ev.recordId)){ healed.add(ev.recordId); redo.push({type:'confirm', recordId: ev.recordId, value:true}); }
+    });
+    if(redo.length){ qSet(q.concat(redo)); setTimeout(flushQueue, 0); }
   }
   let opChain = Promise.resolve(), offlineNoted = false;
   function typing(){ const a = document.activeElement; return !!(a && root && root.contains(a) && /^(INPUT|TEXTAREA)$/.test(a.tagName) && a.type!=='checkbox'); }
   function softRender(){ if(!typing()) render(); }
   async function refreshAfterReject(msg){
     toast(msg || '저장하지 못했어요');
-    try{ const nv = await H.onRefresh(); if(nv){ view = nv; qGet().forEach(applyLocal); } }catch(_){}
+    try{ const nv = await H.onRefresh(); if(nv){ view = nv; reapply(); } }catch(_){}
   }
   async function drain(){ // 대기열을 서버에 전송 (화면은 이미 반영된 상태) · 쌓인 요청은 한 번에 묶어서
     if(H.preview || !H.onOp) return;
@@ -1180,30 +1312,6 @@ const PartnerPortal = (function(){
       ${past.length? `<details class="pp-past"><summary>지난 근무 ${past.length}건 보기</summary>${past.map(ev=>eventCard(ev,false)).join('')}</details>`:''}`;
   }
 
-  function prepHTML(){
-    const up=upcoming();
-    const list = up.length? up : pastEvents().slice(0,3);
-    if(!list.length) return '<div class="pp-empty">준비할 예식이 없어요</div>';
-    if(!selRecord || !eventById(selRecord)) selRecord = list[0].recordId;
-    const ev = eventById(selRecord), pr=progress(ev), t=today();
-    const items=tpl();
-    const phases = PHASE_ORDER.concat([...new Set(items.map(i=>i.phase))].filter(p=>!PHASE_ORDER.includes(p)));
-    const blocks = phases.map(ph=>{
-      const its = items.filter(i=>i.phase===ph); if(!its.length) return '';
-      const due = addDays(ev.date, PHASE_OFFSET[ph]||0);
-      const allDone = its.every(i=>ev.checks&&ev.checks[i.id]);
-      const late = !allDone && due < t && ph!=='종료 후';
-      return `<div class="pp-phase"><div class="pp-phase-h"><span>${e(ph)}</span><small class="${late?'late':''}">${ph==='종료 후'?'예식 종료 후': fdate(due)+'까지'}${late?' · 지남':''}${allDone?' · ✓ 완료':''}</small></div>
-        ${its.map(i=>{ const done=!!(ev.checks&&ev.checks[i.id]); return `<label class="pp-check ${done?'done':''}"><input type="checkbox" data-ppcheck="${e(i.id)}" ${done?'checked':''}><span>${e(i.text)}</span></label>`; }).join('')}
-      </div>`;
-    }).join('');
-    return `
-      <div class="pp-chips">${list.map(x=>`<button class="pp-chip ${x.recordId===selRecord?'on':''}" data-pp="sel" data-rid="${e(x.recordId)}">${fdate(x.date)} ${e((x.venueName||'').split(' ').slice(-1)[0])}</button>`).join('')}</div>
-      ${eventCard(ev,true)}
-      <div class="pp-h">준비 체크리스트 <small>${pr.done}/${pr.total} 완료</small></div>
-      ${items.length? blocks : '<div class="pp-empty">등록된 체크리스트가 없어요</div>'}`;
-  }
-
   function payHTML(){
     const months=[...new Set(view.events.map(ev=>ev.date.slice(0,7)).concat([today().slice(0,7)]))].sort().reverse();
     if(!payMonth || !months.includes(payMonth)) payMonth = today().slice(0,7);
@@ -1273,7 +1381,7 @@ const PartnerPortal = (function(){
     if(!root || !view) return;
     if(H.onCache){ try{ H.onCache(view); }catch(e){} }
     const pendingCount = upcoming().filter(ev=>!ev.confirmed).length;
-    const body = tab==='home'?homeHTML(): tab==='work'?workHTML(): tab==='schedule'?scheduleHTML(): tab==='prep'?prepHTML(): tab==='pay'?payHTML(): tab==='avail'?availHTML(): noticeHTML();
+    const body = tab==='home'?homeHTML(): tab==='work'?workHTML(): tab==='schedule'?scheduleHTML(): tab==='pay'?payHTML(): tab==='avail'?availHTML(): noticeHTML();
     const updated = view.generatedAt ? new Date(view.generatedAt) : new Date();
     root.innerHTML = `<div class="pp">
       ${busy?'<div class="pp-busy"></div>':''}
@@ -1381,7 +1489,7 @@ const PartnerPortal = (function(){
     if(act==='home'){ tab='home'; selDay=null; sheet=null; window.scrollTo(0,0); }
     if(act==='refresh' || act==='home'){
       if(busy){ render(); return; } busy=true; render();
-      try{ await flushQueue(); const nv = await H.onRefresh(); if(nv){ view=nv; qGet().forEach(applyLocal); } toast('최신 정보로 업데이트했어요'); }
+      try{ await flushQueue(); const nv = await H.onRefresh(); if(nv){ view=nv; reapply(); } toast('최신 정보로 업데이트했어요'); }
       catch(err){ toast(err.message||'불러오지 못했어요'); }
       finally{ busy=false; render(); }
       return;
@@ -1391,7 +1499,6 @@ const PartnerPortal = (function(){
     if(act==='confirm'){ queueOp({type:'confirm', recordId:rid, value:true}, '배정 확인 완료! 대표에게 전달돼요'); return; }
     if(act==='unconfirm'){ if(!confirm('배정 확인을 취소할까요?\n대표에게 "확인 대기"로 다시 표시돼요.')) return; queueOp({type:'confirm', recordId:rid, value:false}, '배정 확인을 취소했어요'); return; }
     if(act==='checkin'){ queueOp({type:'checkin', recordId:rid}, '도착 체크인 완료! 오늘도 잘 부탁드려요'); return; }
-    if(act==='prep' || act==='sel'){ selRecord=rid; tab='prep'; render(); if(act==='prep') window.scrollTo(0,0); return; }
     if(act==='map'){ const x=eventById(rid); if(x) openMap(x); return; }
     if(act==='ics'){ const x=eventById(rid); if(x) downloadIcs([x], 'momentworks-'+x.date+'.ics'); return; }
     if(act==='icsAll'){ downloadIcs(upcoming(), 'momentworks-schedule.ics'); return; }
@@ -1424,7 +1531,6 @@ const PartnerPortal = (function(){
     const fi = ev.target.closest && ev.target.closest('[data-ppfile]');
     if(fi){ const ta=document.getElementById('pwMsg'); if(ta && sheet) sheet.text = ta.value; photoFiles = photoFiles.concat([...(fi.files||[])]).slice(0, 20); render(); return; }
     const cb = ev.target.closest('[data-ppcheck]');
-    if(cb){ queueOp({type:'check', recordId:selRecord, itemId:cb.dataset.ppcheck, value:cb.checked}); return; }
     const sel = ev.target.closest('[data-ppsel]');
     if(sel && sel.dataset.ppsel==='payMonth'){ payMonth=sel.value; render(); }
   }
@@ -1432,15 +1538,17 @@ const PartnerPortal = (function(){
   function mount(el, v, handlers){
     unmount();
     root=el; view=v; H=handlers||{}; tab='home'; workRid=null; sheet=null;
-    qGet().forEach(applyLocal);
+    reapply();
     clearInterval(mount._t); mount._t = setInterval(()=>{ if(root && qGet().length) flushQueue(); }, 20000); if(qGet().length) setTimeout(flushQueue, 300); window.removeEventListener('online', flushQueue); window.addEventListener('online', flushQueue); selRecord=null; calCursor=null; availCursor=null; payMonth=null; selDay=null; busy=false;
+    root.addEventListener('toggle', onToggle, true);
     root.addEventListener('click', onClick);
     root.addEventListener('change', onChange);
     root.addEventListener('input', onInput);
     render();
   }
-  function update(v){ view=v; qGet().forEach(applyLocal); if(sheet && sheet.mode==='photo') return; softRender(); }
-  function unmount(){ if(root){ root.removeEventListener('click', onClick); root.removeEventListener('change', onChange); root.removeEventListener('input', onInput); root.innerHTML=''; } root=null; view=null; }
+  function onToggle(ev){ const d = ev.target; if(d && d.matches && d.matches('details.pp-info')){ if(d.open) infoOpen.add(d.dataset.infoid); else infoOpen.delete(d.dataset.infoid); } }
+  function update(v){ view=v; reapply(); if(sheet && sheet.mode==='photo') return; softRender(); }
+  function unmount(){ if(root){ root.removeEventListener('toggle', onToggle, true); root.removeEventListener('click', onClick); root.removeEventListener('change', onChange); root.removeEventListener('input', onInput); root.innerHTML=''; } root=null; view=null; }
   return {mount, update, unmount, toast, buildIcs};
 })();
 
