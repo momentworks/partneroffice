@@ -1146,7 +1146,7 @@ const PartnerPortal = (function(){
     return o;
   }
   const CARD_SECTIONS = [
-    ['예식 기본정보', [['신랑 성함','groom'],['신부 성함','bride'],['예식장명','venue'],['홀 이름','hall'],['신랑측 혼주','parents_g'],['신부측 혼주','parents_b'],['가족 인지 여부','aware']]],
+    ['예식 기본정보', [['신랑 성함','groom'],['신랑 연락처','groom_phone'],['신부 성함','bride'],['신부 연락처','bride_phone'],['예식장명','venue'],['홀 이름','hall'],['신랑측 혼주','parents_g'],['신부측 혼주','parents_b'],['가족 인지 여부','aware']]],
     ['축의금 정리방식', [['정리 방식','money_way'],['계좌이체 접수','transfer_yn'],['신랑 계좌','acc_g'],['신부 계좌','acc_b'],['반환 요청 대응','refund']]],
     ['식권 운영', [['신랑측 대인','tk_g_a'],['신랑측 소인','tk_g_c'],['신부측 대인','tk_b_a'],['신부측 소인','tk_b_c'],['계좌이체 하객 응대','tk_contact'],['모바일 청첩장 주소','tk_invite'],['교차 사용','tk_cross'],['소진 시 대응','tk_out'],['소진 시 수령 장소','tk_place'],['소인 나이 기준','tk_age'],['소인→대인 사용','tk_child_swap'],['추가 지급 요청 대응','tk_extra']]],
     ['하객 안내사항', [['주차 등록 방법','parking'],['무료 주차 시간','parking_free'],['ATM 위치','atm'],['연회장 위치','hallpos'],['신부대기실','waiting'],['식사 가능 시간','meal']]],
@@ -1171,11 +1171,10 @@ const PartnerPortal = (function(){
     if(!hasAny) return `<div class="pp-info-empty">${ev.settingsSubmitted? '운영 설정서는 제출됐지만 내용이 아직 연결되지 않았어요. 대표가 설정서를 불러오면 표시돼요.' : '운영 설정서가 제출되면 이곳에 예식 정보가 표시돼요.'}</div>`;
     const val = k=> { const v = o[k]; return (v!==undefined && v!==null && String(v).trim()!=='') ? `<b>${linkPhones(v)}</b>` : '<b class="pp-nil">-</b>'; };
     const dstr = o.date ? fdate(o.date, true) : '-';
-    const pack = [o.package || (ev.productType? '축의대 '+ev.productType : ''), o.halfside].filter(Boolean).join(' & ');
+    const pack = o.package || (ev.productType? '축의대 '+ev.productType : '');
     const qc = (l,k)=> `<div class="pp-qcell"><span>${l}</span>${val(k)}</div>`;
     const head = `<div class="pp-card-brief">
       <div class="pp-cb-names">${e(o.groom||'신랑')} <i>&amp;</i> ${e(o.bride||'신부')}</div>
-      ${(o.groom_phone||o.bride_phone)? `<div class="pp-cb-tels">${o.groom_phone? `<div>신랑 연락처 ${linkPhones(o.groom_phone)}</div>`:''}${o.bride_phone? `<div>신부 연락처 ${linkPhones(o.bride_phone)}</div>`:''}</div>`:''}
       ${pack? `<div class="pp-cb-pack">${e(pack)}</div>`:''}
       <div class="pp-cb-when">예식일 <b>${e(dstr)}</b> | 시작 <b>${e(o.time||'-')}</b><br>${o.region? e(o.region)+'<br>':''}${e(o.venue||'')}${o.hall? ' · '+e(o.hall):''}</div>
     </div>
