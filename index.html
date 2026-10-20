@@ -422,6 +422,21 @@ details.pp-past summary{cursor:pointer;font-size:13px;font-weight:700;color:var(
 
 .pp-url{color:#2563eb;text-decoration:underline;word-break:break-all;font-weight:700}
 
+.pp-ok-badge{display:inline-block;font-style:normal;font-size:10.5px;font-weight:800;line-height:1;padding:3px 6px;margin-left:5px;border-radius:999px;background:#2F7D57;color:#fff;vertical-align:middle}
+.pp-card-top .pp-ok-badge{margin-left:auto}
+.pp-ev .pp-ok-badge{font-size:9px;padding:2px 4px;margin-left:2px}
+
+.pp-newbn{background:#FFF6DF;border:1.5px solid #D9A93A;border-radius:12px;padding:12px 12px 10px;margin:0 0 14px;box-shadow:0 2px 10px rgba(180,130,20,.12)}
+.pp-newbn-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-size:14px;color:#5A3E00}
+.pp-newbn-h button{border:0;background:transparent;font-size:18px;line-height:1;cursor:pointer;color:#7a5a10;padding:4px 8px}
+.pp-newbn-row{display:flex;align-items:center;gap:8px;width:100%;text-align:left;border:0;background:#fff;border-radius:8px;padding:9px 10px;margin-bottom:6px;font-size:13px;cursor:pointer;color:inherit}
+.pp-newbn-row span{flex:1}.pp-newbn-row i{font-style:normal;color:#999}
+.pp-newbn-ok{width:100%;margin-top:2px}
+.pp-newbn-row em,.pp-newtag{font-style:normal;font-size:10px;font-weight:800;color:#fff;background:#D64545;border-radius:999px;padding:3px 7px;line-height:1}
+.pp-newbn-row em.chg,.pp-newtag.chg{background:#D9822B}
+.pp-ev .pp-newtag{padding:2px 4px;font-size:9px}
+.pp-card-top .pp-newtag{margin-left:6px}
+
 /* ================= 접속 메인화면 (모먼트웍스 로고) ================= */
 .mw-entry{position:fixed;inset:0;z-index:500;overflow-y:auto;background:#F7F5F0;background-image:radial-gradient(ellipse at 50% 38%, #FFFFFF 0%, #F7F5F0 55%, #EFEBE3 100%);color:#1A1618;
   font-family:'Pretendard',-apple-system,BlinkMacSystemFont,sans-serif;display:flex;align-items:center;justify-content:center;padding:56px 22px;box-sizing:border-box;}
@@ -632,7 +647,8 @@ function buildPartnerView(records, db, code, todayStr){
     var resp = ((db.responses||{})[recordId]||{})[member.id] || {};
     var team = slots.filter(function(s){ return s.memberId; }).map(function(s){
       var m = memberById[s.memberId] || {};
-      return {name: m.name||'(미정)', title: m.title||'', role: s.role||'', color: m.color||'#7A2E3A',
+      var rs = ((db.responses||{})[recordId]||{})[s.memberId] || {};
+      return {name: m.name||'(미정)', title: m.title||'', role: s.role||'', color: m.color||'#7A2E3A', confirmed: !!rs.confirmed,
               phone: (settings.showTeamPhone && s.memberId!==member.id) ? (m.phone||'') : '',
               me: s.memberId===member.id};
     });
@@ -1231,7 +1247,7 @@ const PartnerPortal = (function(){
   function eventCard(ev, full){
     const t=today(), n=diffDays(t, ev.date);
     const cls = n<0?'past': n===0?'today': n<=3?'soon':'';
-    const team = full && ev.team && ev.team.length>1 ? `<div class="pp-team">${ev.team.map(m=>`<span class="pp-mate ${m.me?'me':''}"><i style="background:${e(m.color)}"></i>${e(m.name)}${m.me?' (나)':''}${m.phone?` <a href="tel:${e(m.phone)}">📞</a>`:''}</span>`).join('')}</div>` : '';
+    const team = full && ev.team && ev.team.length>0 ? `<div class="pp-team">${ev.team.map(m=>`<span class="pp-mate ${m.me?'me':''}"><i style="background:${e(m.color)}"></i>${e(m.name)}${m.me?' (나)':''}${(m.me? ev.confirmed : m.confirmed)? '<em class="pp-ok-badge">확정</em>':''}${m.phone?` <a href="tel:${e(m.phone)}">📞</a>`:''}</span>`).join('')}</div>` : '';
     const checkin = n===0 ? (ev.checkinAt
         ? `<span class="pp-confirmed">📍 도착 체크인 ${new Date(ev.checkinAt).toTimeString().slice(0,5)}</span>`
         : `<button class="pp-btn gold" data-pp="checkin" data-rid="${e(ev.recordId)}">📍 현장 도착 체크인</button>`) : '';
@@ -1240,7 +1256,7 @@ const PartnerPortal = (function(){
           : `<button class="pp-confirmed pp-unconfirm" data-pp="unconfirm" data-rid="${e(ev.recordId)}" title="한 번 더 누르면 확인을 취소할 수 있어요">✓ 배정 확인 완료<small>누르면 취소</small></button>`)
         : `<button class="pp-btn primary" data-pp="confirm" data-rid="${e(ev.recordId)}">배정 확인했어요</button>`) : '';
     return `<article class="pp-card ${cls}">
-      <div class="pp-card-top"><span class="pp-dday">${dLabel(ev.date)}</span><span class="pp-date">${fdate(ev.date,true)}</span>${ev.productType?`<span class="pp-prod">${e(ev.productType)}</span>`:''}</div>
+      <div class="pp-card-top"><span class="pp-dday">${dLabel(ev.date)}</span>${NEWMAP[ev.recordId]?`<span class="pp-newtag ${NEWMAP[ev.recordId]}">${NEWMAP[ev.recordId]==='new'?'NEW':'변경'}</span>`:''}<span class="pp-date">${fdate(ev.date,true)}</span>${ev.productType?`<span class="pp-prod">${e(ev.productType)}</span>`:''}${ev.confirmed?'<span class="pp-ok-badge">확정</span>':''}</div>
       <div class="pp-venue">${e(ev.venueName||'예식장 미정')}<small>${e(ev.hallName)}</small></div>
       <div class="pp-timeline">
         <div><span>출근</span><b>${e(ev.callTime||'-')}</b></div><i></i>
@@ -1512,7 +1528,7 @@ const PartnerPortal = (function(){
       const dow=parseD(ds).getDay(), evs=byDate[ds]||[], a=av[ds];
       return `<button class="pp-day ${dow===0||dow===6?'we':''} ${ds===t?'today':''} ${ds===selDay?'sel':''}" data-pp="day" data-v="${ds}">
         <span class="pp-dn">${d}</span>
-        ${evs.map(ev=>`<span class="pp-ev">${e(ev.callTime||'')} ${e(ev.venueName.split(' ')[0]||'')}</span>`).join('')}
+        ${evs.map(ev=>`<span class="pp-ev">${e(ev.callTime||'')} ${e(ev.venueName.split(' ')[0]||'')}${ev.confirmed?' <b class="pp-ok-badge">확정</b>':''}${NEWMAP[ev.recordId]?' <b class="pp-newtag '+NEWMAP[ev.recordId]+'">N</b>':''}</span>`).join('')}
         ${a&&!evs.length?`<span class="pp-av ${a.type}">${a.type==='off'?'휴무':a.type==='am'?'오전만':'오후만'}</span>`:''}
       </button>`;
     });
@@ -1596,8 +1612,31 @@ const PartnerPortal = (function(){
   const PP_SVG = d=> `<svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
   const PP_ICON_REFRESH = PP_SVG('<path d="M20 11a8 8 0 1 0-2.34 5.66"/><path d="M20 4v7h-7"/>');
   const PP_ICON_LOGOUT = PP_SVG('<path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M15 8l4 4-4 4"/><path d="M19 12H9"/>');
+  /* ---------- 새 배정 · 일정 변경 알림 (이 기기에서 아직 못 본 일정) ---------- */
+  let NEWMAP = {};
+  function sKey(){ return 'pp_seen_'+(view && view.member ? view.member.id : ''); }
+  function sGet(){ try{ return JSON.parse(localStorage.getItem(sKey())||'null'); }catch(e){ return null; } }
+  function sSet(o){ try{ localStorage.setItem(sKey(), JSON.stringify(o)); }catch(e){} }
+  function evSig(ev){ return [ev.date, ev.weddingTime, ev.venueName, ev.hallName, ev.callTime, (ev.roles||[]).join(',')].join('|'); }
+  function computeNew(){
+    NEWMAP = {};
+    if(!view || H.preview) return;
+    const seen = sGet(), up = upcoming();
+    if(!seen){ const o = {}; up.forEach(ev=>{ o[ev.recordId] = evSig(ev); }); sSet({ev:o, at:new Date().toISOString()}); return; } // 처음 열었을 땐 기존 일정을 본 것으로 처리
+    up.forEach(ev=>{ const s = seen.ev && seen.ev[ev.recordId]; if(s===undefined) NEWMAP[ev.recordId] = 'new'; else if(s!==evSig(ev)) NEWMAP[ev.recordId] = 'chg'; });
+  }
+  function markSeen(){ const o = {}; upcoming().forEach(ev=>{ o[ev.recordId] = evSig(ev); }); const seen = sGet() || {}; const keep = {}; Object.keys(seen.ev||{}).forEach(k=>{ if(!view.events.some(ev=>ev.recordId===k && ev.date>=today())) return; }); sSet({ev:o, at:new Date().toISOString()}); NEWMAP = {}; }
+  function newBannerHTML(){
+    const ids = Object.keys(NEWMAP); if(!ids.length) return '';
+    const evs = ids.map(id=> view.events.find(ev=>ev.recordId===id)).filter(Boolean).sort((a,b)=> a.date<b.date?-1:1);
+    return `<div class="pp-newbn" role="status"><div class="pp-newbn-h"><b>🔔 ${evs.some(ev=>NEWMAP[ev.recordId]==='new')? '새로 배정된 일정이 있어요':'일정이 변경됐어요'}</b><button data-pp="seenAll" aria-label="닫기" title="확인했어요">✕</button></div>
+      ${evs.map(ev=>`<button class="pp-newbn-row" data-pp="newgo" data-rid="${e(ev.recordId)}"><em class="${NEWMAP[ev.recordId]}">${NEWMAP[ev.recordId]==='new'?'NEW':'변경'}</em><span>${fdate(ev.date,true)} ${e(ev.callTime? '출근 '+ev.callTime : '')} · ${e((ev.venueName||'예식장 미정').split(' ').slice(0,2).join(' '))}</span><i>›</i></button>`).join('')}
+      <button class="pp-btn pp-newbn-ok" data-pp="seenAll">확인했어요</button></div>`;
+  }
+
   function render(){
     if(!root || !view) return;
+    computeNew();
     if(H.onCache){ try{ H.onCache(view); }catch(e){} }
     const pendingCount = upcoming().filter(ev=>!ev.confirmed).length;
     const body = tab==='home'?homeHTML(): tab==='work'?workHTML(): tab==='schedule'?scheduleHTML(): tab==='info'?infoPageHTML(): tab==='pay'?payHTML(): tab==='avail'?availHTML(): noticeHTML();
@@ -1620,7 +1659,7 @@ const PartnerPortal = (function(){
         </div>
       </header>
       <nav class="pp-tabs">${TABS.map(([k,l])=>`<button class="${tab===k?'on':''}" data-pp="tab" data-v="${k}">${l}${k==='schedule'&&pendingCount?`<span class="pp-n">${pendingCount}</span>`:''}</button>`).join('')}</nav>
-      <main class="pp-main">${body}</main>
+      <main class="pp-main">${newBannerHTML()}${body}</main>
       ${sheetHTML()}
       ${H.onInstall && !(H.isInstalled && H.isInstalled()) ? '<div style="text-align:center;margin-top:18px;"><button class="pp-install-link" data-pp="install">📲 홈 화면에 바로가기 추가</button></div>' : ''}
       <div class="pp-foot">${typeof MW_LOGO_MARK!=='undefined' ? `<img src="${MW_LOGO_MARK}" alt="">` : ''}<b>MOMENT WORKS</b>마지막 업데이트 ${pd(updated.getMonth()+1)}.${pd(updated.getDate())} ${pd(updated.getHours())}:${pd(updated.getMinutes())} · 모먼트웍스 파트너스오피스</div>
@@ -1720,6 +1759,8 @@ const PartnerPortal = (function(){
     if(act==='checkin'){ queueOp({type:'checkin', recordId:rid}, '도착 체크인 완료! 오늘도 잘 부탁드려요'); return; }
     if(act==='map'){ const x=eventById(rid); if(x) openMap(x); return; }
     if(act==='ics'){ const x=eventById(rid); if(x) downloadIcs([x], 'momentworks-'+x.date+'.ics'); return; }
+    if(act==='seenAll'){ markSeen(); render(); return; }
+    if(act==='newgo'){ const x=eventById(rid); if(x){ tab='schedule'; calCursor=x.date.slice(0,7); selDay=x.date; } render(); return; }
     if(act==='icsAll'){ downloadIcs(upcoming(), 'momentworks-schedule.ics'); return; }
     if(act==='cal'){ calCursor=shiftMonth(calCursor, Number(v)); render(); return; }
     if(act==='acal'){ availCursor=shiftMonth(availCursor, Number(v)); render(); return; }
