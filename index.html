@@ -1134,7 +1134,7 @@ const PartnerPortal = (function(){
     ticket_reissue_way:'tk_extra', ticket_reissue_way_etc:'tk_extra_etc',
     gift_yn:'gift', gift_type:'gift_type', gift_place:'gift_place', gift_target:'gift_target', gift_criteria:'gift_criteria', gift_script:'gift_script',
     info_parking_way:'parking', info_parking_time:'parking_free', info_atm:'atm', info_hall:'hallpos', info_bride_room:'waiting', info_meal_time:'meal',
-    vip_yn:'vip_flag', family_aware:'aware', aware_family:'aware', family_awareness:'aware', family_notice:'aware', family_know:'aware', family_known:'aware', vendor_aware:'aware', aware_yn:'aware', family_aware_yn:'aware', aware_notice:'aware',
+    vip_yn:'vip_flag', agency_awareness:'aware', ticket_deliverer_relation:'tk_del_rel', ticket_deliverer_name:'tk_del_name', ticket_deliverer_phone:'tk_del_phone', family_aware:'aware', aware_family:'aware', family_awareness:'aware', family_notice:'aware', family_know:'aware', family_known:'aware', vendor_aware:'aware', aware_yn:'aware', family_aware_yn:'aware', aware_notice:'aware',
     handover_relation_groom:'hand_g_rel', handover_name_groom:'hand_g_name', handover_phone_groom:'hand_g_phone',
     handover_relation_bride:'hand_b_rel', handover_name_bride:'hand_b_name', handover_phone_bride:'hand_b_phone',
     handover_report_email_groom:'email_g', handover_report_email_bride:'email_b',
@@ -1145,13 +1145,13 @@ const PartnerPortal = (function(){
     link_receiver_groom:'link_g', link_receiver_bride:'link_b', guide_doc:'signage', contractor_name:'contractor'
   };
   const KOLAB = {groom:'신랑 성함', bride:'신부 성함', date:'예식일', time:'예식 시작시간', region:'지역', venue:'예식장명', hall:'홀 이름', guest_g:'신랑측 예상 하객 수', guest_b:'신부측 예상 하객 수',
-    parents_g:'[신랑측] 혼주 성함', parents_b:'[신부측] 혼주 성함', aware:'축의업체 인지사항(가족 인지 여부)', relation:'관계 설정', money_way:'축의금 정리 방식', transfer_yn:'계좌이체 받을 예정', acc_g:'신랑 계좌', acc_b:'신부 계좌', refund:'축의금 반환 요청 시 대응 방법',
+    parents_g:'[신랑측] 혼주 성함', parents_b:'[신부측] 혼주 성함', aware:'축의업체 인지사항', relation:'관계 설정', money_way:'축의금 정리 방식', transfer_yn:'계좌이체 받을 예정', acc_g:'신랑 계좌', acc_b:'신부 계좌', refund:'축의금 반환 요청 시 대응 방법',
     tk_g_a:'배정 식권수량(신랑측 대인)', tk_g_c:'배정 식권수량(신랑측 소인)', tk_b_a:'배정 식권수량(신부측 대인)', tk_b_c:'배정 식권수량(신부측 소인)', tk_contact:'축의금 계좌이체 하객 응대 방법', tk_invite:'모바일 청첩장 주소', tk_cross:'식권 교차 사용 가능 여부', tk_out:'식권 소진 시 대응 방법', tk_place:'식권 소진 시 추가 수령 장소', tk_age:'소인 식권의 나이 기준', tk_child_swap:'소인 식권 소진 시 대인 식권 사용 가능 여부', tk_extra:'식권 추가 지급 요청 시 대응 방법', tk_extra_etc:'식권 추가 지급 대응(기타)',
     gift:'답례품 제공 여부', parking:'주차 등록 방법', parking_free:'무료 주차 시간', atm:'ATM 위치', hallpos:'연회장 위치', waiting:'신부대기실 위치', meal:'식사 가능 시간', vip_flag:'VIP 명단 작성 여부',
     hand_g_rel:'인계 받으실 분(신랑측) - 관계', hand_g_name:'인계 받으실 분(신랑측) - 성함', hand_g_phone:'인계 받으실 분(신랑측) - 연락처', hand_b_rel:'인계 받으실 분(신부측) - 관계', hand_b_name:'인계 받으실 분(신부측) - 성함', hand_b_phone:'인계 받으실 분(신부측) - 연락처',
     hand_disclose:'축의금 인계시, 축의금 내역 노출 여부', hand_method:'축의금 전체 세부내역 전달 방식', email_g:'축의금 정리내역 전달 이메일(신랑측)', email_b:'축의금 정리내역 전달 이메일(신부측)', arrival:'신랑,신부님 웨딩홀 도착 예상 시간',
     e1_rel:'비상연락 1순위 - 관계', e1_name:'비상연락 1순위 - 성함', e1_phone:'비상연락 1순위 - 연락처', e2_rel:'비상연락 2순위 - 관계', e2_name:'비상연락 2순위 - 성함', e2_phone:'비상연락 2순위 - 연락처',
-    photo_agree:'서비스 전 과정 촬영 동의', photo_cam:'추가 촬영용 카메라 제공 여부', cam_rel:'추가 카메라 전달자 - 관계', cam_name:'추가 카메라 전달자 - 성함', cam_phone:'추가 카메라 전달자 - 연락처', link_g:'링크 받으실 분(신랑측)', link_b:'링크 받으실 분(신부측)', signage:'예식 안내문 제작 여부', contractor:'계약자 성함'};
+    photo_agree:'서비스 전 과정 촬영 동의', photo_cam:'추가 촬영용 카메라 제공 여부', cam_rel:'추가 카메라 전달자 - 관계', cam_name:'추가 카메라 전달자 - 성함', cam_phone:'추가 카메라 전달자 - 연락처', link_g:'링크 받으실 분(신랑측)', link_b:'링크 받으실 분(신부측)', signage:'예식 안내문 제작 여부', contractor:'계약자 성함', tk_del_rel:'본식 당일 식권 전달자 - 관계', tk_del_name:'본식 당일 식권 전달자 - 성함', tk_del_phone:'본식 당일 식권 전달자 - 연락처'};
   function cardEntries(ev){
     const inf = ev.info || {}, m = inf.card || {}, it = inf.items || {}, E = {};
     const lowM = {}; Object.keys(m).forEach(k=>{ lowM[String(k).toLowerCase()] = m[k]; });
@@ -1177,24 +1177,25 @@ const PartnerPortal = (function(){
     const o = Object.assign({}, E);
     o.relation = etc(E.relation, E.relation_etc); o.refund = etc(E.refund, E.refund_etc); o.tk_extra = etc(E.tk_extra, E.tk_extra_etc);
     o.gift = (has(E.gift) && !/^없음/.test(E.gift)) ? join([E.gift, E.gift_type, E.gift_place, E.gift_target, E.gift_criteria, E.gift_script], ' / ') : (E.gift||'');
+    o.tk_del = person(E.tk_del_rel, E.tk_del_name, E.tk_del_phone);
     o.hand_g = person(E.hand_g_rel, E.hand_g_name, E.hand_g_phone); o.hand_b = person(E.hand_b_rel, E.hand_b_name, E.hand_b_phone);
     o.emg1 = person(E.e1_rel, E.e1_name, E.e1_phone) || (E.e1_all||''); o.emg2 = person(E.e2_rel, E.e2_name, E.e2_phone) || (E.e2_all||'');
     o.cam_person = person(E.cam_rel, E.cam_name, E.cam_phone);
     return o;
   }
   const CARD_SECTIONS = [
-    ['예식 기본정보', [['신랑 성함','groom'],['신랑 연락처','groom_phone'],['신부 성함','bride'],['신부 연락처','bride_phone'],['예식장명','venue'],['홀 이름','hall'],['신랑측 혼주','parents_g'],['신부측 혼주','parents_b'],['가족 인지 여부','aware']]],
+    ['예식 기본정보', [['신랑 성함','groom'],['신랑 연락처','groom_phone'],['신부 성함','bride'],['신부 연락처','bride_phone'],['예식장명','venue'],['홀 이름','hall'],['신랑측 혼주','parents_g'],['신부측 혼주','parents_b'],['축의업체 인지사항','aware']]],
     ['축의금 정리방식', [['정리 방식','money_way'],['계좌이체 접수','transfer_yn'],['신랑 계좌','acc_g'],['신부 계좌','acc_b'],['반환 요청 대응','refund']]],
-    ['식권 운영', [['신랑측 대인','tk_g_a'],['신랑측 소인','tk_g_c'],['신부측 대인','tk_b_a'],['신부측 소인','tk_b_c'],['계좌이체 하객 응대','tk_contact'],['모바일 청첩장 주소','tk_invite'],['교차 사용','tk_cross'],['소진 시 대응','tk_out'],['소진 시 수령 장소','tk_place'],['소인 나이 기준','tk_age'],['소인→대인 사용','tk_child_swap'],['추가 지급 요청 대응','tk_extra']]],
+    ['식권 운영', [['신랑측 대인','tk_g_a'],['신랑측 소인','tk_g_c'],['신부측 대인','tk_b_a'],['신부측 소인','tk_b_c'],['계좌이체 하객 응대','tk_contact'],['식권 전달해주시는 분','tk_del'],['모바일 청첩장 주소','tk_invite'],['교차 사용','tk_cross'],['소진 시 대응','tk_out'],['소진 시 수령 장소','tk_place'],['소인 나이 기준','tk_age'],['소인→대인 사용','tk_child_swap'],['추가 지급 요청 대응','tk_extra']]],
     ['하객 안내사항', [['주차 등록 방법','parking'],['무료 주차 시간','parking_free'],['ATM 위치','atm'],['연회장 위치','hallpos'],['신부대기실','waiting'],['식사 가능 시간','meal']]],
     ['VIP 명단', 'vip'],
-    ['축의금 인계 & 긴급연락처', [['인계자(신랑측)','hand_g'],['인계자(신부측)','hand_b'],['내역 노출 방식','hand_disclose'],['세부내역 전달 방식','hand_method'],['정리내역 이메일(신랑측)','email_g'],['정리내역 이메일(신부측)','email_b'],['비상연락 1순위','emg1'],['비상연락 2순위','emg2']]],
+    ['축의금 인계 & 긴급연락처', [['인계자(신랑측)','hand_g'],['인계자(신부측)','hand_b'],['비상연락 1순위','emg1'],['비상연락 2순위','emg2']]],
     ['사진·영상 / 답례품', [['전 과정 촬영 동의','photo_agree'],['추가 카메라 제공','photo_cam'],['카메라 전달자','cam_person'],['답례품','gift']]],
-    ['영상 링크 수신 / 안내문', [['링크 수신(신랑측)','link_g'],['링크 수신(신부측)','link_b'],['예식 안내문 제작','signage']]]
+    ['예식 안내문', [['예식 안내문 제작 여부','signage']]]
   ];
   const CARD_USED = new Set();
   Object.keys(JMAP).forEach(k=>{ CARD_USED.add(k); CARD_USED.add(JMAP[k]); });
-  ['vip_name','vip_relation','vip_contact','vip_memo','vip_ticket','vip_tickets','guide','e1_all','e2_all','package','halfside'].forEach(k=> CARD_USED.add(k));
+  ['vip_name','vip_relation','vip_contact','vip_memo','vip_ticket','vip_tickets','guide','tk_del','e1_all','e2_all','package','halfside'].forEach(k=> CARD_USED.add(k));
   function linkPhones(v){
     const ph = s=> s.replace(/(0\d{1,2})[-.\s]?(\d{3,4})[-.\s]?(\d{4})/g, (mm,a,b,c)=> `<a class="pp-tel" href="tel:${a}${b}${c}">${mm}</a>`);
     return String(v==null?'':v).split(/((?:https?:\/\/|www\.)[^\s<>"'()]+)/i).map((seg,i)=>{
