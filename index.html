@@ -439,6 +439,13 @@ details.pp-past summary{cursor:pointer;font-size:13px;font-weight:700;color:var(
 
 .pp-pendhead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 2px 12px;font-size:14px}.pp-pendhead small{color:var(--pp-soft);font-weight:700}
 
+.pp-others{margin:18px 0 6px;border:1px solid var(--pp-line);border-radius:12px;padding:10px 12px;background:#fff}
+.pp-others summary{cursor:pointer;font-size:14px}.pp-others summary small{color:var(--pp-soft);font-weight:700}
+.pp-others-note{font-size:11.5px;color:var(--pp-soft);margin:6px 0 10px}
+.pp-other{border-top:1px dashed var(--pp-line);padding:9px 0}
+.pp-other-top{display:flex;justify-content:space-between;font-size:13px}.pp-other-top span{color:var(--pp-soft);font-size:12px}
+.pp-other-venue{font-size:13.5px;font-weight:700;margin:3px 0 6px}.pp-other-venue small{font-weight:400;color:var(--pp-soft)}
+
 /* ================= 접속 메인화면 (모먼트웍스 로고) ================= */
 .mw-entry{position:fixed;inset:0;z-index:500;overflow-y:auto;background:#F7F5F0;background-image:radial-gradient(ellipse at 50% 38%, #FFFFFF 0%, #F7F5F0 55%, #EFEBE3 100%);color:#1A1618;
   font-family:'Pretendard',-apple-system,BlinkMacSystemFont,sans-serif;display:flex;align-items:center;justify-content:center;padding:56px 22px;box-sizing:border-box;}
@@ -634,7 +641,7 @@ function buildPartnerView(records, db, code, todayStr){
   var memberById = {};
   members.forEach(function(m){ memberById[m.id] = m; });
 
-  var events = [];
+  var events = [], others = [];
   var assignments = db.assignments || {};
   Object.keys(assignments).forEach(function(recordId){
     var a = assignments[recordId] || {};
@@ -642,7 +649,14 @@ function buildPartnerView(records, db, code, todayStr){
     if(!r || r.type!=='contract' || r.cancelled || !r.weddingDate) return;
     var slots = a.slots || [];
     var mine = slots.filter(function(s){ return s.memberId===member.id; });
-    if(mine.length===0) return;
+    if(mine.length===0){
+      // 내 예식이 아닌 일정: 다른 파트너가 배정 확정한 건만 (이름 · 일정 · 장소만 공유, 인건비 · 고객 정보는 제외)
+      var rsp = (db.responses||{})[recordId] || {}, ppl = [], seenM = {};
+      slots.forEach(function(s){ if(!s.memberId || seenM[s.memberId] || !(rsp[s.memberId] && rsp[s.memberId].confirmed)) return; seenM[s.memberId] = 1; var mm = memberById[s.memberId] || {}; ppl.push({name: mm.name||'', color: mm.color||'#7A2E3A', role: s.role||''}); });
+      if(ppl.length){ var wt0 = toMin(r.weddingTime), off0 = (a.callOffset!==null && a.callOffset!==undefined && a.callOffset!=='') ? Number(a.callOffset) : Number(settings.callOffset);
+        others.push({recordId: recordId, date: r.weddingDate, weddingTime: r.weddingTime||'', callTime: wt0===null ? '' : toHm(wt0-off0), venueName: r.venueName||'', hallName: r.hallName||'', people: ppl}); }
+      return;
+    }
     var wt = toMin(r.weddingTime);
     var offset = (a.callOffset!==null && a.callOffset!==undefined && a.callOffset!=='') ? Number(a.callOffset) : Number(settings.callOffset);
     var work = (a.workMinutes!==null && a.workMinutes!==undefined && a.workMinutes!=='') ? Number(a.workMinutes) : Number(settings.workMinutes);
@@ -702,6 +716,7 @@ function buildPartnerView(records, db, code, todayStr){
     today: todayStr || '',
     member: {id: member.id, name: member.name, title: member.title||'', color: member.color||'#7A2E3A', kind: member.kind||'partner'},
     events: events,
+    others: others,
     notices: notices,
     template: db.template || [],
     workflow: (db.settings && Array.isArray(db.settings.workflow) && db.settings.workflow.length) ? db.settings.workflow : pvDefaultWorkflow(),
@@ -1523,6 +1538,16 @@ const PartnerPortal = (function(){
   }
 
   let schedFilter = null;
+  function othersHTML(){
+    const t = today(), list = (view.others||[]).filter(o=>o.date>=t).sort((a,b)=> (a.date+(a.callTime||''))<(b.date+(b.callTime||''))?-1:1);
+    if(!list.length) return '';
+    return `<details class="pp-others" open><summary><b>👥 다른 파트너 확정 일정</b> <small>${list.length}건</small></summary>
+      <p class="pp-others-note">다른 파트너가 배정을 확인해 확정한 일정이에요. 이름 · 일정 · 장소만 보여요.</p>
+      ${list.map(o=>`<div class="pp-other"><div class="pp-other-top"><b>${fdate(o.date,true)}</b><span>${e(o.callTime? '출근 '+o.callTime : '')}${o.weddingTime? ' · 예식 '+e(o.weddingTime):''}</span></div>
+        <div class="pp-other-venue">${e(o.venueName||'예식장 미정')}${o.hallName? ' <small>'+e(o.hallName)+'</small>':''}</div>
+        <div class="pp-team">${o.people.map(m=>`<span class="pp-mate"><i style="background:${e(m.color)}"></i>${e(m.name)}${m.role? ' <small>'+e(m.role)+'</small>':''}<em class="pp-ok-badge">확정</em></span>`).join('')}</div></div>`).join('')}
+    </details>`;
+  }
   function scheduleHTML(){
     if(schedFilter==='pending'){
       const pend = upcoming().filter(ev=>!ev.confirmed).sort((a,b)=> a.date<b.date?-1:a.date>b.date?1:0);
@@ -1550,6 +1575,7 @@ const PartnerPortal = (function(){
         <div class="pp-cal-grid">${cells}</div>
       </div>
       ${selDay ? `<div class="pp-h">${fdate(selDay,true)}</div>${dayEvs.length? dayEvs.map(ev=>eventCard(ev,true)).join('') : '<div class="pp-empty">이 날은 배정된 예식이 없어요</div>'}`:''}
+      ${othersHTML()}
       <div class="pp-h">다가오는 일정 <button class="pp-btn" data-pp="icsAll">📅 전체 캘린더에 추가</button></div>
       ${up.length? groups : '<div class="pp-empty">다가오는 배정이 없어요</div>'}
       ${past.length? `<details class="pp-past"><summary>지난 근무 ${past.length}건 보기</summary>${past.map(ev=>eventCard(ev,false)).join('')}</details>`:''}`;
