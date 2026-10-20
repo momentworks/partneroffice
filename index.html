@@ -437,6 +437,8 @@ details.pp-past summary{cursor:pointer;font-size:13px;font-weight:700;color:var(
 .pp-ev .pp-newtag{padding:2px 4px;font-size:9px}
 .pp-card-top .pp-newtag{margin-left:6px}
 
+.pp-pendhead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 2px 12px;font-size:14px}.pp-pendhead small{color:var(--pp-soft);font-weight:700}
+
 /* ================= 접속 메인화면 (모먼트웍스 로고) ================= */
 .mw-entry{position:fixed;inset:0;z-index:500;overflow-y:auto;background:#F7F5F0;background-image:radial-gradient(ellipse at 50% 38%, #FFFFFF 0%, #F7F5F0 55%, #EFEBE3 100%);color:#1A1618;
   font-family:'Pretendard',-apple-system,BlinkMacSystemFont,sans-serif;display:flex;align-items:center;justify-content:center;padding:56px 22px;box-sizing:border-box;}
@@ -1509,7 +1511,7 @@ const PartnerPortal = (function(){
       <div class="pp-hello-s">${next ? `다음 예식은 <b>${fdate(next.date)} ${e(next.callTime)} 출근</b> · ${e(next.venueName)}이에요.` : '아직 배정된 예식이 없어요. 배정되면 여기에 바로 보여요.'}</div>
       ${H.onInstall && !(H.isInstalled && H.isInstalled()) && !installHidden() ? `<div class="pp-install"><span>📲 <b>홈 화면에 추가</b>하면 앱처럼 바로 열려요</span><button data-pp="install">추가하기</button><button class="x" data-pp="installHide" title="닫기">✕</button></div>` : ''}
       ${todayEvents().length? `<button class="pw-start" data-pp="tab" data-v="work"><span>오늘 예식 ${todayEvents().length}건 · ${e(todayEvents()[0].callTime)} 출근</span><b>▶ 오늘 업무 시작하기</b></button>` : `<button class="pw-learn" data-pp="tab" data-v="work">처음이신가요? <b>당일 업무 순서 미리 보기 →</b></button>`}
-      ${pending.length? `<div class="pp-alert"><span>확인이 필요한 새 배정 <b>${pending.length}건</b></span><button data-pp="tab" data-v="schedule">확인하기</button></div>`:''}
+      ${pending.length? `<div class="pp-alert"><span>확인이 필요한 새 배정 <b>${pending.length}건</b></span><button data-pp="pendingList">확인하기</button></div>`:''}
       <div class="pp-stats">
         <div class="pp-stat"><span>이번달 예식</span><b>${monthEv.length}건</b></div>
         <div class="pp-stat"><span>이번달 근무</span><b>${hours(monthEv.reduce((s,x)=>s+x.minutes,0))}</b></div>
@@ -1520,7 +1522,13 @@ const PartnerPortal = (function(){
       ${up.length>1? `<div class="pp-h">이후 일정 <small>${up.length-1}건</small></div>${up.slice(1,4).map(ev=>eventCard(ev,false)).join('')}${up.length>4?`<button class="pp-btn" style="width:100%" data-pp="tab" data-v="schedule">전체 일정 보기</button>`:''}`:''}`;
   }
 
+  let schedFilter = null;
   function scheduleHTML(){
+    if(schedFilter==='pending'){
+      const pend = upcoming().filter(ev=>!ev.confirmed).sort((a,b)=> a.date<b.date?-1:a.date>b.date?1:0);
+      return `<div class="pp-pendhead"><div><b>배정 확인이 필요한 일정</b> <small>${pend.length}건</small></div><button class="pp-btn" data-pp="allList">전체 일정 보기</button></div>
+        ${pend.length ? pend.map(ev=>eventCard(ev,true)).join('') : '<div class="pp-empty">✅ 확인이 필요한 일정이 없어요. 모두 확인하셨어요!</div>'}`;
+    }
     if(!calCursor) calCursor = today().slice(0,7);
     const byDate={}; view.events.forEach(ev=>{ (byDate[ev.date]=byDate[ev.date]||[]).push(ev); });
     const av=view.availability||{}, t=today();
@@ -1681,7 +1689,9 @@ const PartnerPortal = (function(){
   async function onClick(ev){
     const el = ev.target.closest('[data-pp]'); if(!el) return;
     const act=el.dataset.pp, v=el.dataset.v, rid=el.dataset.rid;
-    if(act==='tab'){ tab=v; selDay=null; sheet=null; render(); window.scrollTo(0,0); return; }
+    if(act==='pendingList'){ tab='schedule'; schedFilter='pending'; selDay=null; sheet=null; render(); window.scrollTo(0,0); return; }
+    if(act==='allList'){ schedFilter=null; render(); window.scrollTo(0,0); return; }
+    if(act==='tab'){ schedFilter=null; tab=v; selDay=null; sheet=null; render(); window.scrollTo(0,0); return; }
     if(act==='wsel'){ workRid=rid; render(); return; }
     if(act==='install'){ if(H.onInstall) H.onInstall(); return; }
     if(act==='installHide'){ try{ localStorage.setItem('pp_install_hide','1'); }catch(e){} render(); return; }
