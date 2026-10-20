@@ -446,6 +446,18 @@ details.pp-past summary{cursor:pointer;font-size:13px;font-weight:700;color:var(
 .pp-other-top{display:flex;justify-content:space-between;font-size:13px}.pp-other-top span{color:var(--pp-soft);font-size:12px}
 .pp-other-venue{font-size:13.5px;font-weight:700;margin:3px 0 6px}.pp-other-venue small{font-weight:400;color:var(--pp-soft)}
 
+.pp-cfhead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 2px 12px;font-size:14px}.pp-cfhead small{color:var(--pp-soft);font-weight:700}
+.pp-cflist{background:#fff;border:1px solid var(--pp-line);border-radius:12px;overflow:hidden}
+.pp-cfrow{display:flex;align-items:center;gap:8px;padding:10px 10px;border-top:1px solid var(--pp-line);font-size:13px;white-space:nowrap}
+.pp-cfrow:first-child{border-top:0}.pp-cfrow.done{background:#F7FAF8}
+.pp-cf-date{font-weight:800;min-width:50px}.pp-cf-date small{font-weight:600;margin-left:3px;color:var(--pp-soft)}.pp-cf-date small.sun{color:#D64545}.pp-cf-date small.sat{color:#3B6FD1}
+.pp-cf-time{font-weight:700;min-width:40px}
+.pp-cf-venue{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+.pp-cf-region{color:var(--pp-soft);font-size:12px;max-width:72px;overflow:hidden;text-overflow:ellipsis}
+.pp-cf-btn{border:0;border-radius:8px;background:var(--pp-wine);color:#fff;font-weight:800;font-size:13px;padding:8px 12px;cursor:pointer;flex:none}
+.pp-cf-btn.ok{background:#E3F1E9;color:#2F7D57}
+.pp-cf-note{font-size:11.5px;color:var(--pp-soft);text-align:center;margin-top:14px}
+
 /* ================= 접속 메인화면 (모먼트웍스 로고) ================= */
 .mw-entry{position:fixed;inset:0;z-index:500;overflow-y:auto;background:#F7F5F0;background-image:radial-gradient(ellipse at 50% 38%, #FFFFFF 0%, #F7F5F0 55%, #EFEBE3 100%);color:#1A1618;
   font-family:'Pretendard',-apple-system,BlinkMacSystemFont,sans-serif;display:flex;align-items:center;justify-content:center;padding:56px 22px;box-sizing:border-box;}
@@ -1007,7 +1019,7 @@ function buildCustomerView(records, db, code, todayStr, withFile){
 ============================================================================================== */
 const PartnerPortal = (function(){
   const WD = ['일','월','화','수','목','금','토'];
-  const TABS = [['home','홈'],['work','오늘 업무'],['schedule','내 일정'],['info','예식정보'],['pay','근무·급여'],['avail','휴무 신청'],['notice','공지']];
+  const TABS = [['home','홈'],['work','오늘 업무'],['schedule','내 일정'],['confirm','배정 확인'],['info','예식정보'],['pay','근무·급여'],['avail','휴무 신청'],['notice','공지']];
   let workRid=null, sheet=null, root=null, view=null, H={}, tab='home', selRecord=null, calCursor=null, availCursor=null, payMonth=null, selDay=null, busy=false;
 
   const pd = n => String(n).padStart(2,'0');
@@ -1530,6 +1542,24 @@ const PartnerPortal = (function(){
   }
 
   let schedFilter = null;
+  function confirmHTML(){
+    const up = upcoming().slice().sort((a,b)=> (a.date+(a.weddingTime||''))<(b.date+(b.weddingTime||''))?-1:1);
+    const pend = up.filter(ev=>!ev.confirmed), done = up.filter(ev=>ev.confirmed);
+    const row = ev=>{
+      const d = parseD(ev.date), dow = '일월화수목금토'[d.getDay()];
+      return `<div class="pp-cfrow ${ev.confirmed?'done':''}">
+        <span class="pp-cf-date">${pd(d.getMonth()+1)}.${pd(d.getDate())}<small class="${d.getDay()===0?'sun':d.getDay()===6?'sat':''}">${dow}</small></span>
+        <span class="pp-cf-time">${e(ev.weddingTime||'-')}</span>
+        <span class="pp-cf-venue">${e(ev.venueName||'예식장 미정')}</span>
+        <span class="pp-cf-region">${e(ev.region||'')}</span>
+        ${ev.confirmed ? `<button class="pp-cf-btn ok" data-pp="unconfirm" data-rid="${e(ev.recordId)}" title="누르면 확정 취소">✓ 확정</button>` : `<button class="pp-cf-btn" data-pp="confirm" data-rid="${e(ev.recordId)}">확정</button>`}
+      </div>`;
+    };
+    return `<div class="pp-cfhead"><div><b>배정 확인</b> <small>확정 대기 ${pend.length}건 · 확정 ${done.length}건</small></div>${pend.length>1?`<button class="pp-btn primary" data-pp="confirmAll">모두 확정 (${pend.length})</button>`:''}</div>
+      ${up.length? `${pend.length? `<div class="pp-h">확정 대기 <small>${pend.length}건</small></div><div class="pp-cflist">${pend.map(row).join('')}</div>`:'<div class="pp-empty">✅ 확정할 일정이 없어요. 모두 확정하셨어요!</div>'}
+        ${done.length? `<div class="pp-h">확정 완료 <small>${done.length}건</small></div><div class="pp-cflist">${done.map(row).join('')}</div>`:''}` : '<div class="pp-empty">배정된 예정 일정이 없어요</div>'}
+      <p class="pp-cf-note">자세한 내용은 「내 일정」 탭에서 볼 수 있어요.</p>`;
+  }
   function scheduleHTML(){
     if(schedFilter==='pending'){
       const pend = upcoming().filter(ev=>!ev.confirmed).sort((a,b)=> a.date<b.date?-1:a.date>b.date?1:0);
@@ -1654,7 +1684,7 @@ const PartnerPortal = (function(){
     computeNew();
     if(H.onCache){ try{ H.onCache(view); }catch(e){} }
     const pendingCount = upcoming().filter(ev=>!ev.confirmed).length;
-    const body = tab==='home'?homeHTML(): tab==='work'?workHTML(): tab==='schedule'?scheduleHTML(): tab==='info'?infoPageHTML(): tab==='pay'?payHTML(): tab==='avail'?availHTML(): noticeHTML();
+    const body = tab==='home'?homeHTML(): tab==='work'?workHTML(): tab==='schedule'?scheduleHTML(): tab==='confirm'?confirmHTML(): tab==='info'?infoPageHTML(): tab==='pay'?payHTML(): tab==='avail'?availHTML(): noticeHTML();
     const updated = view.generatedAt ? new Date(view.generatedAt) : new Date();
     root.innerHTML = `<div class="pp">
       ${busy?'<div class="pp-busy"></div>':''}
@@ -1673,7 +1703,7 @@ const PartnerPortal = (function(){
           ${H.preview? '' : `<button class="pp-icon" data-pp="logout" title="로그아웃" aria-label="로그아웃">${PP_ICON_LOGOUT}</button>`}
         </div>
       </header>
-      <nav class="pp-tabs">${TABS.map(([k,l])=>`<button class="${tab===k?'on':''}" data-pp="tab" data-v="${k}">${l}${k==='schedule'&&pendingCount?`<span class="pp-n">${pendingCount}</span>`:''}</button>`).join('')}</nav>
+      <nav class="pp-tabs">${TABS.map(([k,l])=>`<button class="${tab===k?'on':''}" data-pp="tab" data-v="${k}">${l}${k==='confirm'&&pendingCount?`<span class="pp-n">${pendingCount}</span>`:''}</button>`).join('')}</nav>
       <main class="pp-main">${newBannerHTML()}${body}</main>
       ${sheetHTML()}
       ${H.onInstall && !(H.isInstalled && H.isInstalled()) ? '<div style="text-align:center;margin-top:18px;"><button class="pp-install-link" data-pp="install">📲 홈 화면에 바로가기 추가</button></div>' : ''}
@@ -1696,7 +1726,14 @@ const PartnerPortal = (function(){
   async function onClick(ev){
     const el = ev.target.closest('[data-pp]'); if(!el) return;
     const act=el.dataset.pp, v=el.dataset.v, rid=el.dataset.rid;
-    if(act==='pendingList'){ tab='schedule'; schedFilter='pending'; selDay=null; sheet=null; render(); window.scrollTo(0,0); return; }
+    if(act==='pendingList'){ tab='confirm'; schedFilter=null; selDay=null; sheet=null; render(); window.scrollTo(0,0); return; }
+    if(act==='confirmAll'){
+      const pend = upcoming().filter(ev=>!ev.confirmed); if(!pend.length) return;
+      if(!confirm(`배정된 일정 ${pend.length}건을 모두 확정할까요?`)) return;
+      if(H.preview){ toast('미리보기에서는 저장되지 않아요'); return; }
+      const q = qGet(); pend.forEach(ev=>{ const op = {type:'confirm', recordId:ev.recordId, value:true}; q.push(op); applyLocal(op); }); qSet(q);
+      render(); pendingDot(); toast(`${pend.length}건 확정 완료! 대표에게 전달돼요`); flushQueue(); return;
+    }
     if(act==='allList'){ schedFilter=null; render(); window.scrollTo(0,0); return; }
     if(act==='tab'){ schedFilter=null; tab=v; selDay=null; sheet=null; render(); window.scrollTo(0,0); return; }
     if(act==='wsel'){ workRid=rid; render(); return; }
