@@ -457,6 +457,12 @@ details.pp-past summary{cursor:pointer;font-size:13px;font-weight:700;color:var(
 .pp-cf-btn{border:0;border-radius:8px;background:var(--pp-wine);color:#fff;font-weight:800;font-size:13px;padding:8px 12px;cursor:pointer;flex:none}
 .pp-cf-btn.ok{background:#E3F1E9;color:#2F7D57}
 .pp-cf-note{font-size:11.5px;color:var(--pp-soft);text-align:center;margin-top:14px}
+.pp-ar-url{font-size:13px;margin:8px 0 12px;word-break:break-all}.pp-ar-url a{color:var(--pp-brand,#2563eb);font-weight:700;text-decoration:underline}
+.pp-ar-ev{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:12px;margin-bottom:12px}
+.pp-ar-h{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:baseline;margin-bottom:8px}.pp-ar-h small{width:100%;color:#64748b}
+.pp-ar-side{border-top:1px dashed #e5e7eb;padding:8px 0}.pp-ar-code{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;font-size:13px}
+.pp-ar-code span{color:#64748b}.pp-ar-code b{font-size:16px;letter-spacing:.5px;user-select:all}.pp-ar-code em{color:#94a3b8;font-style:normal}
+.pp-ar-go{width:100%;padding:12px}.pp-ar-go[disabled]{opacity:.45}
 
 /* ================= 접속 메인화면 (모먼트웍스 로고) ================= */
 .mw-entry{position:fixed;inset:0;z-index:500;overflow-y:auto;background:#F7F5F0;background-image:radial-gradient(ellipse at 50% 38%, #FFFFFF 0%, #F7F5F0 55%, #EFEBE3 100%);color:#1A1618;
@@ -600,6 +606,18 @@ function partnerContacts(rows){
   ];
   var PH = /(?:\+?82[\s\-.]?)?0?1[016789][\s\-.]?\d{3,4}[\s\-.]?\d{4}|0\d{1,2}[\s\-.]\d{3,4}[\s\-.]\d{4}/g;
   var used = {}, groups = [];
+  // 신랑 · 신부 연락처 (예식 기본정보) — 현장 연락처 맨 위에 둠
+  var couple = [], nm = {};
+  rows.forEach(function(r){ var k = String(r.key||''); if(k==='groom_name') nm.g = String(r.value||'').trim(); if(k==='bride_name') nm.b = String(r.value||'').trim(); });
+  [['g','신랑',/^(?:groom_(?:phone|contact|tel)|신랑\s*연락처)$/i],['b','신부',/^(?:bride_(?:phone|contact|tel)|신부\s*연락처)$/i]].forEach(function(d){
+    rows.forEach(function(r, i){
+      if(used[i]) return;
+      if(!(d[2].test(String(r.key||'').trim()) || d[2].test(String(r.label||'').trim()))) return;
+      var f = String(r.value||'').match(PH); used[i] = true;
+      if(f) couple.push({name: d[1] + (nm[d[0]] ? ' ' + nm[d[0]] : ''), phone: f[0].replace(/[^0-9+]/g,''), shown: f[0]});
+    });
+  });
+  if(couple.length) groups.push({id:'couple', title:'신랑 · 신부', icon:'💍', people: couple});
   GROUPS.forEach(function(G){
     var mine = [];
     rows.forEach(function(r, i){ var t = String(r.key||'')+' '+String(r.label||''); if(G.re.test(t) && !(G.not && G.not.test(t)) && !used[i]){ mine.push({r:r, i:i}); } });
@@ -695,6 +713,7 @@ function buildPartnerView(records, db, code, todayStr){
       team: team,
       note: a.note || '',
       confirmed: !!resp.confirmed, confirmedAt: resp.confirmedAt || '',
+      arrange: (function(){ var a = (db.referralPay||{})['arrange:'+recordId]; return (a && (a.groom || a.bride)) ? {groom: String(a.groom||''), bride: String(a.bride||'')} : null; })(),
       info: (function(){
         var g = (db.referralPay||{})['guide:'+recordId] || {}, c = (db.referralPay||{})['card:'+recordId] || {};
         if(!g.items && !g.groomName && !g.brideName && !(c.rows||[]).length) return null;
@@ -1019,7 +1038,7 @@ function buildCustomerView(records, db, code, todayStr, withFile){
 ============================================================================================== */
 const PartnerPortal = (function(){
   const WD = ['일','월','화','수','목','금','토'];
-  const TABS = [['home','홈'],['work','오늘 업무'],['schedule','내 일정'],['confirm','배정 확인'],['info','예식정보'],['pay','근무·급여'],['avail','휴무 신청'],['notice','공지']];
+  const TABS = [['home','홈'],['work','오늘 업무'],['schedule','내 일정'],['confirm','배정 확인'],['info','예식정보'],['arrange','축의대 내역정리'],['pay','근무·급여'],['avail','휴무 신청'],['notice','공지']];
   let workRid=null, sheet=null, root=null, view=null, H={}, tab='home', selRecord=null, calCursor=null, availCursor=null, payMonth=null, selDay=null, busy=false;
 
   const pd = n => String(n).padStart(2,'0');
@@ -1543,6 +1562,24 @@ const PartnerPortal = (function(){
   }
 
   let schedFilter = null;
+  const ARRANGE_URL = 'https://momentworks.github.io/arrange/';
+  function arrangeHTML(){
+    const up = upcoming().slice().sort((a,b)=> (a.date+(a.weddingTime||''))<(b.date+(b.weddingTime||''))?-1:1);
+    const side = (ev, k, lab)=>{
+      const c = ev.arrange && ev.arrange[k];
+      return `<div class="pp-ar-side"><div class="pp-ar-code"><span>${lab} 접속코드</span>${c? `<b>${e(c)}</b><button class="pp-btn" data-pp="arrCopy" data-rid="${e(ev.recordId)}" data-v="${k}">📋 코드 복사</button>` : '<em>아직 등록 전이에요</em>'}</div>
+        <button class="pp-btn primary pp-ar-go" data-pp="arrGo" data-rid="${e(ev.recordId)}" data-v="${k}" ${c?'':'disabled'}>${lab}측 내역정리 시작하기</button></div>`;
+    };
+    const card = ev=>{
+      const d = parseD(ev.date), dow = '일월화수목금토'[d.getDay()], inf = ev.info || {};
+      const nm = (inf.groomName||inf.brideName) ? `${inf.groomName? '신랑 '+e(inf.groomName):''}${inf.groomName&&inf.brideName?' · ':''}${inf.brideName? '신부 '+e(inf.brideName):''}` : '';
+      return `<section class="pp-ar-ev"><div class="pp-ar-h"><b>${pd(d.getMonth()+1)}.${pd(d.getDate())} (${dow}) ${e(ev.weddingTime||'')}</b> <span>${e(ev.venueName||'예식장 미정')}</span>${nm? `<small>${nm}</small>`:''}</div>${side(ev,'groom','신랑')}${side(ev,'bride','신부')}</section>`;
+    };
+    return `<div class="pp-cfhead"><div><b>축의대 내역정리</b> <small>배정된 예식의 정리 시트 접속코드</small></div></div>
+      <p class="pp-ar-url">내역정리 사이트: <a href="${ARRANGE_URL}" target="_blank" rel="noopener">${ARRANGE_URL}</a></p>
+      ${up.length? up.map(card).join('') : '<div class="pp-empty">배정된 예정 일정이 없어요</div>'}
+      <p class="pp-cf-note">「시작하기」를 누르면 접속코드가 복사되고 내역정리 사이트가 열려요. 코드 입력칸에 붙여넣어 주세요.</p>`;
+  }
   function confirmHTML(){
     const up = upcoming().slice().sort((a,b)=> (a.date+(a.weddingTime||''))<(b.date+(b.weddingTime||''))?-1:1);
     const pend = up.filter(ev=>!ev.confirmed), done = up.filter(ev=>ev.confirmed);
@@ -1685,7 +1722,7 @@ const PartnerPortal = (function(){
     computeNew();
     if(H.onCache){ try{ H.onCache(view); }catch(e){} }
     const pendingCount = upcoming().filter(ev=>!ev.confirmed).length;
-    const body = tab==='home'?homeHTML(): tab==='work'?workHTML(): tab==='schedule'?scheduleHTML(): tab==='confirm'?confirmHTML(): tab==='info'?infoPageHTML(): tab==='pay'?payHTML(): tab==='avail'?availHTML(): noticeHTML();
+    const body = tab==='home'?homeHTML(): tab==='work'?workHTML(): tab==='schedule'?scheduleHTML(): tab==='confirm'?confirmHTML(): tab==='info'?infoPageHTML(): tab==='arrange'?arrangeHTML(): tab==='pay'?payHTML(): tab==='avail'?availHTML(): noticeHTML();
     const updated = view.generatedAt ? new Date(view.generatedAt) : new Date();
     root.innerHTML = `<div class="pp">
       ${busy?'<div class="pp-busy"></div>':''}
@@ -1728,6 +1765,11 @@ const PartnerPortal = (function(){
     const el = ev.target.closest('[data-pp]'); if(!el) return;
     const act=el.dataset.pp, v=el.dataset.v, rid=el.dataset.rid;
     if(act==='pendingList'){ tab='confirm'; schedFilter=null; selDay=null; sheet=null; render(); window.scrollTo(0,0); return; }
+    if(act==='arrCopy' || act==='arrGo'){
+      const evn = view.events.find(x=>x.recordId===rid), c = evn && evn.arrange && evn.arrange[v]; if(!c) return;
+      const ok = await copyText(c); toast(ok? `${v==='groom'?'신랑':'신부'}측 접속코드를 복사했어요` : '복사하지 못했어요 · 코드를 직접 선택해 주세요');
+      if(act==='arrGo') window.open(ARRANGE_URL, '_blank', 'noopener'); return;
+    }
     if(act==='confirmAll'){
       const pend = upcoming().filter(ev=>!ev.confirmed); if(!pend.length) return;
       if(!confirm(`배정된 일정 ${pend.length}건을 모두 확정할까요?`)) return;
@@ -1979,7 +2021,7 @@ function screenLogin(msg, prefill){
       const view = await fetchView(code);
       CODE = code;
       ls(LS_CODE, document.getElementById('rememberInput').checked ? code : null);
-      openPortal(view);
+      _sig = viewSig(view); openPortal(view);
     }catch(ex){ err.textContent = ex.message; btn.disabled=false; btn.textContent='내 일정 보기'; }
   });
   if(!prefill && !saved) setTimeout(()=>document.getElementById('codeInput').focus(), 50);
@@ -2053,11 +2095,27 @@ function openPortal(view){
   });
 }
 
-/* 다른 앱을 보다가 돌아오면 5분마다 자동 새로고침 */
-document.addEventListener('visibilitychange', async ()=>{
-  if(document.visibilityState!=='visible' || !CODE || Date.now()-lastLoad < 5*60*1000) return;
-  try{ const v = await fetchView(CODE); PartnerPortal.update(v); }catch(e){ /* 조용히 무시 */ }
-});
+/* 통합운영시스템에서 바뀐 내용(예식정보 · 배정 · 안내카드)을 자동으로 따라가요
+   · 화면을 보고 있는 동안 30초마다 확인 · 다른 앱을 보다가 돌아오면 바로 확인 (10초 이상 지났을 때)
+   · 달라진 게 있을 때만 화면을 새로 그려요 (입력 중이거나 저장 대기 중이면 건너뜀) */
+let _sig = '', _syncBusy = false;
+function viewSig(v){ try{ const o = Object.assign({}, v); delete o.generatedAt; delete o.today; return JSON.stringify(o); }catch(e){ return String(Math.random()); } }
+async function syncNow(force){
+  if(_syncBusy || !CODE || document.visibilityState!=='visible') return;
+  if(!force && Date.now()-lastLoad < 10*1000) return;
+  _syncBusy = true;
+  try{
+    const v = await fetchView(CODE), sg = viewSig(v);
+    if(_sig && sg===_sig) return;                       // 달라진 게 없으면 그대로
+    const first = !_sig; _sig = sg; cacheView(v); PartnerPortal.update(v);
+    if(!first){ try{ PartnerPortal.toast('통합운영시스템의 최신 정보로 업데이트했어요'); }catch(e){} }
+  }catch(e){ /* 조용히 무시 · 다음 확인 때 다시 */ }
+  finally{ _syncBusy = false; }
+}
+setInterval(()=> syncNow(false), 30*1000);
+document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='visible') syncNow(false); });
+window.addEventListener('focus', ()=> syncNow(false));
+window.addEventListener('online', ()=> syncNow(true));
 
 (async function boot(){
   const h = readHash();
@@ -2069,12 +2127,12 @@ document.addEventListener('visibilitychange', async ()=>{
   const cached = code ? cachedView(code) : null;
   if(cached){ // 저장된 화면을 바로 보여주고 최신 정보는 뒤에서 받아옴
     CODE = code; openPortal(cached);
-    fetchView(code).then(v=>{ cacheView(v); PartnerPortal.update(v); }).catch(ex=>{ if(!ex.network){ ls(LS_CODE, null); try{ localStorage.removeItem(viewKey(code)); }catch(e){} screenLogin(ex.message); } });
+    fetchView(code).then(v=>{ cacheView(v); _sig = viewSig(v); PartnerPortal.update(v); }).catch(ex=>{ if(!ex.network){ ls(LS_CODE, null); try{ localStorage.removeItem(viewKey(code)); }catch(e){} screenLogin(ex.message); } });
     return;
   }
   if(code){
     app.innerHTML = entryShell('파트너스오피스', '<p class="mw-loading">일정을 불러오는 중</p>');
-    try{ const view = await fetchView(code); CODE = code; if(h.code) ls(LS_CODE, code); openPortal(view); return; }
+    try{ const view = await fetchView(code); CODE = code; if(h.code) ls(LS_CODE, code); _sig = viewSig(view); openPortal(view); return; }
     catch(ex){ screenLogin(ex.message, h.code||''); return; }
   }
   screenLogin();
