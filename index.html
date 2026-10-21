@@ -463,21 +463,31 @@ details.pp-past summary{cursor:pointer;font-size:13px;font-weight:700;color:var(
 .pp-ar-side{border-top:1px dashed #e5e7eb;padding:8px 0}.pp-ar-code{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;font-size:13px}
 .pp-ar-code span{color:#64748b}.pp-ar-code b{font-size:16px;letter-spacing:.5px;user-select:all}.pp-ar-code em{color:#94a3b8;font-style:normal}
 .pp-ar-go{width:100%;padding:12px}.pp-ar-go[disabled]{opacity:.45}
-/* 스마트폰용 스마트 달력: 일정 있는 날은 넓게, 없는 날은 좁게 */
-.pp-sc{padding:8px 6px}.pp-sc-week{display:grid;gap:3px;margin-bottom:3px}
-.pp-sc-week.quiet{min-height:0}.pp-sc-week.quiet .pp-sc-day{min-height:30px;padding:3px 2px;display:flex;align-items:center;justify-content:center}
-.pp-sc-day{border:1px solid #ECEAE0;background:#fff;border-radius:7px;padding:4px 3px;font-size:11px;cursor:pointer;text-align:left;color:var(--pp-ink);min-width:0;display:flex;flex-direction:column;gap:3px}
-.pp-sc-day:not(.ev){min-height:44px;background:#FAF9F5;color:var(--pp-soft);align-items:center}.pp-sc-day:not(.ev) .pp-sc-dn{font-weight:600}
-.pp-sc-day.ev{background:#fff;border-color:var(--pp-wine);box-shadow:0 1px 3px rgba(0,0,0,.06)}
-.pp-sc-day.today{border-color:var(--pp-gold);box-shadow:inset 0 0 0 1.5px var(--pp-gold)}.pp-sc-day.sel{background:var(--pp-gold-s)}
-.pp-sc-day.we .pp-sc-dn{color:var(--pp-wine)}.pp-sc-dn{font-weight:800;font-size:13px;line-height:1}.pp-sc-dn small{font-size:9px;font-weight:600;margin-left:2px;color:var(--pp-soft)}
-.pp-sc-day:not(.ev) .pp-sc-dn small{display:none}.pp-sc-week.quiet .pp-sc-dn{font-size:11.5px}
-.pp-sc-out{display:block}
-.pp-sc-ev{display:flex;flex-direction:column;gap:1px;background:var(--pp-wine);color:#fff;border-radius:5px;padding:3px 4px;font-size:10.5px;line-height:1.25;word-break:keep-all;overflow:hidden}
-.pp-sc-ev b{font-size:11px}.pp-sc-ev>span{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pp-sc-ev.ok{background:#2F7D57}.pp-sc-ev em{font-style:normal;font-size:9px;font-weight:800;align-self:flex-start;border-radius:3px;padding:1px 3px;background:rgba(255,255,255,.22);color:#fff}
-.pp-sc-ev .pp-ok-badge{background:rgba(255,255,255,.9);color:#2F7D57}
-.pp-sc .pp-av{font-size:9px}
+/* 스마트폰용 월 달력 — 균등 7열, 일정 있는 주만 높게 */
+.pp-sc{padding:14px 10px 10px;background:#FFFDF9;border:1px solid #E6DFD0;border-radius:14px;box-shadow:0 2px 10px rgba(60,40,30,.05)}
+.pp-sc-head{display:flex;align-items:center;justify-content:space-between;margin:0 2px 10px}
+.pp-sc-head div{text-align:center;line-height:1.25}.pp-sc-head b{font-family:'Noto Serif KR',serif;font-size:17px;letter-spacing:.3px;color:var(--pp-ink);display:block}
+.pp-sc-head small{font-size:10.5px;color:var(--pp-soft);letter-spacing:.4px}
+.pp-sc-head button{width:34px;height:34px;border-radius:50%;border:1px solid #E6DFD0;background:#fff;color:var(--pp-ink);font-size:20px;line-height:1;cursor:pointer;padding:0 0 3px}
+.pp-sc-wd,.pp-sc-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+.pp-sc-wd{border-bottom:1px solid #D9D0BE;padding-bottom:6px;margin-bottom:2px}
+.pp-sc-wd span{text-align:center;font-size:10.5px;font-weight:700;letter-spacing:1px;color:#8A8274}.pp-sc-wd .sun{color:#B0483F}.pp-sc-wd .sat{color:#4A6FA5}
+.pp-sc-week{border-bottom:1px solid #F0EADD}.pp-sc-week:last-of-type{border-bottom:0}
+.pp-sc-week.quiet .pp-sc-day{min-height:32px;padding-top:6px}
+.pp-sc-week.has .pp-sc-day{min-height:70px}
+.pp-sc-day{display:flex;flex-direction:column;align-items:center;gap:3px;border:0;background:transparent;padding:6px 1px 4px;cursor:pointer;min-width:0;color:var(--pp-ink);border-radius:8px;font-family:inherit}
+.pp-sc-dn{font-size:12.5px;font-weight:600;width:24px;height:24px;line-height:24px;text-align:center;border-radius:50%;font-variant-numeric:tabular-nums}
+.pp-sc-day.sun .pp-sc-dn{color:#B0483F}.pp-sc-day.sat .pp-sc-dn{color:#4A6FA5}
+.pp-sc-day:not(.ev) .pp-sc-dn{color:#A39B8B;font-weight:500}.pp-sc-day.sun:not(.ev) .pp-sc-dn{color:#C9948E}.pp-sc-day.sat:not(.ev) .pp-sc-dn{color:#93A8C8}
+.pp-sc-day.today .pp-sc-dn{background:var(--pp-gold,#B8924A);color:#fff;font-weight:800}
+.pp-sc-day.sel{background:#F6EFE0}
+.pp-sc-ev{display:flex;flex-direction:column;align-items:center;width:calc(100% - 4px);border-radius:6px;padding:3px 1px;line-height:1.2;position:relative;border-left:3px solid;overflow:hidden}
+.pp-sc-ev b{font-size:10.5px;font-weight:800;font-variant-numeric:tabular-nums}.pp-sc-ev>span{font-size:9px;font-weight:600;max-width:100%;overflow:hidden;white-space:nowrap}
+.pp-sc-ev.wait{background:#F8ECEA;color:#7A2E2A;border-color:#B0483F}.pp-sc-ev.ok{background:#E8F2EC;color:#25613F;border-color:#2F7D57}
+.pp-sc-new{position:absolute;top:2px;right:2px;width:6px;height:6px;border-radius:50%;background:#E0572F}
+.pp-sc-av{font-size:9px;font-weight:700;color:#8A8274;background:#F1EDE3;border-radius:4px;padding:1px 4px}
+.pp-sc-legend{display:flex;justify-content:center;gap:14px;margin-top:10px;font-size:10.5px;color:#8A8274}.pp-sc-legend i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px;vertical-align:0}
+.pp-sc-legend i.ok{background:#2F7D57}.pp-sc-legend i.wait{background:#B0483F}
 /* 배정 확인: 펼침 상세 · 지도 */
 .pp-cfitem{border-top:1px solid var(--pp-line)}.pp-cfitem:first-child{border-top:0}.pp-cfitem .pp-cfrow{border-top:0;cursor:pointer}
 .pp-cfitem.open{background:#FCFBF8}.pp-cf-caret{color:var(--pp-soft);font-size:12px;flex:none;width:12px;text-align:center}
@@ -1356,7 +1366,7 @@ const PartnerPortal = (function(){
     for(let d=1; d<=days; d++){ h += cellFn(`${y}-${pd(m)}-${pd(d)}`, d); }
     return h;
   }
-  /* 일정 있는 날은 넓게 · 없는 날은 좁게 — 주(週)마다 칸 너비를 자동으로 나눈 스마트폰용 달력 */
+  /* 스마트폰용 월 달력: 7열 균등(요일 정렬) · 일정 있는 주는 높게, 없는 주는 낮게 */
   function smartCal(act, selected){
     if(!calCursor) calCursor = today().slice(0,7);
     const [y,m] = calCursor.split('-').map(Number), days = new Date(y,m,0).getDate(), off = (new Date(y,m-1,1).getDay()+6)%7;
@@ -1365,20 +1375,22 @@ const PartnerPortal = (function(){
     let wk = new Array(off).fill(null);
     for(let d=1; d<=days; d++){ wk.push(`${y}-${pd(m)}-${pd(d)}`); if(wk.length===7){ weeks.push(wk); wk=[]; } }
     if(wk.length){ while(wk.length<7) wk.push(null); weeks.push(wk); }
+    const head = ['월','화','수','목','금','토','일'].map((w,i)=>`<span class="${i===5?'sat':i===6?'sun':''}">${w}</span>`).join('');
     const body = weeks.map(w=>{
-      const nEv = w.filter(ds=> ds && (byDate[ds]||[]).length).length;
-      const evFr = nEv<=1?3: nEv===2?2.4: nEv<=4?1.9:1.5;
-      const cols = w.map(ds=> !ds ? '0.2fr' : (byDate[ds]||[]).length ? evFr+'fr' : (nEv? '0.62fr':'1fr')).join(' ');
-      return `<div class="pp-sc-week ${nEv?'has':'quiet'}" style="grid-template-columns:${cols}">${w.map((ds,i)=>{
+      const has = w.some(ds=> ds && (byDate[ds]||[]).length);
+      return `<div class="pp-sc-week ${has?'has':'quiet'}">${w.map((ds,i)=>{
         if(!ds) return '<span class="pp-sc-out"></span>';
-        const evs=byDate[ds]||[], a=av[ds], dn=Number(ds.slice(8)), dow=i;
-        return `<button class="pp-sc-day ${evs.length?'ev':''} ${i>=5?'we':''} ${ds===t?'today':''} ${ds===selected?'sel':''}" data-pp="${act}" data-v="${ds}">
-          <span class="pp-sc-dn">${dn}<small>${'월화수목금토일'[dow]}</small></span>
-          ${evs.map(ev=>`<span class="pp-sc-ev ${ev.confirmed?'ok':''}"><b>${e(ev.weddingTime||ev.callTime||'')}</b><span>${e((ev.venueName||'예식장 미정').split(' ')[0])}</span>${ev.confirmed?'<em class="pp-ok-badge">확정</em>':'<em class="pp-sc-wait">대기</em>'}${NEWMAP[ev.recordId]?'<em class="pp-newtag '+NEWMAP[ev.recordId]+'">N</em>':''}</span>`).join('')}
-          ${a&&!evs.length?`<span class="pp-av ${a.type}">${a.type==='off'?'휴무':a.type==='am'?'오전':'오후'}</span>`:''}
+        const evs=byDate[ds]||[], a=av[ds], dn=Number(ds.slice(8));
+        return `<button class="pp-sc-day ${evs.length?'ev':''} ${i===5?'sat':i===6?'sun':''} ${ds===t?'today':''} ${ds===selected?'sel':''}" data-pp="${act}" data-v="${ds}" aria-label="${ds}${evs.length?' 일정 '+evs.length+'건':''}">
+          <span class="pp-sc-dn">${dn}</span>
+          ${evs.map(ev=>`<span class="pp-sc-ev ${ev.confirmed?'ok':'wait'}"><b>${e((ev.weddingTime||ev.callTime||'').slice(0,5))}</b><span>${e((ev.venueName||'미정').replace(/\s+/g,'').slice(0,5))}</span>${NEWMAP[ev.recordId]?'<i class="pp-sc-new"></i>':''}</span>`).join('')}
+          ${a&&!evs.length?`<span class="pp-sc-av ${a.type}">${a.type==='off'?'휴무':a.type==='am'?'오전':'오후'}</span>`:''}
         </button>`; }).join('')}</div>`;
     }).join('');
-    return `<div class="pp-cal pp-sc"><div class="pp-cal-head"><button data-pp="cal" data-v="-1">◀</button><b>${monthLabel(calCursor)}</b><button data-pp="cal" data-v="1">▶</button></div>${body}</div>`;
+    const nEv = view.events.filter(ev=>ev.date.slice(0,7)===calCursor).length;
+    return `<div class="pp-cal pp-sc"><div class="pp-sc-head"><button data-pp="cal" data-v="-1" aria-label="이전 달">‹</button><div><b>${monthLabel(calCursor)}</b><small>${nEv? '배정 '+nEv+'건':'배정 없음'}</small></div><button data-pp="cal" data-v="1" aria-label="다음 달">›</button></div>
+      <div class="pp-sc-wd">${head}</div>${body}
+      <div class="pp-sc-legend"><span><i class="ok"></i>확정</span><span><i class="wait"></i>확정 대기</span></div></div>`;
   }
   function shiftMonth(cursor, n){ const [y,m]=cursor.split('-').map(Number); const d=new Date(y,m-1+n,1); return d.getFullYear()+'-'+pd(d.getMonth()+1); }
   function monthLabel(cursor){ const [y,m]=cursor.split('-'); return `${y}년 ${Number(m)}월`; }
