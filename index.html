@@ -463,6 +463,29 @@ details.pp-past summary{cursor:pointer;font-size:13px;font-weight:700;color:var(
 .pp-ar-side{border-top:1px dashed #e5e7eb;padding:8px 0}.pp-ar-code{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;font-size:13px}
 .pp-ar-code span{color:#64748b}.pp-ar-code b{font-size:16px;letter-spacing:.5px;user-select:all}.pp-ar-code em{color:#94a3b8;font-style:normal}
 .pp-ar-go{width:100%;padding:12px}.pp-ar-go[disabled]{opacity:.45}
+/* 스마트폰용 스마트 달력: 일정 있는 날은 넓게, 없는 날은 좁게 */
+.pp-sc{padding:8px 6px}.pp-sc-week{display:grid;gap:3px;margin-bottom:3px}
+.pp-sc-week.quiet{min-height:0}.pp-sc-week.quiet .pp-sc-day{min-height:30px;padding:3px 2px;display:flex;align-items:center;justify-content:center}
+.pp-sc-day{border:1px solid #ECEAE0;background:#fff;border-radius:7px;padding:4px 3px;font-size:11px;cursor:pointer;text-align:left;color:var(--pp-ink);min-width:0;display:flex;flex-direction:column;gap:3px}
+.pp-sc-day:not(.ev){min-height:44px;background:#FAF9F5;color:var(--pp-soft);align-items:center}.pp-sc-day:not(.ev) .pp-sc-dn{font-weight:600}
+.pp-sc-day.ev{background:#fff;border-color:var(--pp-wine);box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.pp-sc-day.today{border-color:var(--pp-gold);box-shadow:inset 0 0 0 1.5px var(--pp-gold)}.pp-sc-day.sel{background:var(--pp-gold-s)}
+.pp-sc-day.we .pp-sc-dn{color:var(--pp-wine)}.pp-sc-dn{font-weight:800;font-size:13px;line-height:1}.pp-sc-dn small{font-size:9px;font-weight:600;margin-left:2px;color:var(--pp-soft)}
+.pp-sc-day:not(.ev) .pp-sc-dn small{display:none}.pp-sc-week.quiet .pp-sc-dn{font-size:11.5px}
+.pp-sc-out{display:block}
+.pp-sc-ev{display:flex;flex-direction:column;gap:1px;background:var(--pp-wine);color:#fff;border-radius:5px;padding:3px 4px;font-size:10.5px;line-height:1.25;word-break:keep-all;overflow:hidden}
+.pp-sc-ev b{font-size:11px}.pp-sc-ev>span{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pp-sc-ev.ok{background:#2F7D57}.pp-sc-ev em{font-style:normal;font-size:9px;font-weight:800;align-self:flex-start;border-radius:3px;padding:1px 3px;background:rgba(255,255,255,.22);color:#fff}
+.pp-sc-ev .pp-ok-badge{background:rgba(255,255,255,.9);color:#2F7D57}
+.pp-sc .pp-av{font-size:9px}
+/* 배정 확인: 펼침 상세 · 지도 */
+.pp-cfitem{border-top:1px solid var(--pp-line)}.pp-cfitem:first-child{border-top:0}.pp-cfitem .pp-cfrow{border-top:0;cursor:pointer}
+.pp-cfitem.open{background:#FCFBF8}.pp-cf-caret{color:var(--pp-soft);font-size:12px;flex:none;width:12px;text-align:center}
+.pp-cf-map{flex:none;border:1px solid #03C75A;background:#fff;color:#03A94D;border-radius:8px;padding:3px 7px;cursor:pointer;display:flex;flex-direction:column;align-items:center;line-height:1.1;font-size:15px}.pp-cf-map small{font-size:9px;font-weight:800}
+.pp-cf-detail{padding:0 8px 10px}.pp-cf-detail .pp-card{margin:0;box-shadow:none}
+.pp-cf-filter{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px;font-weight:700;margin:10px 2px 0;background:var(--pp-gold-s);border-radius:8px;padding:8px 10px}
+@media (max-width:400px){.pp-cf-region{display:none}.pp-cfrow{gap:6px;padding:10px 6px}.pp-cf-time{min-width:36px}}
+.pp-cfhead .pp-btn{white-space:nowrap;flex:none}.pp-cfhead>div{min-width:0}.pp-cfhead small{display:block;font-size:11px;line-height:1.4}
 
 /* ================= 접속 메인화면 (모먼트웍스 로고) ================= */
 .mw-entry{position:fixed;inset:0;z-index:500;overflow-y:auto;background:#F7F5F0;background-image:radial-gradient(ellipse at 50% 38%, #FFFFFF 0%, #F7F5F0 55%, #EFEBE3 100%);color:#1A1618;
@@ -1333,6 +1356,30 @@ const PartnerPortal = (function(){
     for(let d=1; d<=days; d++){ h += cellFn(`${y}-${pd(m)}-${pd(d)}`, d); }
     return h;
   }
+  /* 일정 있는 날은 넓게 · 없는 날은 좁게 — 주(週)마다 칸 너비를 자동으로 나눈 스마트폰용 달력 */
+  function smartCal(act, selected){
+    if(!calCursor) calCursor = today().slice(0,7);
+    const [y,m] = calCursor.split('-').map(Number), days = new Date(y,m,0).getDate(), off = (new Date(y,m-1,1).getDay()+6)%7;
+    const byDate={}; view.events.forEach(ev=>{ (byDate[ev.date]=byDate[ev.date]||[]).push(ev); });
+    const av=view.availability||{}, t=today(), weeks=[];
+    let wk = new Array(off).fill(null);
+    for(let d=1; d<=days; d++){ wk.push(`${y}-${pd(m)}-${pd(d)}`); if(wk.length===7){ weeks.push(wk); wk=[]; } }
+    if(wk.length){ while(wk.length<7) wk.push(null); weeks.push(wk); }
+    const body = weeks.map(w=>{
+      const nEv = w.filter(ds=> ds && (byDate[ds]||[]).length).length;
+      const evFr = nEv<=1?3: nEv===2?2.4: nEv<=4?1.9:1.5;
+      const cols = w.map(ds=> !ds ? '0.2fr' : (byDate[ds]||[]).length ? evFr+'fr' : (nEv? '0.62fr':'1fr')).join(' ');
+      return `<div class="pp-sc-week ${nEv?'has':'quiet'}" style="grid-template-columns:${cols}">${w.map((ds,i)=>{
+        if(!ds) return '<span class="pp-sc-out"></span>';
+        const evs=byDate[ds]||[], a=av[ds], dn=Number(ds.slice(8)), dow=i;
+        return `<button class="pp-sc-day ${evs.length?'ev':''} ${i>=5?'we':''} ${ds===t?'today':''} ${ds===selected?'sel':''}" data-pp="${act}" data-v="${ds}">
+          <span class="pp-sc-dn">${dn}<small>${'월화수목금토일'[dow]}</small></span>
+          ${evs.map(ev=>`<span class="pp-sc-ev ${ev.confirmed?'ok':''}"><b>${e(ev.weddingTime||ev.callTime||'')}</b><span>${e((ev.venueName||'예식장 미정').split(' ')[0])}</span>${ev.confirmed?'<em class="pp-ok-badge">확정</em>':'<em class="pp-sc-wait">대기</em>'}${NEWMAP[ev.recordId]?'<em class="pp-newtag '+NEWMAP[ev.recordId]+'">N</em>':''}</span>`).join('')}
+          ${a&&!evs.length?`<span class="pp-av ${a.type}">${a.type==='off'?'휴무':a.type==='am'?'오전':'오후'}</span>`:''}
+        </button>`; }).join('')}</div>`;
+    }).join('');
+    return `<div class="pp-cal pp-sc"><div class="pp-cal-head"><button data-pp="cal" data-v="-1">◀</button><b>${monthLabel(calCursor)}</b><button data-pp="cal" data-v="1">▶</button></div>${body}</div>`;
+  }
   function shiftMonth(cursor, n){ const [y,m]=cursor.split('-').map(Number); const d=new Date(y,m-1+n,1); return d.getFullYear()+'-'+pd(d.getMonth()+1); }
   function monthLabel(cursor){ const [y,m]=cursor.split('-'); return `${y}년 ${Number(m)}월`; }
 
@@ -1562,6 +1609,7 @@ const PartnerPortal = (function(){
   }
 
   let schedFilter = null;
+  let cfOpen = {}, cfDay = null;
   const ARRANGE_URL = 'https://momentworks.github.io/arrange/';
   function arrangeHTML(){
     const up = upcoming().slice().sort((a,b)=> (a.date+(a.weddingTime||''))<(b.date+(b.weddingTime||''))?-1:1);
@@ -1582,18 +1630,23 @@ const PartnerPortal = (function(){
   }
   function confirmHTML(){
     const up = upcoming().slice().sort((a,b)=> (a.date+(a.weddingTime||''))<(b.date+(b.weddingTime||''))?-1:1);
-    const pend = up.filter(ev=>!ev.confirmed), done = up.filter(ev=>ev.confirmed);
+    const shown = cfDay ? up.filter(ev=>ev.date===cfDay) : up;
+    const pend = shown.filter(ev=>!ev.confirmed), done = shown.filter(ev=>ev.confirmed);
     const row = ev=>{
-      const d = parseD(ev.date), dow = '일월화수목금토'[d.getDay()];
-      return `<div class="pp-cfrow ${ev.confirmed?'done':''}">
+      const d = parseD(ev.date), dow = '일월화수목금토'[d.getDay()], open = !!cfOpen[ev.recordId];
+      return `<div class="pp-cfitem ${open?'open':''}"><div class="pp-cfrow ${ev.confirmed?'done':''}" data-pp="cfx" data-rid="${e(ev.recordId)}">
         <span class="pp-cf-date">${pd(d.getMonth()+1)}.${pd(d.getDate())}<small class="${d.getDay()===0?'sun':d.getDay()===6?'sat':''}">${dow}</small></span>
         <span class="pp-cf-time">${e(ev.weddingTime||'-')}</span>
         <span class="pp-cf-venue">${e(ev.venueName||'예식장 미정')}</span>
         <span class="pp-cf-region">${e(ev.region||'')}</span>
         ${ev.confirmed ? `<button class="pp-cf-btn ok" data-pp="unconfirm" data-rid="${e(ev.recordId)}" title="누르면 확정 취소">✓ 확정</button>` : `<button class="pp-cf-btn" data-pp="confirm" data-rid="${e(ev.recordId)}">확정</button>`}
-      </div>`;
+        <button class="pp-cf-map" data-pp="map" data-rid="${e(ev.recordId)}" title="네이버지도로 예식장 위치 보기" aria-label="네이버지도">🗺️<small>지도</small></button>
+        <span class="pp-cf-caret">${open?'▴':'▾'}</span>
+      </div>${open? `<div class="pp-cf-detail">${eventCard(ev,true)}</div>`:''}</div>`;
     };
-    return `<div class="pp-cfhead"><div><b>배정 확인</b> <small>확정 대기 ${pend.length}건 · 확정 ${done.length}건</small></div>${pend.length>1?`<button class="pp-btn primary" data-pp="confirmAll">모두 확정 (${pend.length})</button>`:''}</div>
+    return `${smartCal('cfday', cfDay)}
+      ${cfDay? `<div class="pp-cf-filter">${fdate(cfDay,true)} 일정만 보는 중 <button class="pp-btn" data-pp="cfday" data-v="${cfDay}">전체 보기</button></div>`:''}
+      <div class="pp-cfhead"><div><b>배정 확인</b> <small>확정 대기 ${pend.length}건 · 확정 ${done.length}건 · 일정을 누르면 상세내용이 펼쳐져요</small></div>${pend.length>1?`<button class="pp-btn primary" data-pp="confirmAll">모두 확정 (${pend.length})</button>`:''}</div>
       ${up.length? `${pend.length? `<div class="pp-h">확정 대기 <small>${pend.length}건</small></div><div class="pp-cflist">${pend.map(row).join('')}</div>`:'<div class="pp-empty">✅ 확정할 일정이 없어요. 모두 확정하셨어요!</div>'}
         ${done.length? `<div class="pp-h">확정 완료 <small>${done.length}건</small></div><div class="pp-cflist">${done.map(row).join('')}</div>`:''}` : '<div class="pp-empty">배정된 예정 일정이 없어요</div>'}
       <p class="pp-cf-note">자세한 내용은 「내 일정」 탭에서 볼 수 있어요.</p>`;
@@ -1607,23 +1660,12 @@ const PartnerPortal = (function(){
     if(!calCursor) calCursor = today().slice(0,7);
     const byDate={}; view.events.forEach(ev=>{ (byDate[ev.date]=byDate[ev.date]||[]).push(ev); });
     const av=view.availability||{}, t=today();
-    const cells = monthGrid(calCursor, (ds,d)=>{
-      const dow=parseD(ds).getDay(), evs=byDate[ds]||[], a=av[ds];
-      return `<button class="pp-day ${dow===0||dow===6?'we':''} ${ds===t?'today':''} ${ds===selDay?'sel':''}" data-pp="day" data-v="${ds}">
-        <span class="pp-dn">${d}</span>
-        ${evs.map(ev=>`<span class="pp-ev">${e(ev.callTime||'')} ${e(ev.venueName.split(' ')[0]||'')}${ev.confirmed?' <b class="pp-ok-badge">확정</b>':''}${NEWMAP[ev.recordId]?' <b class="pp-newtag '+NEWMAP[ev.recordId]+'">N</b>':''}</span>`).join('')}
-        ${a&&!evs.length?`<span class="pp-av ${a.type}">${a.type==='off'?'휴무':a.type==='am'?'오전만':'오후만'}</span>`:''}
-      </button>`;
-    });
     const up=upcoming(), past=pastEvents();
     const dayEvs = selDay ? (byDate[selDay]||[]) : [];
     let groups='', lastMonth='';
     up.forEach(ev=>{ const mk=ev.date.slice(0,7); if(mk!==lastMonth){ groups+=`<div class="pp-h">${monthLabel(mk)} <small>${up.filter(x=>x.date.slice(0,7)===mk).length}건</small></div>`; lastMonth=mk; } groups+=eventCard(ev,true); });
     return `
-      <div class="pp-cal">
-        <div class="pp-cal-head"><button data-pp="cal" data-v="-1">◀</button><b>${monthLabel(calCursor)}</b><button data-pp="cal" data-v="1">▶</button></div>
-        <div class="pp-cal-grid">${cells}</div>
-      </div>
+      ${smartCal('day', selDay)}
       ${selDay ? `<div class="pp-h">${fdate(selDay,true)}</div>${dayEvs.length? dayEvs.map(ev=>eventCard(ev,true)).join('') : '<div class="pp-empty">이 날은 배정된 예식이 없어요</div>'}`:''}
       <div class="pp-h">다가오는 일정 <button class="pp-btn" data-pp="icsAll">📅 전체 캘린더에 추가</button></div>
       ${up.length? groups : '<div class="pp-empty">다가오는 배정이 없어요</div>'}
@@ -1765,6 +1807,8 @@ const PartnerPortal = (function(){
     const el = ev.target.closest('[data-pp]'); if(!el) return;
     const act=el.dataset.pp, v=el.dataset.v, rid=el.dataset.rid;
     if(act==='pendingList'){ tab='confirm'; schedFilter=null; selDay=null; sheet=null; render(); window.scrollTo(0,0); return; }
+    if(act==='cfx'){ cfOpen[rid] = !cfOpen[rid]; render(); return; }
+    if(act==='cfday'){ cfDay = (cfDay===v)? null : v; render(); return; }
     if(act==='arrCopy' || act==='arrGo'){
       const evn = view.events.find(x=>x.recordId===rid), c = evn && evn.arrange && evn.arrange[v]; if(!c) return;
       const ok = await copyText(c); toast(ok? `${v==='groom'?'신랑':'신부'}측 접속코드를 복사했어요` : '복사하지 못했어요 · 코드를 직접 선택해 주세요');
