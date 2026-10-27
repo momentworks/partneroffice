@@ -522,6 +522,37 @@ details.pp-past summary{cursor:pointer;font-size:13px;font-weight:700;color:var(
 .pp-rt-dist{font-size:11px;color:var(--pp-soft);margin:2px 0 6px}
 .pp-rt-links{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}.pp-rt-links .pp-btn{text-decoration:none;font-size:12px}
 .pp-rt-nv{border-color:#03C75A;color:#03A94D}
+/* ---------- 추천 동선 v2 ---------- */
+.pp-rt-alert{background:#FDECEC;border:2px solid #C62828;border-radius:8px;padding:12px 14px;margin:0 0 14px;color:#7A1414;font-size:12.5px;line-height:1.6}
+.pp-rt-alert>b{display:block;font-size:14.5px;margin-bottom:4px;color:#B71C1C}
+.pp-rt-alert p{margin:4px 0 0}.pp-rt-alert u{text-decoration-color:#C62828}
+.pp-rt-verdict.tight{background:#FFF6E5;color:#7A4B00}.pp-rt-verdict.risk{background:#FDECEC;color:#8A1C1C;border:1px solid #E57373}
+.pp-rt-verdict .lv{display:inline-block;font-size:11.5px;color:#fff;border-radius:3px;padding:1px 7px;margin-right:4px;vertical-align:1px}
+.pp-rt-verdict.ok .lv{background:#2E7D32}.pp-rt-verdict.tight .lv{background:#E08A00}.pp-rt-verdict.risk .lv{background:#C62828}
+.pp-rt-mh .lvc{font-style:normal;font-size:10.5px;font-weight:800;color:#fff;border-radius:3px;padding:1px 6px}
+.pp-rt-mh .lvc.ok{background:#2E7D32}.pp-rt-mh .lvc.tight{background:#E08A00}.pp-rt-mh .lvc.risk{background:#C62828}
+.pp-rt-mode.best{border-color:var(--pp-line);box-shadow:none}
+.pp-rt-plan small{color:var(--pp-soft)}
+.pp-rt-leave{margin:9px 0 2px;border:2px solid var(--pp-wine,#7A2E3A);border-radius:8px;padding:9px 11px;background:#FBF6F2}
+.pp-rt-leave .t{font-size:12px;font-weight:800;color:var(--pp-wine,#7A2E3A);margin-bottom:6px}
+.pp-rt-leave .v{display:flex;gap:8px;flex-wrap:wrap}
+.pp-rt-leave .v span{flex:1 1 120px;display:flex;flex-direction:column;align-items:flex-start;background:#fff;border-radius:6px;padding:6px 9px;border:1px solid var(--pp-line)}
+.pp-rt-leave .v small{font-size:11px;color:var(--pp-soft);font-weight:700}
+.pp-rt-leave .v b{font-size:24px;line-height:1.15;letter-spacing:-.5px;color:#1A1618}
+.pp-rt-leave .v i{font-style:normal;font-size:10.5px;font-weight:800;color:#fff;border-radius:3px;padding:1px 6px;margin-top:3px}
+.pp-rt-leave .v .ok i{background:#2E7D32}.pp-rt-leave .v .tight i{background:#E08A00}.pp-rt-leave .v .risk i{background:#C62828}
+.pp-rt-leave .v .risk b{color:#C62828}
+.pp-rt-steps{list-style:none;margin:8px 0 2px;padding:0;font-size:12.5px;line-height:1.5}
+.pp-rt-steps li{display:flex;gap:8px;padding:5px 0;border-top:1px dashed var(--pp-line)}
+.pp-rt-steps li:first-child{border-top:0}
+.pp-rt-steps .ic{flex:none;width:20px;text-align:center}
+.pp-rt-steps i{font-style:normal;font-size:10.5px;font-weight:800;color:#fff;border-radius:3px;padding:1px 5px;margin-right:2px}
+.pp-rt-steps i.on{background:#1565C0}.pp-rt-steps i.tr{background:#6A1B9A}.pp-rt-steps i.off{background:#455A64}
+.pp-rt-steps .ln{font-style:normal;font-weight:800;color:#1565C0}
+.pp-rt-steps small{color:var(--pp-soft)}
+.pp-rt-ride{color:var(--pp-soft);font-size:11.5px;margin:1px 0 2px;padding-left:2px;border-left:2px solid #90CAF9;padding-left:7px}
+.pp-rt-more{width:100%;margin:2px 0 12px;padding:11px;font-weight:800}
+.pp-rt-more small{font-weight:600;color:var(--pp-soft)}
 
 /* ================= 접속 메인화면 (모먼트웍스 로고) ================= */
 .mw-entry{position:fixed;inset:0;z-index:500;overflow-y:auto;background:#F7F5F0;background-image:radial-gradient(ellipse at 50% 38%, #FFFFFF 0%, #F7F5F0 55%, #EFEBE3 100%);color:#1A1618;
@@ -1097,7 +1128,7 @@ function buildCustomerView(records, db, code, todayStr, withFile){
 ============================================================================================== */
 const PartnerPortal = (function(){
   const WD = ['일','월','화','수','목','금','토'];
-  const TABS = [['home','홈'],['work','오늘 업무'],['schedule','내 일정'],['confirm','배정 확인'],['route','일정 이동 동선'],['info','예식정보'],['arrange','축의대 내역정리'],['pay','근무·급여'],['avail','휴무 신청'],['notice','공지']];
+  const TABS = [['home','홈'],['work','오늘 업무'],['schedule','내 일정'],['confirm','배정 확인'],['route','추천 동선'],['info','예식정보'],['arrange','축의대 내역정리'],['pay','근무·급여'],['avail','휴무 신청'],['notice','공지']];
   let workRid=null, sheet=null, root=null, view=null, H={}, tab='home', selRecord=null, calCursor=null, availCursor=null, payMonth=null, selDay=null, busy=false;
 
   const pd = n => String(n).padStart(2,'0');
@@ -1666,25 +1697,27 @@ const PartnerPortal = (function(){
       ${up.length? up.map(card).join('') : '<div class="pp-empty">배정된 예정 일정이 없어요</div>'}
       <p class="pp-cf-note">「시작하기」를 누르면 내역정리 시트가 열리고 접속코드와 <b>${e(view.member.name||'')}</b>님 이름으로 바로 로그인돼요.</p>`;
   }
-  /* ---------- 일정 이동 동선: 같은 날 2건 이상 배정된 경우 ---------- */
+  /* ---------- 추천 동선: 같은 날 2건 이상 배정된 경우 ---------- */
   const ROUTE_BUFFER = 10; // 다음 예식 출근 전 확보할 여유(분)
-  let routeData = null, routeSig = '', routeLoading = false, routeErr = '';
+  let routeData = null, routeSig = '', routeLoading = false, routeErr = '', routeMonths = 1;
   const hm2m = s => { const m=/^(\d{1,2}):(\d{2})/.exec(String(s||'')); return m ? (+m[1])*60+(+m[2]) : null; };
   const m2hm = n => { n=((n%1440)+1440)%1440; return pd(Math.floor(n/60))+':'+pd(n%60); };
   const durTxt = n => n>=60 ? `${Math.floor(n/60)}시간${n%60? ' '+(n%60)+'분':''}` : `${n}분`;
-  function routeDays(){
+  function routeUntil(){ return addDays(today(), routeMonths*31 - 1); }
+  function routeDaysAll(){
     const by = {};
     upcoming().forEach(ev=>{ (by[ev.date] = by[ev.date] || []).push(ev); });
     return Object.keys(by).sort().filter(d=>by[d].length>1).map(d=>({date:d, list: by[d].slice().sort((a,b)=> String(a.callTime||a.weddingTime||'').localeCompare(String(b.callTime||b.weddingTime||'')))}));
   }
-  function routeSigOf(days){ return days.map(d=>d.list.map(x=>x.recordId+'@'+x.venueName+'@'+x.callTime).join('>')).join('|'); }
+  function routeDays(){ const u = routeUntil(); return routeDaysAll().filter(d=>d.date<=u); }
+  function routeSigOf(days){ return routeUntil()+'#'+days.map(d=>d.list.map(x=>x.recordId+'@'+x.venueName+'@'+x.callTime).join('>')).join('|'); }
   async function loadRoutes(force){
     if(!H.onRoute || routeLoading) return;
     const sig = routeSigOf(routeDays());
     if(!force && routeData && routeSig===sig) return;
     routeLoading = true; routeErr = ''; if(tab==='route') render();
     try{
-      const r = await H.onRoute();
+      const r = await H.onRoute(routeUntil());
       if(!r || !r.ok) throw new Error((r && r.error) || '경로를 불러오지 못했어요');
       routeData = r; routeSig = sig;
     }catch(err){ routeErr = err.message || '경로를 불러오지 못했어요'; }
@@ -1696,61 +1729,114 @@ const PartnerPortal = (function(){
     if(leg && leg.fromPos && leg.toPos) return `https://map.kakao.com/link/from/${encodeURIComponent(fn)},${leg.fromPos.lat},${leg.fromPos.lng}/to/${encodeURIComponent(tn)},${leg.toPos.lat},${leg.toPos.lng}`;
     return `https://map.kakao.com/?sName=${encodeURIComponent(fn)}&eName=${encodeURIComponent(tn)}`;
   }
-  function routeLegHTML(a, b){
-    const leg = routeData && (routeData.legs||[]).find(l=>l.from===a.recordId && l.to===b.recordId);
+  // 여유 / 빠듯 / 위험 판정 (출발 시각 = 다음 예식 출근 − 이동시간 − 여유 10분)
+  function routeJudge(a, b, min){
     const arrive = hm2m(b.callTime), prevEnd = hm2m(a.endTime), prevCall = hm2m(a.callTime);
-    if(leg && leg.sameVenue){
-      return `<div class="pp-rt-leg same"><div class="pp-rt-same">🏛️ 같은 예식장이에요 · 홀만 이동하면 돼요</div>
-        ${arrive!==null && prevEnd!==null ? `<div class="pp-rt-plan ${arrive-5<prevEnd?'warn':''}">⏰ <b>${m2hm(arrive-5)}</b>까지 이전 예식 마무리 후 다음 홀로 이동 ${arrive-5<prevEnd? `<em>· 예정 종료(${e(a.endTime)})보다 ${prevEnd-(arrive-5)}분 일찍 마무리 필요</em>`:`<span>· 여유 ${arrive-5-prevEnd}분</span>`}</div>`:''}</div>`;
-    }
+    if(arrive===null) return null;
+    const leave = arrive - min - ROUTE_BUFFER;
+    const slack = prevEnd===null ? null : leave - prevEnd;
+    const level = (prevCall!==null && leave <= prevCall + 30) ? 'risk' : (slack!==null && slack < 0) ? 'tight' : 'ok';
+    return { leave, arriveAt: leave + min, slack, level };
+  }
+  const LV = { ok:['여유','ok'], tight:['빠듯','tight'], risk:['위험','risk'] };
+  function legModes(leg){
     const modes = [];
     if(leg && leg.transit) modes.push(['transit','🚇','대중교통',leg.transit]);
     if(leg && leg.car) modes.push(['car','🚗','자동차',leg.car]);
+    return modes;
+  }
+  // 대중교통 승차 · 하차 · 환승 안내
+  function transitStepsHTML(m, a, b){
+    const st = (m.steps||[]).filter(x=>x && (x.kind!=='walk' || x.min>=1));
+    if(!st.some(x=>x.kind!=='walk')) return m.summary? `<div class="pp-rt-sum">${e(m.summary)}</div>` : '';
+    const rides = st.filter(x=>x.kind!=='walk');
+    let ride = 0, out = [];
+    st.forEach((x, i)=>{
+      if(x.kind==='walk'){
+        const last = i===st.length-1, first = i===0;
+        out.push(`<li class="walk"><span class="ic">🚶</span><div>${first? `<b>${e(a.venueName||'출발 예식장')}</b>에서 ` : ''}도보 ${x.min}분${last? ` → <b>${e(b.venueName||'다음 예식장')}</b> 도착` : (ride>0 && ride<rides.length? ' 이동 후 환승':'')}</div></li>`);
+        return;
+      }
+      ride++;
+      const ic = x.kind==='subway' ? '🚇' : '🚌';
+      const line = x.line ? `<em class="ln">${e(x.line)}${x.kind==='bus' && /^\d/.test(x.line) && !/번/.test(x.line) ? '번':''}</em>` : (x.kind==='subway'?'지하철':'버스');
+      const tag = ride===1 ? '<i class="on">승차</i>' : '<i class="tr">환승</i>';
+      out.push(`<li class="${x.kind}"><span class="ic">${ic}</span><div>${tag} <b>${e(x.from||'정류장')}</b>에서 ${line} 탑승${x.dir? ` <small>(${e(x.dir)} 방면)</small>`:''}
+        <div class="pp-rt-ride">${x.stops? x.stops+'개 정거장 · ':''}약 ${x.min}분</div>
+        <div><i class="off">하차</i> <b>${e(x.to||'목적 정류장')}</b></div></div></li>`);
+    });
+    if(st[st.length-1].kind!=='walk') out.push(`<li class="walk"><span class="ic">📍</span><div><b>${e(b.venueName||'다음 예식장')}</b> 도착</div></li>`);
+    return `<ol class="pp-rt-steps">${out.join('')}</ol>`;
+  }
+  // 각 예식에서 업무를 마무리하고 출발해야 하는 시각 (강조 박스)
+  function leaveBoxHTML(a, b){
+    const leg = routeData && (routeData.legs||[]).find(l=>l.from===a.recordId && l.to===b.recordId);
+    if(leg && leg.sameVenue){
+      const arrive = hm2m(b.callTime); if(arrive===null) return '';
+      return `<div class="pp-rt-leave"><div class="t">⏰ 이 예식 업무 마무리 시각</div><div class="v"><span><small>같은 예식장 · 홀 이동</small><b>${m2hm(arrive-5)}</b></span></div></div>`;
+    }
+    const modes = legModes(leg); if(!modes.length) return '';
+    const cells = modes.map(([k,ic,lab,m])=>{ const j = routeJudge(a,b,m.min); return j? `<span class="${LV[j.level][1]}"><small>${ic} ${lab}${k==='transit'?'으로':'로'} 이동 시</small><b>${m2hm(j.leave)}</b><i>${LV[j.level][0]}</i></span>` : ''; }).join('');
+    return cells ? `<div class="pp-rt-leave"><div class="t">⏰ 이 예식 업무 마무리 · 출발 시각</div><div class="v">${cells}</div></div>` : '';
+  }
+  function routeLegHTML(a, b){
+    const leg = routeData && (routeData.legs||[]).find(l=>l.from===a.recordId && l.to===b.recordId);
+    const links = `<div class="pp-rt-links"><button class="pp-btn pp-rt-nv" data-pp="nmap" data-v="public" data-rid="${e(a.recordId)}" data-to="${e(b.recordId)}">🚇 네이버 대중교통</button><button class="pp-btn pp-rt-nv" data-pp="nmap" data-v="car" data-rid="${e(a.recordId)}" data-to="${e(b.recordId)}">🚗 네이버 자동차</button><a class="pp-btn" href="${kakaoLink(leg,a,b)}" target="_blank" rel="noopener noreferrer">🧭 카카오맵</a><button class="pp-btn" data-pp="map" data-rid="${e(b.recordId)}">🗺️ 다음 예식장 위치</button></div>`;
+    if(leg && leg.sameVenue){
+      const arrive = hm2m(b.callTime), prevEnd = hm2m(a.endTime);
+      const sl = (arrive!==null && prevEnd!==null) ? arrive-5-prevEnd : null;
+      const lv = sl===null ? 'ok' : sl>=0 ? 'ok' : 'tight';
+      return `<div class="pp-rt-leg"><div class="pp-rt-verdict ${lv}"><b class="lv">${LV[lv][0]}</b> 🏛️ 같은 예식장이에요 · 홀만 이동하면 돼요${sl===null?'': sl>=0? ` · 이전 예식 종료 예정 후 <b>${sl}분 여유</b>` : ` · 종료 예정보다 ${-sl}분 일찍 마무리해야 해요. 함께 근무하는 파트너에게 미리 인계를 부탁해 주세요`}</div></div>`;
+    }
+    const modes = legModes(leg);
     let body;
     if(!leg){
-      body = routeLoading ? '<div class="pp-rt-wait"><span class="pp-rt-spin"></span>최적 경로를 계산하고 있어요…</div>'
+      body = routeLoading ? '<div class="pp-rt-wait"><span class="pp-rt-spin"></span>이동 동선을 계산하고 있어요…</div>'
         : `<div class="pp-rt-wait">${routeErr? '⚠️ '+e(routeErr) : (H.onRoute? '경로 정보를 불러오지 못했어요' : '미리보기에서는 경로 계산을 하지 않아요')}${H.onRoute? ' <button class="pp-btn" data-pp="routeReload">다시 계산</button>':''}</div>`;
     } else if(!modes.length){
       body = `<div class="pp-rt-wait">⚠️ ${e(leg.error||'경로를 찾지 못했어요')} · 아래 지도에서 직접 확인해 주세요</div>`;
     } else {
-      const best = modes.slice().sort((x,y)=> (x[3].min - y[3].min) || (x[0]==='transit'?-1:1))[0];
+      // 판정은 두 수단 중 더 빠른 쪽 기준
+      const fast = modes.slice().sort((x,y)=> x[3].min - y[3].min)[0];
+      const j = routeJudge(a, b, fast[3].min);
+      let verdict = '';
+      if(j){
+        verdict = j.level==='ok' ? `<div class="pp-rt-verdict ok"><b class="lv">여유</b> 이전 예식 종료 예정(${e(a.endTime)}) 후 <b>${j.slack===null?'-':j.slack}분 여유</b>가 있어요</div>`
+          : j.level==='tight' ? `<div class="pp-rt-verdict tight"><b class="lv">빠듯</b> 종료 예정(${e(a.endTime)})보다 <b>${-j.slack}분 일찍</b> 마무리하고 출발해야 해요. <b>함께 근무하는 파트너에게 미리 인계를 부탁해 주세요.</b></div>`
+          : `<div class="pp-rt-verdict risk"><b class="lv">위험</b> 이동 시간이 부족해 제시간 도착이 어려워요. <b>대표자에게 바로 알려 주세요.</b></div>`;
+      }
       const rows = modes.map(([k,ic,lab,m])=>{
-        const leave = arrive===null ? null : arrive - m.min - ROUTE_BUFFER;
-        const slack = (leave===null || prevEnd===null) ? null : leave - prevEnd;
-        return `<div class="pp-rt-mode ${k===best[0]?'best':''}">
-          <div class="pp-rt-mh"><span>${ic} ${lab}</span>${k===best[0]?'<i>추천</i>':''}<b>${m.est?'약 ':''}${durTxt(m.min)}</b><small>${m.km? m.km+'km':''}${m.transfers? ' · 환승 '+m.transfers+'회':''}${m.fare? ' · '+money(m.fare):''}${m.toll? ' · 통행료 '+money(m.toll):''}${m.est? ' · 거리 기반 추정':''}</small></div>
-          ${m.summary? `<div class="pp-rt-sum">${e(m.summary)}</div>`:''}
-          ${leave===null? '' : (prevCall!==null && leave <= prevCall + 30) ? `<div class="pp-rt-plan warn">⛔ 이 수단으로는 제시간 도착이 어려워요 <em>· ${m2hm(leave)}에 출발해야 해서 이전 예식(출근 ${e(a.callTime)}) 업무 시간이 없어요</em></div>`
-            : `<div class="pp-rt-plan ${slack!==null && slack<0?'warn':''}">⏰ <b>${m2hm(leave)}</b>까지 마무리하고 출발 → ${m2hm(leave+m.min)} 도착 ${slack===null?'': slack<0? `<em>· 예정 종료(${e(a.endTime)})보다 ${-slack}분 일찍 마무리 필요</em>` : `<span>· 이전 예식 종료 후 여유 ${slack}분</span>`}</div>`}
+        const jj = routeJudge(a, b, m.min);
+        return `<div class="pp-rt-mode">
+          <div class="pp-rt-mh"><span>${ic} ${lab}</span>${jj? `<i class="lvc ${LV[jj.level][1]}">${LV[jj.level][0]}</i>`:''}<b>${m.est?'약 ':''}${durTxt(m.min)}</b><small>${m.km? m.km+'km':''}${m.transfers? ' · 환승 '+m.transfers+'회':''}${m.est? ' · 거리 기반 추정':''}</small></div>
+          ${k==='transit'? transitStepsHTML(m, a, b) : ''}
+          ${jj? `<div class="pp-rt-plan">${m2hm(jj.leave)} 출발 → ${m2hm(jj.arriveAt)} 도착 <small>(출근 ${e(b.callTime)})</small></div>`:''}
         </div>`;
       }).join('');
-      const bLeave = arrive===null ? null : arrive - best[3].min - ROUTE_BUFFER;
-      let verdict = '';
-      if(bLeave!==null && prevEnd!==null){
-        const sl = bLeave - prevEnd;
-        verdict = sl>=0 ? `<div class="pp-rt-verdict ok">✅ <b>${best[2]}</b> 이동 추천 · 이전 예식 업무를 <b>${m2hm(bLeave)}</b>까지 마치고 출발하면 다음 예식 출근(${e(b.callTime)}) ${ROUTE_BUFFER}분 전에 도착해요 · 이전 예식 종료 예정(${e(a.endTime)})보다 ${sl}분 여유</div>`
-          : (prevCall!==null && bLeave <= prevCall + 30) ? `<div class="pp-rt-verdict bad">🚨 이동 시간이 부족해요 · 가장 빠른 ${best[2]}로도 ${m2hm(bLeave)}에 출발해야 해서 이전 예식 업무가 거의 불가능해요. 대표에게 바로 알려 주세요</div>`
-          : `<div class="pp-rt-verdict warn">⚠️ 빠듯해요 · <b>${best[2]}</b>로 이동하려면 이전 예식 업무를 <b>${m2hm(bLeave)}</b>까지 마쳐야 해요 (예정 종료 ${e(a.endTime)}보다 ${-sl}분 빠름). 함께 근무하는 팀원에게 미리 인계를 부탁해 두세요</div>`;
-      }
-      body = verdict + rows + (leg.straightKm? `<div class="pp-rt-dist">직선거리 ${leg.straightKm}km${leg.car && leg.car.src==='kakao'?' · 자동차: 카카오내비 예상 교통량 기준':''}${leg.transit && leg.transit.src==='kakao'?' · 대중교통: 카카오맵 기준':''}${leg.transit && leg.transit.src==='google'?' · 대중교통: Google 경로 기준':''}</div>`:'');
+      body = verdict + rows + (leg.straightKm? `<div class="pp-rt-dist">직선거리 ${leg.straightKm}km${leg.car && leg.car.src==='kakao'?' · 자동차: 카카오내비 기준':''}${leg.transit && leg.transit.src==='kakao'?' · 대중교통: 카카오맵 기준':''}${leg.transit && leg.transit.src==='google'?' · 대중교통: Google 경로 기준':''}</div>`:'');
     }
-    return `<div class="pp-rt-leg">${body}
-      <div class="pp-rt-links"><button class="pp-btn pp-rt-nv" data-pp="nmap" data-v="public" data-rid="${e(a.recordId)}" data-to="${e(b.recordId)}">🚇 네이버 대중교통</button><button class="pp-btn pp-rt-nv" data-pp="nmap" data-v="car" data-rid="${e(a.recordId)}" data-to="${e(b.recordId)}">🚗 네이버 자동차</button><a class="pp-btn" href="${kakaoLink(leg,a,b)}" target="_blank" rel="noopener noreferrer">🧭 카카오맵</a><button class="pp-btn" data-pp="map" data-rid="${e(b.recordId)}">🗺️ 다음 예식장 위치</button></div></div>`;
+    return `<div class="pp-rt-leg">${body}${links}</div>`;
   }
   function routeHTML(){
-    const days = routeDays();
+    const days = routeDays(), allDays = routeDaysAll(), more = allDays.length > days.length;
     if(days.length && H.onRoute && !routeLoading && (!routeData || routeSig!==routeSigOf(days)) && !routeErr) setTimeout(()=>loadRoutes(), 0);
-    const stop = (ev, i) => `<div class="pp-rt-stop"><span class="pp-rt-no">${i+1}</span><div><b>${e(ev.venueName||'예식장 미정')}</b>${ev.hallName? ` <small>${e(ev.hallName)}</small>`:''}
-      <div class="pp-rt-times">출근 <b>${e(ev.callTime||'-')}</b> · 예식 ${e(ev.weddingTime||'-')} · 종료 예정 ${e(ev.endTime||'-')}</div></div></div>`;
+    const at = routeData && routeData.at ? new Date(routeData.at) : null;
+    const stop = (ev, i, next) => `<div class="pp-rt-stop"><span class="pp-rt-no">${i+1}</span><div><b>${e(ev.venueName||'예식장 미정')}</b>${ev.hallName? ` <small>${e(ev.hallName)}</small>`:''}
+      <div class="pp-rt-times">출근 <b>${e(ev.callTime||'-')}</b> · 예식 ${e(ev.weddingTime||'-')} · 종료 예정 ${e(ev.endTime||'-')}</div>${next? leaveBoxHTML(ev, next) : ''}</div></div>`;
     const day = d => {
       const dt = parseD(d.date);
       let html = `<section class="pp-rt-day"><div class="pp-rt-dh"><b>${pd(dt.getMonth()+1)}.${pd(dt.getDate())} (${WD[dt.getDay()]})</b><span>${dLabel(d.date)}</span><small>하루 ${d.list.length}건</small></div>`;
-      d.list.forEach((ev,i)=>{ html += stop(ev,i); if(i+1<d.list.length) html += routeLegHTML(ev, d.list[i+1]); });
+      d.list.forEach((ev,i)=>{ const nx = d.list[i+1]; html += stop(ev,i,nx); if(nx) html += routeLegHTML(ev, nx); });
       return html + '</section>';
     };
-    return `<div class="pp-cfhead"><div><b>일정 이동 동선</b> <small>같은 날 2건 이상 배정된 일정의 이동 경로와 출발 시각</small></div>${days.length && H.onRoute? `<button class="pp-btn" data-pp="routeReload">↻ 다시 계산</button>`:''}</div>
-      ${days.length? days.map(day).join('') : '<div class="pp-empty">같은 날 2건 이상 배정된 일정이 없어요<br><small>하루에 두 곳 이상 근무하게 되면 여기에서 이동 동선을 안내해 드려요</small></div>'}
-      ${days.length? `<p class="pp-cf-note">· 출발 시각 = 다음 예식 출근 시각 − 이동 시간 − 여유 ${ROUTE_BUFFER}분<br>· 자동차 시간에는 주차·출차 시간이 포함돼요. 예식 당일 교통 상황에 따라 달라질 수 있으니 출발 전 지도 앱으로 한 번 더 확인해 주세요</p>`:''}`;
+    const until = parseD(routeUntil());
+    return `<div class="pp-rt-alert" role="alert"><b>⚠️ 예식 당일 이동 전 반드시 다시 확인하세요</b>
+        <p>이 추천 동선은 <u>마지막으로 조회한 시점${at? `(${pd(at.getMonth()+1)}.${pd(at.getDate())} ${pd(at.getHours())}:${pd(at.getMinutes())})`:''}의 교통 정보</u>를 기준으로 계산돼요. 당일 도로 상황·배차 간격·공사·행사에 따라 이동 시간이 크게 달라질 수 있어요.</p>
+        <p><b>예식 당일 출발 전에는 꼭 「↻ 다시 계산」을 누르거나, 네이버지도·카카오맵으로 이동 동선을 한 번 더 확인해 주세요.</b></p></div>
+      <div class="pp-cfhead"><div><b>추천 동선</b> <small>같은 날 2건 이상 배정된 일정 · ${pd(until.getMonth()+1)}.${pd(until.getDate())}까지</small></div>${days.length && H.onRoute? `<button class="pp-btn" data-pp="routeReload">↻ 다시 계산</button>`:''}</div>
+      ${days.length? days.map(day).join('') : `<div class="pp-empty">앞으로 한 달${routeMonths>1? `(${routeMonths}개월)`:''} 동안 같은 날 2건 이상 배정된 일정이 없어요<br><small>하루에 두 곳 이상 근무하게 되면 여기에서 이동 동선을 안내해 드려요</small></div>`}
+      ${more? `<button class="pp-btn pp-rt-more" data-pp="routeMore">＋ 다음 한 달 일정 더 보기 <small>(남은 ${allDays.length - days.length}일)</small></button>`:''}
+      ${days.length? `<p class="pp-cf-note">· 마무리·출발 시각 = 다음 예식 출근 시각 − 이동 시간 − 여유 ${ROUTE_BUFFER}분<br>· <b>여유</b>: 종료 예정 후 출발해도 됨 · <b>빠듯</b>: 종료 예정보다 일찍 마무리 필요 · <b>위험</b>: 제시간 도착 어려움<br>· 자동차 시간에는 주차·출차 시간이 포함돼요</p>`:''}`;
   }
   function confirmHTML(){
     const up = upcoming().slice().sort((a,b)=> (a.date+(a.weddingTime||''))<(b.date+(b.weddingTime||''))?-1:1);
@@ -1944,6 +2030,7 @@ const PartnerPortal = (function(){
       return;
     }
     if(act==='routeReload'){ routeData=null; routeErr=''; loadRoutes(true); return; }
+    if(act==='routeMore'){ routeMonths++; routeErr=''; render(); return; }
     if(act==='cfx'){ cfOpen[rid] = !cfOpen[rid]; render(); return; }
     if(act==='cfday'){ cfDay = (cfDay===v)? null : v; render(); return; }
     if(act==='arrCopy' || act==='arrGo'){
@@ -2280,7 +2367,7 @@ function openPortal(view){
     isInstalled: ()=> isInstalled(),
     onOp: (op)=> postOp(op),
     onOps: (ops)=> postOp(null, ops),
-    onRoute: async ()=>{ const r = await fetch(apiUrl({action:'routePlan', code: CODE}), {method:'GET'}); return await r.json(); },
+    onRoute: async (until)=>{ const r = await fetch(apiUrl({action:'routePlan', code: CODE, until: until||''}), {method:'GET'}); return await r.json(); },
     onLogout: ()=>{ if(confirm('로그아웃할까요? 자동 로그인도 해제돼요.')){ try{ localStorage.removeItem(viewKey(CODE)); }catch(e){} ls(LS_CODE, null); CODE=''; screenLogin(); } }
   });
 }
