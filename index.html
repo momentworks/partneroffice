@@ -496,6 +496,32 @@ details.pp-past summary{cursor:pointer;font-size:13px;font-weight:700;color:var(
 .pp-cf-filter{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px;font-weight:700;margin:10px 2px 0;background:var(--pp-gold-s);border-radius:8px;padding:8px 10px}
 @media (max-width:400px){.pp-cf-region{display:none}.pp-cfrow{gap:6px;padding:10px 6px}.pp-cf-time{min-width:36px}}
 .pp-cfhead .pp-btn{white-space:nowrap;flex:none}.pp-cfhead>div{min-width:0}.pp-cfhead small{display:block;font-size:11px;line-height:1.4}
+/* ---------- 일정 이동 동선 ---------- */
+.pp-rt-day{background:var(--pp-card);border:1px solid var(--pp-line);border-radius:6px;padding:14px 14px 10px;margin:0 0 14px;box-shadow:0 1px 2px rgba(26,22,24,.035)}
+.pp-rt-dh{display:flex;align-items:baseline;gap:8px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--pp-line)}
+.pp-rt-dh b{font-size:15px}.pp-rt-dh span{font-size:11px;font-weight:800;color:#fff;background:var(--pp-wine,#7A2E3A);border-radius:999px;padding:2px 8px}.pp-rt-dh small{margin-left:auto;color:var(--pp-soft);font-weight:700;font-size:12px}
+.pp-rt-stop{display:flex;gap:10px;align-items:flex-start}
+.pp-rt-stop b{font-size:14px}.pp-rt-stop small{color:var(--pp-soft);font-size:12px}
+.pp-rt-no{flex:none;width:24px;height:24px;border-radius:50%;background:var(--pp-wine,#7A2E3A);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.pp-rt-times{font-size:12px;color:var(--pp-slate,#555);margin-top:3px}
+.pp-rt-leg{margin:8px 0 8px 11px;padding:6px 0 8px 21px;border-left:2px dashed var(--pp-line)}
+.pp-rt-same{font-size:13px;font-weight:700;margin-bottom:6px}
+.pp-rt-wait{font-size:13px;color:var(--pp-soft);padding:6px 0;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pp-rt-spin{width:14px;height:14px;border:2px solid var(--pp-line);border-top-color:var(--pp-wine,#7A2E3A);border-radius:50%;animation:pprtspin .8s linear infinite}
+@keyframes pprtspin{to{transform:rotate(360deg)}}
+.pp-rt-verdict{font-size:13px;line-height:1.55;border-radius:6px;padding:9px 11px;margin-bottom:8px}
+.pp-rt-verdict.ok{background:#EEF6F0;color:#1E5631}.pp-rt-verdict.warn{background:#FFF6E5;color:#7A4B00}.pp-rt-verdict.bad{background:#FDECEC;color:#8A1C1C}
+.pp-rt-mode{border:1px solid var(--pp-line);border-radius:6px;padding:9px 11px;margin-bottom:7px;background:var(--pp-bg,#fff)}
+.pp-rt-mode.best{border-color:var(--pp-wine,#7A2E3A);box-shadow:0 0 0 1px var(--pp-wine,#7A2E3A) inset}
+.pp-rt-mh{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.pp-rt-mh span{font-weight:800;font-size:13px}.pp-rt-mh i{font-style:normal;font-size:10px;font-weight:800;color:#fff;background:var(--pp-wine,#7A2E3A);border-radius:3px;padding:1px 5px}
+.pp-rt-mh b{margin-left:auto;font-size:15px}.pp-rt-mh small{width:100%;color:var(--pp-soft);font-size:11.5px}
+.pp-rt-sum{font-size:12px;color:var(--pp-slate,#555);margin-top:5px;line-height:1.5;word-break:keep-all}
+.pp-rt-plan{font-size:12.5px;margin-top:6px;line-height:1.5}.pp-rt-plan span{color:#1E5631}.pp-rt-plan em{font-style:normal;color:#A33}
+.pp-rt-plan.warn b{color:#A33}
+.pp-rt-dist{font-size:11px;color:var(--pp-soft);margin:2px 0 6px}
+.pp-rt-links{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}.pp-rt-links .pp-btn{text-decoration:none;font-size:12px}
+.pp-rt-nv{border-color:#03C75A;color:#03A94D}
 
 /* ================= 접속 메인화면 (모먼트웍스 로고) ================= */
 .mw-entry{position:fixed;inset:0;z-index:500;overflow-y:auto;background:#F7F5F0;background-image:radial-gradient(ellipse at 50% 38%, #FFFFFF 0%, #F7F5F0 55%, #EFEBE3 100%);color:#1A1618;
@@ -1071,7 +1097,7 @@ function buildCustomerView(records, db, code, todayStr, withFile){
 ============================================================================================== */
 const PartnerPortal = (function(){
   const WD = ['일','월','화','수','목','금','토'];
-  const TABS = [['home','홈'],['work','오늘 업무'],['schedule','내 일정'],['confirm','배정 확인'],['info','예식정보'],['arrange','축의대 내역정리'],['pay','근무·급여'],['avail','휴무 신청'],['notice','공지']];
+  const TABS = [['home','홈'],['work','오늘 업무'],['schedule','내 일정'],['confirm','배정 확인'],['route','일정 이동 동선'],['info','예식정보'],['arrange','축의대 내역정리'],['pay','근무·급여'],['avail','휴무 신청'],['notice','공지']];
   let workRid=null, sheet=null, root=null, view=null, H={}, tab='home', selRecord=null, calCursor=null, availCursor=null, payMonth=null, selDay=null, busy=false;
 
   const pd = n => String(n).padStart(2,'0');
@@ -1638,7 +1664,93 @@ const PartnerPortal = (function(){
     return `<div class="pp-cfhead"><div><b>축의대 내역정리</b> <small>배정된 예식의 정리 시트 접속코드</small></div></div>
       <p class="pp-ar-url">내역정리 사이트: <a href="${ARRANGE_URL}" target="_blank" rel="noopener">${ARRANGE_URL}</a></p>
       ${up.length? up.map(card).join('') : '<div class="pp-empty">배정된 예정 일정이 없어요</div>'}
-      <p class="pp-cf-note">「시작하기」를 누르면 접속코드가 복사되고 내역정리 사이트가 열려요. 코드 입력칸에 붙여넣어 주세요.</p>`;
+      <p class="pp-cf-note">「시작하기」를 누르면 내역정리 시트가 열리고 접속코드와 <b>${e(view.member.name||'')}</b>님 이름으로 바로 로그인돼요.</p>`;
+  }
+  /* ---------- 일정 이동 동선: 같은 날 2건 이상 배정된 경우 ---------- */
+  const ROUTE_BUFFER = 10; // 다음 예식 출근 전 확보할 여유(분)
+  let routeData = null, routeSig = '', routeLoading = false, routeErr = '';
+  const hm2m = s => { const m=/^(\d{1,2}):(\d{2})/.exec(String(s||'')); return m ? (+m[1])*60+(+m[2]) : null; };
+  const m2hm = n => { n=((n%1440)+1440)%1440; return pd(Math.floor(n/60))+':'+pd(n%60); };
+  const durTxt = n => n>=60 ? `${Math.floor(n/60)}시간${n%60? ' '+(n%60)+'분':''}` : `${n}분`;
+  function routeDays(){
+    const by = {};
+    upcoming().forEach(ev=>{ (by[ev.date] = by[ev.date] || []).push(ev); });
+    return Object.keys(by).sort().filter(d=>by[d].length>1).map(d=>({date:d, list: by[d].slice().sort((a,b)=> String(a.callTime||a.weddingTime||'').localeCompare(String(b.callTime||b.weddingTime||'')))}));
+  }
+  function routeSigOf(days){ return days.map(d=>d.list.map(x=>x.recordId+'@'+x.venueName+'@'+x.callTime).join('>')).join('|'); }
+  async function loadRoutes(force){
+    if(!H.onRoute || routeLoading) return;
+    const sig = routeSigOf(routeDays());
+    if(!force && routeData && routeSig===sig) return;
+    routeLoading = true; routeErr = ''; if(tab==='route') render();
+    try{
+      const r = await H.onRoute();
+      if(!r || !r.ok) throw new Error((r && r.error) || '경로를 불러오지 못했어요');
+      routeData = r; routeSig = sig;
+    }catch(err){ routeErr = err.message || '경로를 불러오지 못했어요'; }
+    finally{ routeLoading = false; if(tab==='route') render(); }
+  }
+  function kakaoLink(leg, a, b){
+    const fn = a.venueName||'출발지', tn = b.venueName||'도착지';
+    if(leg && leg.transit && leg.transit.link && /^https:\/\//.test(leg.transit.link)) return leg.transit.link;
+    if(leg && leg.fromPos && leg.toPos) return `https://map.kakao.com/link/from/${encodeURIComponent(fn)},${leg.fromPos.lat},${leg.fromPos.lng}/to/${encodeURIComponent(tn)},${leg.toPos.lat},${leg.toPos.lng}`;
+    return `https://map.kakao.com/?sName=${encodeURIComponent(fn)}&eName=${encodeURIComponent(tn)}`;
+  }
+  function routeLegHTML(a, b){
+    const leg = routeData && (routeData.legs||[]).find(l=>l.from===a.recordId && l.to===b.recordId);
+    const arrive = hm2m(b.callTime), prevEnd = hm2m(a.endTime), prevCall = hm2m(a.callTime);
+    if(leg && leg.sameVenue){
+      return `<div class="pp-rt-leg same"><div class="pp-rt-same">🏛️ 같은 예식장이에요 · 홀만 이동하면 돼요</div>
+        ${arrive!==null && prevEnd!==null ? `<div class="pp-rt-plan ${arrive-5<prevEnd?'warn':''}">⏰ <b>${m2hm(arrive-5)}</b>까지 이전 예식 마무리 후 다음 홀로 이동 ${arrive-5<prevEnd? `<em>· 예정 종료(${e(a.endTime)})보다 ${prevEnd-(arrive-5)}분 일찍 마무리 필요</em>`:`<span>· 여유 ${arrive-5-prevEnd}분</span>`}</div>`:''}</div>`;
+    }
+    const modes = [];
+    if(leg && leg.transit) modes.push(['transit','🚇','대중교통',leg.transit]);
+    if(leg && leg.car) modes.push(['car','🚗','자동차',leg.car]);
+    let body;
+    if(!leg){
+      body = routeLoading ? '<div class="pp-rt-wait"><span class="pp-rt-spin"></span>최적 경로를 계산하고 있어요…</div>'
+        : `<div class="pp-rt-wait">${routeErr? '⚠️ '+e(routeErr) : (H.onRoute? '경로 정보를 불러오지 못했어요' : '미리보기에서는 경로 계산을 하지 않아요')}${H.onRoute? ' <button class="pp-btn" data-pp="routeReload">다시 계산</button>':''}</div>`;
+    } else if(!modes.length){
+      body = `<div class="pp-rt-wait">⚠️ ${e(leg.error||'경로를 찾지 못했어요')} · 아래 지도에서 직접 확인해 주세요</div>`;
+    } else {
+      const best = modes.slice().sort((x,y)=> (x[3].min - y[3].min) || (x[0]==='transit'?-1:1))[0];
+      const rows = modes.map(([k,ic,lab,m])=>{
+        const leave = arrive===null ? null : arrive - m.min - ROUTE_BUFFER;
+        const slack = (leave===null || prevEnd===null) ? null : leave - prevEnd;
+        return `<div class="pp-rt-mode ${k===best[0]?'best':''}">
+          <div class="pp-rt-mh"><span>${ic} ${lab}</span>${k===best[0]?'<i>추천</i>':''}<b>${m.est?'약 ':''}${durTxt(m.min)}</b><small>${m.km? m.km+'km':''}${m.transfers? ' · 환승 '+m.transfers+'회':''}${m.fare? ' · '+money(m.fare):''}${m.toll? ' · 통행료 '+money(m.toll):''}${m.est? ' · 거리 기반 추정':''}</small></div>
+          ${m.summary? `<div class="pp-rt-sum">${e(m.summary)}</div>`:''}
+          ${leave===null? '' : (prevCall!==null && leave <= prevCall + 30) ? `<div class="pp-rt-plan warn">⛔ 이 수단으로는 제시간 도착이 어려워요 <em>· ${m2hm(leave)}에 출발해야 해서 이전 예식(출근 ${e(a.callTime)}) 업무 시간이 없어요</em></div>`
+            : `<div class="pp-rt-plan ${slack!==null && slack<0?'warn':''}">⏰ <b>${m2hm(leave)}</b>까지 마무리하고 출발 → ${m2hm(leave+m.min)} 도착 ${slack===null?'': slack<0? `<em>· 예정 종료(${e(a.endTime)})보다 ${-slack}분 일찍 마무리 필요</em>` : `<span>· 이전 예식 종료 후 여유 ${slack}분</span>`}</div>`}
+        </div>`;
+      }).join('');
+      const bLeave = arrive===null ? null : arrive - best[3].min - ROUTE_BUFFER;
+      let verdict = '';
+      if(bLeave!==null && prevEnd!==null){
+        const sl = bLeave - prevEnd;
+        verdict = sl>=0 ? `<div class="pp-rt-verdict ok">✅ <b>${best[2]}</b> 이동 추천 · 이전 예식 업무를 <b>${m2hm(bLeave)}</b>까지 마치고 출발하면 다음 예식 출근(${e(b.callTime)}) ${ROUTE_BUFFER}분 전에 도착해요 · 이전 예식 종료 예정(${e(a.endTime)})보다 ${sl}분 여유</div>`
+          : (prevCall!==null && bLeave <= prevCall + 30) ? `<div class="pp-rt-verdict bad">🚨 이동 시간이 부족해요 · 가장 빠른 ${best[2]}로도 ${m2hm(bLeave)}에 출발해야 해서 이전 예식 업무가 거의 불가능해요. 대표에게 바로 알려 주세요</div>`
+          : `<div class="pp-rt-verdict warn">⚠️ 빠듯해요 · <b>${best[2]}</b>로 이동하려면 이전 예식 업무를 <b>${m2hm(bLeave)}</b>까지 마쳐야 해요 (예정 종료 ${e(a.endTime)}보다 ${-sl}분 빠름). 함께 근무하는 팀원에게 미리 인계를 부탁해 두세요</div>`;
+      }
+      body = verdict + rows + (leg.straightKm? `<div class="pp-rt-dist">직선거리 ${leg.straightKm}km${leg.car && leg.car.src==='kakao'?' · 자동차: 카카오내비 예상 교통량 기준':''}${leg.transit && leg.transit.src==='kakao'?' · 대중교통: 카카오맵 기준':''}${leg.transit && leg.transit.src==='google'?' · 대중교통: Google 경로 기준':''}</div>`:'');
+    }
+    return `<div class="pp-rt-leg">${body}
+      <div class="pp-rt-links"><button class="pp-btn pp-rt-nv" data-pp="nmap" data-v="public" data-rid="${e(a.recordId)}" data-to="${e(b.recordId)}">🚇 네이버 대중교통</button><button class="pp-btn pp-rt-nv" data-pp="nmap" data-v="car" data-rid="${e(a.recordId)}" data-to="${e(b.recordId)}">🚗 네이버 자동차</button><a class="pp-btn" href="${kakaoLink(leg,a,b)}" target="_blank" rel="noopener noreferrer">🧭 카카오맵</a><button class="pp-btn" data-pp="map" data-rid="${e(b.recordId)}">🗺️ 다음 예식장 위치</button></div></div>`;
+  }
+  function routeHTML(){
+    const days = routeDays();
+    if(days.length && H.onRoute && !routeLoading && (!routeData || routeSig!==routeSigOf(days)) && !routeErr) setTimeout(()=>loadRoutes(), 0);
+    const stop = (ev, i) => `<div class="pp-rt-stop"><span class="pp-rt-no">${i+1}</span><div><b>${e(ev.venueName||'예식장 미정')}</b>${ev.hallName? ` <small>${e(ev.hallName)}</small>`:''}
+      <div class="pp-rt-times">출근 <b>${e(ev.callTime||'-')}</b> · 예식 ${e(ev.weddingTime||'-')} · 종료 예정 ${e(ev.endTime||'-')}</div></div></div>`;
+    const day = d => {
+      const dt = parseD(d.date);
+      let html = `<section class="pp-rt-day"><div class="pp-rt-dh"><b>${pd(dt.getMonth()+1)}.${pd(dt.getDate())} (${WD[dt.getDay()]})</b><span>${dLabel(d.date)}</span><small>하루 ${d.list.length}건</small></div>`;
+      d.list.forEach((ev,i)=>{ html += stop(ev,i); if(i+1<d.list.length) html += routeLegHTML(ev, d.list[i+1]); });
+      return html + '</section>';
+    };
+    return `<div class="pp-cfhead"><div><b>일정 이동 동선</b> <small>같은 날 2건 이상 배정된 일정의 이동 경로와 출발 시각</small></div>${days.length && H.onRoute? `<button class="pp-btn" data-pp="routeReload">↻ 다시 계산</button>`:''}</div>
+      ${days.length? days.map(day).join('') : '<div class="pp-empty">같은 날 2건 이상 배정된 일정이 없어요<br><small>하루에 두 곳 이상 근무하게 되면 여기에서 이동 동선을 안내해 드려요</small></div>'}
+      ${days.length? `<p class="pp-cf-note">· 출발 시각 = 다음 예식 출근 시각 − 이동 시간 − 여유 ${ROUTE_BUFFER}분<br>· 자동차 시간에는 주차·출차 시간이 포함돼요. 예식 당일 교통 상황에 따라 달라질 수 있으니 출발 전 지도 앱으로 한 번 더 확인해 주세요</p>`:''}`;
   }
   function confirmHTML(){
     const up = upcoming().slice().sort((a,b)=> (a.date+(a.weddingTime||''))<(b.date+(b.weddingTime||''))?-1:1);
@@ -1776,7 +1888,7 @@ const PartnerPortal = (function(){
     computeNew();
     if(H.onCache){ try{ H.onCache(view); }catch(e){} }
     const pendingCount = upcoming().filter(ev=>!ev.confirmed).length;
-    const body = tab==='home'?homeHTML(): tab==='work'?workHTML(): tab==='schedule'?scheduleHTML(): tab==='confirm'?confirmHTML(): tab==='info'?infoPageHTML(): tab==='arrange'?arrangeHTML(): tab==='pay'?payHTML(): tab==='avail'?availHTML(): noticeHTML();
+    const body = tab==='home'?homeHTML(): tab==='work'?workHTML(): tab==='schedule'?scheduleHTML(): tab==='confirm'?confirmHTML(): tab==='info'?infoPageHTML(): tab==='arrange'?arrangeHTML(): tab==='route'?routeHTML(): tab==='pay'?payHTML(): tab==='avail'?availHTML(): noticeHTML();
     const updated = view.generatedAt ? new Date(view.generatedAt) : new Date();
     root.innerHTML = `<div class="pp">
       ${busy?'<div class="pp-busy"></div>':''}
@@ -1819,12 +1931,33 @@ const PartnerPortal = (function(){
     const el = ev.target.closest('[data-pp]'); if(!el) return;
     const act=el.dataset.pp, v=el.dataset.v, rid=el.dataset.rid;
     if(act==='pendingList'){ tab='confirm'; schedFilter=null; selDay=null; sheet=null; render(); window.scrollTo(0,0); return; }
+    if(act==='nmap'){
+      // 네이버지도 앱 길찾기 (키 없이 무료) · 앱이 없으면 네이버지도 웹에서 도착지 검색
+      const a = eventById(rid), b = eventById(el.dataset.to); if(!a || !b) return;
+      const leg = routeData && (routeData.legs||[]).find(l=>l.from===a.recordId && l.to===b.recordId);
+      const web = 'https://map.naver.com/v5/search/'+encodeURIComponent(b.venueName||'');
+      if(!leg || !leg.fromPos || !leg.toPos){ window.open(web, '_blank'); return; }
+      const q = `slat=${leg.fromPos.lat}&slng=${leg.fromPos.lng}&sname=${encodeURIComponent(a.venueName||'출발')}&dlat=${leg.toPos.lat}&dlng=${leg.toPos.lng}&dname=${encodeURIComponent(b.venueName||'도착')}&appname=${encodeURIComponent(location.hostname||'momentworks.github.io')}`;
+      const t0 = Date.now();
+      setTimeout(()=>{ if(document.visibilityState==='visible' && Date.now()-t0 < 2600){ toast('네이버지도 앱이 없어 웹으로 열어요'); window.open(web, '_blank'); } }, 1800);
+      location.href = `nmap://route/${v==='car'?'car':'public'}?${q}`;
+      return;
+    }
+    if(act==='routeReload'){ routeData=null; routeErr=''; loadRoutes(true); return; }
     if(act==='cfx'){ cfOpen[rid] = !cfOpen[rid]; render(); return; }
     if(act==='cfday'){ cfDay = (cfDay===v)? null : v; render(); return; }
     if(act==='arrCopy' || act==='arrGo'){
       const evn = view.events.find(x=>x.recordId===rid), c = evn && evn.arrange && evn.arrange[v]; if(!c) return;
+      if(act==='arrGo'){
+        // 입력자 코드 + 접속한 파트너 이름을 담아 열기 → 정리 시트에서 자동 로그인 (# 뒤 값은 서버로 전송되지 않음)
+        const url = ARRANGE_URL + '#edit=' + encodeURIComponent(c) + '&actor=' + encodeURIComponent(view.member.name || '');
+        let w = null; try{ w = window.open(url, '_blank'); if(w) w.opener = null; }catch(_){}
+        if(!w) location.href = url;   // 팝업이 막힌 경우(홈화면 앱 등) 현재 창에서 열기
+        toast(`${v==='groom'?'신랑':'신부'}측 내역정리 시트를 열고 자동 로그인해요`);
+        return;
+      }
       const ok = await copyText(c); toast(ok? `${v==='groom'?'신랑':'신부'}측 접속코드를 복사했어요` : '복사하지 못했어요 · 코드를 직접 선택해 주세요');
-      if(act==='arrGo') window.open(ARRANGE_URL, '_blank', 'noopener'); return;
+      return;
     }
     if(act==='confirmAll'){
       const pend = upcoming().filter(ev=>!ev.confirmed); if(!pend.length) return;
@@ -2147,6 +2280,7 @@ function openPortal(view){
     isInstalled: ()=> isInstalled(),
     onOp: (op)=> postOp(op),
     onOps: (ops)=> postOp(null, ops),
+    onRoute: async ()=>{ const r = await fetch(apiUrl({action:'routePlan', code: CODE}), {method:'GET'}); return await r.json(); },
     onLogout: ()=>{ if(confirm('로그아웃할까요? 자동 로그인도 해제돼요.')){ try{ localStorage.removeItem(viewKey(CODE)); }catch(e){} ls(LS_CODE, null); CODE=''; screenLogin(); } }
   });
 }
