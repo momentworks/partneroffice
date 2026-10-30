@@ -564,6 +564,19 @@ details.pp-past summary{cursor:pointer;font-size:13px;font-weight:700;color:var(
 .pp-cf-due{font-size:11.5px;color:#7A4B00;background:#FFF6E5;padding:5px 10px 6px;line-height:1.45}
 .pp-cf-due.soon{color:#A52A21;background:#FDECEC}
 
+/* 전체 일정 관리자 */
+.pp-mg-list{background:var(--pp-card);border:1px solid var(--pp-line);border-radius:6px;overflow:hidden}
+.pp-mg-day{font-size:12px;font-weight:800;padding:8px 12px 6px;background:#F7F3EE;border-top:1px solid var(--pp-line)}
+.pp-mg-day:first-child{border-top:0}.pp-mg-day small{color:var(--pp-soft);font-weight:700;margin-left:4px}
+.pp-mg-row{display:grid;grid-template-columns:44px 1fr;gap:4px 8px;padding:9px 12px;border-top:1px solid var(--pp-line);cursor:pointer;font-size:13px}
+.pp-mg-row .t{font-weight:800}.pp-mg-row .v small{display:block;color:var(--pp-soft);font-size:11.5px}
+.pp-mg-row .m{grid-column:2;display:flex;flex-wrap:wrap;gap:4px}
+.pp-mg-row .m i{font-style:normal;font-size:11.5px;border-radius:999px;padding:2px 8px;border:1px solid var(--pp-line);border-left:3px solid var(--c,#999);background:#fff}
+.pp-mg-row .m i.ok{background:#EEF6F0}.pp-mg-row .m i.open{border-color:#E6A8A3;color:#B3261E;background:#FDECEC;border-left-width:1px;font-weight:700}
+.pp-mg-open{display:inline-block;font-size:12px;font-weight:800;color:#B3261E;background:#FDECEC;border-radius:6px;padding:7px 10px}
+.pp-stat b.bad{color:#B3261E}
+.pp-mg-row .m i small{font-size:10px;color:var(--pp-soft);font-weight:700}
+
 /* ================= 접속 메인화면 (모먼트웍스 로고) ================= */
 .mw-entry{position:fixed;inset:0;z-index:500;overflow-y:auto;background:#F7F5F0;background-image:radial-gradient(ellipse at 50% 38%, #FFFFFF 0%, #F7F5F0 55%, #EFEBE3 100%);color:#1A1618;
   font-family:'Pretendard',-apple-system,BlinkMacSystemFont,sans-serif;display:flex;align-items:center;justify-content:center;padding:56px 22px;box-sizing:border-box;}
@@ -780,13 +793,22 @@ function buildPartnerView(records, db, code, todayStr){
 
   var events = [];
   var assignments = db.assignments || {};
-  Object.keys(assignments).forEach(function(recordId){
-    var a = assignments[recordId] || {};
+  var manager = !!member.allView;   // 전체 일정 관리자 계정: 배정과 관계없이 모든 예식을 봄 (보기 전용)
+  var ids = Object.keys(assignments), cutoff = '';
+  if(manager){
+    if(todayStr){ var cd = new Date(todayStr+'T00:00:00Z'); cd.setUTCDate(cd.getUTCDate()-60); cutoff = cd.toISOString().slice(0,10); }
+    var seenIds = {}; ids.forEach(function(x){ seenIds[x] = 1; });
+    (records||[]).forEach(function(r){ if(r && r.id && r.type==='contract' && !seenIds[r.id]){ ids.push(r.id); seenIds[r.id] = 1; } });
+  }
+  ids.forEach(function(recordId){
+    var a = assignments[recordId] || {slots:[]};
     var r = byId[recordId] || (a.key ? byKey[a.key] : null);
     if(!r || r.type!=='contract' || r.cancelled || !r.weddingDate) return;
+    if(manager && cutoff && r.weddingDate < cutoff) return;
     var slots = a.slots || [];
     var mine = slots.filter(function(s){ return s.memberId===member.id; });
-    if(mine.length===0) return;
+    if(mine.length===0 && !manager) return;
+    var need = slots.length || ((settings.slotsByProduct||{})[r.productType]) || (r.productType==='양측' ? 4 : 2);
     var wt = toMin(r.weddingTime);
     var offset = (a.callOffset!==null && a.callOffset!==undefined && a.callOffset!=='') ? Number(a.callOffset) : Number(settings.callOffset);
     var work = (a.workMinutes!==null && a.workMinutes!==undefined && a.workMinutes!=='') ? Number(a.workMinutes) : Number(settings.workMinutes);
@@ -794,7 +816,7 @@ function buildPartnerView(records, db, code, todayStr){
     var team = slots.filter(function(s){ return s.memberId; }).map(function(s){
       var m = memberById[s.memberId] || {};
       var rs = ((db.responses||{})[recordId]||{})[s.memberId] || {};
-      return {name: m.name||'(미정)', title: m.title||'', role: s.role||'', color: m.color||'#7A2E3A', confirmed: !!rs.confirmed || !!s.pinned,
+      return {name: m.name||'(미정)', title: m.title||'', role: s.role||'', color: m.color||'#7A2E3A', confirmed: !!rs.confirmed || !!s.pinned, owner: m.kind==='owner' || m.title==='대표',
               phone: (settings.showTeamPhone && s.memberId!==member.id) ? (m.phone||'') : '',
               me: s.memberId===member.id};
     });
@@ -820,6 +842,7 @@ function buildPartnerView(records, db, code, todayStr){
       team: team,
       note: a.note || '',
       pinned: mine.some(function(s){ return !!s.pinned; }),
+      need: Number(need)||0, open: Math.max(0, (Number(need)||0) - slots.filter(function(s){ return s.memberId; }).length),
       respondBy: (function(){ if(resp.confirmed) return ''; var sl = mine.filter(function(s){ return s.auto && !s.pinned && s.assignedAt; })[0]; return sl ? responseDeadline(db.settings, r, sl) : ''; })(),
       confirmed: !!resp.confirmed || mine.some(function(s){ return !!s.pinned; }), confirmedAt: resp.confirmedAt || '',
       arrange: (function(){ var a = (db.referralPay||{})['arrange:'+recordId]; return (a && (a.groom || a.bride)) ? {groom: String(a.groom||''), bride: String(a.bride||'')} : null; })(),
@@ -847,7 +870,7 @@ function buildPartnerView(records, db, code, todayStr){
     ok: true,
     v: 8, // 7 이상: 여러 건 한 번에 저장(ops) 지원 · 8: 식권 실수량(대인·소인) 양식
     today: todayStr || '',
-    member: {id: member.id, name: member.name, title: member.title||'', color: member.color||'#7A2E3A', kind: member.kind||'partner'},
+    member: {id: member.id, name: member.name, title: member.title||'', color: member.color||'#7A2E3A', kind: member.kind||'partner', allView: !!member.allView},
     events: events,
     notices: notices,
     template: db.template || [],
@@ -1193,7 +1216,7 @@ function autoRankMembers(db, records, rec, a){
   var inSlots = {}; (a.slots||[]).forEach(function(s){ if(s.memberId) inSlots[s.memberId] = true; });
   var out = [];
   (db.members||[]).forEach(function(m){
-    if(m.active===false) return;
+    if(m.active===false || m.allView) return;   // 전체 일정 관리자 계정은 배정 대상 아님
     var owner = m.kind==='owner' || m.title==='대표';
     if(owner && !includeOwners) return;
     var issues = [];
@@ -1360,9 +1383,14 @@ function sweepTimeouts(db, records, nowIso, todayStr){
 const PartnerPortal = (function(){
   const WD = ['일','월','화','수','목','금','토'];
   const TABS = [['home','홈'],['work','오늘 업무'],['schedule','내 일정'],['confirm','배정 확인'],['route','추천 동선'],['info','예식정보'],['arrange','축의대 내역정리'],['pay','근무·급여'],['avail','휴무 신청'],['notice','공지']];
+  let navScroll = 0;
   let workRid=null, sheet=null, root=null, view=null, H={}, tab='home', selRecord=null, calCursor=null, availCursor=null, payMonth=null, selDay=null, busy=false;
 
   const pd = n => String(n).padStart(2,'0');
+  // 전체 일정 관리자 계정 (보기 전용)
+  const MGR = () => !!(view && view.member && view.member.allView);
+  const MGR_TABS = [['home','홈'],['schedule','전체 일정'],['info','예식정보'],['arrange','축의대 내역정리'],['notice','공지']];
+  const tabsNow = () => MGR() ? MGR_TABS : TABS;
   const e = s => (s===undefined||s===null) ? '' : String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const money = n => (Number(n)||0).toLocaleString('ko-KR')+'원';
   const dstr = dt => dt.getFullYear()+'-'+pd(dt.getMonth()+1)+'-'+pd(dt.getDate());
@@ -1610,10 +1638,10 @@ const PartnerPortal = (function(){
     const t=today(), n=diffDays(t, ev.date);
     const cls = n<0?'past': n===0?'today': n<=3?'soon':'';
     const team = full && ev.team && ev.team.length>0 ? `<div class="pp-team">${ev.team.map(m=>`<span class="pp-mate ${m.me?'me':''}"><i style="background:${e(m.color)}"></i>${e(m.name)}${m.me?' (나)':''}${(m.me? ev.confirmed : m.confirmed)? '<em class="pp-ok-badge">확정</em>':''}${m.phone?` <a href="tel:${e(m.phone)}">📞</a>`:''}</span>`).join('')}</div>` : '';
-    const checkin = n===0 ? (ev.checkinAt
+    const checkin = MGR() ? '' : n===0 ? (ev.checkinAt
         ? `<span class="pp-confirmed">📍 도착 체크인 ${new Date(ev.checkinAt).toTimeString().slice(0,5)}</span>`
         : `<button class="pp-btn gold" data-pp="checkin" data-rid="${e(ev.recordId)}">📍 현장 도착 체크인</button>`) : '';
-    const confirm = n>=0 ? (ev.confirmed
+    const confirm = MGR() ? (ev.open? `<span class="pp-mg-open">빈 자리 ${ev.open}명</span>` : '') : n>=0 ? (ev.confirmed
         ? (ev.checkinAt ? `<span class="pp-confirmed">✓ 배정 확인 완료</span>`
           : `<button class="pp-confirmed pp-unconfirm" data-pp="unconfirm" data-rid="${e(ev.recordId)}" title="한 번 더 누르면 확인을 취소할 수 있어요">✓ 배정 확인 완료<small>누르면 취소</small></button>`)
         : `<button class="pp-btn primary" data-pp="confirm" data-rid="${e(ev.recordId)}">배정 확인했어요</button>`) : '';
@@ -1887,7 +1915,32 @@ const PartnerPortal = (function(){
   }
 
   /* ---------- 탭 화면 ---------- */
+  function managerHomeHTML(){
+    const up = upcoming().slice().sort((a,b)=> (a.date+(a.weddingTime||'')).localeCompare(b.date+(b.weddingTime||''))), mon = today().slice(0,7), in30 = addDays(today(), 30);
+    const soon = up.filter(ev=> ev.date<=in30);
+    const openEv = up.filter(ev=> ev.open>0), unconf = up.reduce((n,ev)=> n + (ev.team||[]).filter(m=>!m.confirmed && !m.owner).length, 0);
+    let last = '';
+    const rows = soon.map(ev=>{
+      const d = parseD(ev.date), head = ev.date!==last ? `<div class="pp-mg-day">${fdate(ev.date)} <small>${dLabel(ev.date)}</small></div>` : ''; last = ev.date;
+      return head + `<div class="pp-mg-row" data-pp="mgOpen" data-rid="${e(ev.recordId)}">
+        <span class="t">${e(ev.weddingTime||'-')}</span>
+        <span class="v"><b>${e(ev.venueName||'예식장 미정')}</b><small>${e(ev.productType||'')} · ${e(ev.clientName||'')}</small></span>
+        <span class="m">${(ev.team||[]).map(m=>`<i class="${m.confirmed||m.owner?'ok':''}" style="--c:${e(m.color)}">${e(m.name)}${m.owner?' <small>대표</small>':m.confirmed?' ✓':' ⏳'}</i>`).join('')}${ev.open? `<i class="open">빈 자리 ${ev.open}</i>`:''}</span>
+      </div>`;
+    }).join('');
+    return `<div class="pp-hello-t">🗂 전체 일정 관리자</div>
+      <div class="pp-hello-s">예정된 모든 예식과 배정 현황을 볼 수 있는 <b>보기 전용</b> 계정이에요. 배정 변경은 통합관리시스템에서 해주세요.</div>
+      <div class="pp-stats">
+        <div class="pp-stat"><span>이번달 예식</span><b>${view.events.filter(ev=>ev.date.slice(0,7)===mon).length}건</b></div>
+        <div class="pp-stat"><span>빈 자리 있는 예식</span><b class="${openEv.length?'bad':''}">${openEv.length}건</b></div>
+        <div class="pp-stat"><span>미확정 인원</span><b>${unconf}명</b></div>
+      </div>
+      <div class="pp-h">앞으로 30일 <small>${soon.length}건 · ✓ 확정 · ⏳ 확인 대기</small></div>
+      <div class="pp-mg-list">${rows || '<div class="pp-empty">앞으로 30일 동안 예정된 예식이 없어요</div>'}</div>
+      ${up.length>soon.length? `<button class="pp-btn" style="width:100%;margin-top:10px;" data-pp="tab" data-v="schedule">전체 일정 보기 (${up.length}건)</button>`:''}`;
+  }
   function homeHTML(){
+    if(MGR()) return managerHomeHTML();
     const up=upcoming(), next=up[0], mon=today().slice(0,7);
     const monthEv=view.events.filter(ev=>ev.date.slice(0,7)===mon);
     const pending=up.filter(ev=>!ev.confirmed);
@@ -2202,11 +2255,15 @@ const PartnerPortal = (function(){
 
   function render(){
     if(!root || !view) return;
+    if(!tabsNow().some(([k])=> k===tab)) tab = 'home';
     computeNew();
     if(H.onCache){ try{ H.onCache(view); }catch(e){} }
     const pendingCount = upcoming().filter(ev=>!ev.confirmed).length;
     const body = tab==='home'?homeHTML(): tab==='work'?workHTML(): tab==='schedule'?scheduleHTML(): tab==='confirm'?confirmHTML(): tab==='info'?infoPageHTML(): tab==='arrange'?arrangeHTML(): tab==='route'?routeHTML(): tab==='pay'?payHTML(): tab==='avail'?availHTML(): noticeHTML();
     const updated = view.generatedAt ? new Date(view.generatedAt) : new Date();
+    // 상단 메뉴바의 가로 스크롤 위치를 기억 → 다시 그린 뒤 그대로 복원 (뒤쪽 메뉴를 눌러도 앞으로 돌아가지 않게)
+    const oldNav = root.querySelector('.pp-tabs');
+    if(oldNav) navScroll = oldNav.scrollLeft;
     root.innerHTML = `<div class="pp">
       ${busy?'<div class="pp-busy"></div>':''}
       ${H.preview? `<div class="pp-preview">관리자 미리보기 · 파트너 화면과 같지만 변경은 저장되지 않아요 <button data-pp="closePreview">닫기</button></div>`:''}
@@ -2224,12 +2281,19 @@ const PartnerPortal = (function(){
           ${H.preview? '' : `<button class="pp-icon" data-pp="logout" title="로그아웃" aria-label="로그아웃">${PP_ICON_LOGOUT}</button>`}
         </div>
       </header>
-      <nav class="pp-tabs">${TABS.map(([k,l])=>`<button class="${tab===k?'on':''}" data-pp="tab" data-v="${k}">${l}${k==='confirm'&&pendingCount?`<span class="pp-n">${pendingCount}</span>`:''}</button>`).join('')}</nav>
+      <nav class="pp-tabs">${tabsNow().map(([k,l])=>`<button class="${tab===k?'on':''}" data-pp="tab" data-v="${k}">${l}${k==='confirm'&&pendingCount?`<span class="pp-n">${pendingCount}</span>`:''}</button>`).join('')}</nav>
       <main class="pp-main">${newBannerHTML()}${body}</main>
       ${sheetHTML()}
       ${H.onInstall && !(H.isInstalled && H.isInstalled()) ? '<div style="text-align:center;margin-top:18px;"><button class="pp-install-link" data-pp="install">📲 홈 화면에 바로가기 추가</button></div>' : ''}
       <div class="pp-foot">${typeof MW_LOGO_MARK!=='undefined' ? `<img src="${MW_LOGO_MARK}" alt="">` : ''}<b>MOMENT WORKS</b>마지막 업데이트 ${pd(updated.getMonth()+1)}.${pd(updated.getDate())} ${pd(updated.getHours())}:${pd(updated.getMinutes())} · 모먼트웍스 파트너스오피스</div>
-    </div>`;
+    </div>`;    const nav = root.querySelector('.pp-tabs');
+    if(nav){
+      nav.scrollLeft = navScroll;
+      // 선택된 메뉴가 화면 밖에 있을 때만 보이도록 살짝 이동 (그 외에는 위치 그대로)
+      const on = nav.querySelector('button.on');
+      if(on){ const l = on.offsetLeft, r = l + on.offsetWidth; if(l < nav.scrollLeft) nav.scrollLeft = l - 8; else if(r > nav.scrollLeft + nav.clientWidth) nav.scrollLeft = r - nav.clientWidth + 8; }
+      if(!nav._kept){ nav._kept = true; nav.addEventListener('scroll', ()=>{ navScroll = nav.scrollLeft; }, {passive:true}); }
+    }
   }
 
   async function runOp(op, okMsg){
@@ -2262,6 +2326,7 @@ const PartnerPortal = (function(){
     }
     if(act==='routeReload'){ routeData=null; routeErr=''; loadRoutes(true); return; }
     if(act==='routeMore'){ routeMonths++; routeErr=''; render(); return; }
+    if(act==='mgOpen'){ const x = eventById(rid); if(x){ selRecord = rid; tab = 'schedule'; schedFilter = null; selDay = x.date; render(); window.scrollTo(0,0); } return; }
     if(act==='cfx'){ cfOpen[rid] = !cfOpen[rid]; render(); return; }
     if(act==='cfday'){ cfDay = (cfDay===v)? null : v; render(); return; }
     if(act==='arrCopy' || act==='arrGo'){
