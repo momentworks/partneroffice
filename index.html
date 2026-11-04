@@ -630,6 +630,17 @@ body.pp-cam-on{overflow:hidden}
 .pp-cam-done{width:64px;border:0;background:#FFD86B;color:#111;border-radius:999px;padding:9px 0;font-weight:800;font-size:12.5px;cursor:pointer;font-family:inherit}
 .pp-cam-bottom p{text-align:center;font-size:11.5px;color:#ddd;margin:10px 0 0}
 .pp-all-past{margin-top:12px}.pp-all-past summary{cursor:pointer;font-size:13px;font-weight:800;padding:10px 4px;color:var(--pp-ink,#241F22)}
+.pp-day-chips{display:flex;gap:8px;margin:4px 0 12px}.pp-day-chip{flex:1;border:1px solid #E5DBD2;background:#fff;border-radius:12px;padding:8px 6px;font-weight:800;font-size:13px;color:var(--pp-ink,#241F22);display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer}.pp-day-chip small{font-weight:600;font-size:11px;color:#8A7F78}.pp-day-chip.on{background:var(--pp-ink,#241F22);color:#fff;border-color:var(--pp-ink,#241F22)}.pp-day-chip.on small{color:#E9DFD6}
+.pp-day-card{border:1px solid #E9DFD6;border-radius:14px;background:#fff;margin-bottom:10px;overflow:hidden;color:var(--pp-ink,#241F22)}.pp-day-head{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;padding:12px 14px;text-align:left;cursor:pointer;color:inherit;font:inherit}
+.pp-day-time{font-weight:900;font-size:15px;min-width:48px}.pp-day-tt{flex:1;min-width:0;display:flex;flex-direction:column}.pp-day-tt small{font-size:12px;color:#8A7F78}.pp-day-prog{font-size:12px;font-weight:800;color:#2F7D57}.pp-day-arr{font-size:11px;color:#8A7F78}
+.pp-day-body{border-top:1px solid #F0E8E0;padding:10px 12px 12px;background:#FFFCF8}.pp-day-wait{font-size:13px;color:#6B5F58;padding:8px 2px}.pp-day-people{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px;font-size:12px}.pp-day-people span{background:#F4EEE8;border-radius:999px;padding:3px 9px;font-weight:700}.pp-day-people span.none{color:#B04A2E;background:#FBEDE8}
+.pp-day-step{border:1px solid #EFE6DD;border-radius:12px;background:#fff;padding:10px;margin-top:8px}.pp-day-step.sent{border-color:#CFE5D8;background:#FAFDFB}.pp-day-sh{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:13.5px}.pp-day-ok{font-size:11.5px;font-weight:800;color:#2F7D57}
+.pp-day-warn{font-size:12px;color:#9A5B13;background:#FFF4DE;border-radius:8px;padding:5px 8px;margin-top:6px}.pp-day-hint{font-size:12px;color:#8A7F78;margin-top:4px}
+.pp-day-ta{width:100%;box-sizing:border-box;margin-top:8px;border:1px solid #E5DBD2;border-radius:10px;padding:9px 10px;font:inherit;font-size:13px;line-height:1.5;color:var(--pp-ink,#241F22);background:#fff;resize:vertical}
+.pp-day-acts,.pp-day-ph{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.pp-btn.pp-kk{background:#FEE500;border-color:#FEE500;color:#191600;font-weight:800}.pp-kk-ic{width:14px;height:14px;vertical-align:-2px;margin-right:4px}.pp-btn.ghost{background:transparent}
+.pp-day-chips{flex-wrap:wrap}.pp-day-chip{min-width:62px}.pp-day-pick{margin:-4px 0 12px;font-size:12.5px;color:#8A7F78}.pp-day-pick input{margin-left:6px;border:1px solid #E5DBD2;border-radius:8px;padding:5px 8px;font:inherit;color:var(--pp-ink,#241F22);background:#fff}
+.pp-day-date{font-weight:900;font-size:13.5px;margin:14px 2px 6px;color:var(--pp-ink,#241F22)}.pp-day-date small{font-weight:700;color:#A0784A;margin-left:4px}
+.pp-day-pre{border:1px dashed #E1D3C4;border-radius:12px;padding:8px 10px;background:#fff;margin-top:4px}.pp-day-pre summary{cursor:pointer;font-weight:800;font-size:13.5px;color:var(--pp-ink,#241F22)}.pp-day-pre summary small{font-weight:600;color:#8A7F78;margin-left:4px}.pp-day-gh{font-weight:900;font-size:13.5px;margin:12px 2px 0;color:var(--pp-ink,#241F22)}
 /* ===== 대시보드 ===== */
 .pp-ev-list,.pp-ev-detail,.pp-ev-head,.pp-ev-tip,.pp-ev-row,.pp-d-next,.pp-d-today,.pp-d-grid button,.pp-d-day,.pp-d-pay,.pp-d-notices button,.pp-d-quick button,.pp-d-sec{color:var(--pp-ink,#241F22)}
 .pp-ev-detail .pp-meta>div{color:var(--pp-ink,#241F22)}
@@ -1558,7 +1569,7 @@ const PartnerPortal = (function(){
   let allMode = false; // 대표 계정의 「전체 일정」 화면을 그리는 동안 true (보기 전용 표시)
   const MGR = () => allMode || !!(view && view.member && view.member.allView);
   const MGR_TABS = [['home','홈'],['schedule','전체 일정'],['done','완료 예식'],['arrange','축의대 내역정리'],['notice','공지']];
-  const tabsNow = () => (view && view.member && view.member.allView) ? MGR_TABS : (view && Array.isArray(view.allEvents) ? TABS.concat([['all','전체 일정']]) : TABS);
+  const tabsNow = () => (view && view.member && view.member.allView) ? MGR_TABS : (view && Array.isArray(view.allEvents) ? TABS.concat([['day','고객 안내'],['all','전체 일정']]) : TABS);
   const e = s => (s===undefined||s===null) ? '' : String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const money = n => (Number(n)||0).toLocaleString('ko-KR')+'원';
   const dstr = dt => dt.getFullYear()+'-'+pd(dt.getMonth()+1)+'-'+pd(dt.getDate());
@@ -2680,6 +2691,99 @@ const PartnerPortal = (function(){
         ${past.length? `<details class="pp-all-past"><summary>지난 예식 ${Math.min(past.length, 60)}건 보기</summary><div class="pp-ev-list">${monthGroups(past.slice(0,60), true)}</div></details>`:''}`;
     } finally { view.events = mine; allMode = false; }
   }
+  const PP_KK = '<svg class="pp-kk-ic" viewBox="0 0 24 24" aria-hidden="true"><path fill="#3C1E1E" d="M12 3.2C6.6 3.2 2.3 6.6 2.3 10.8c0 2.7 1.8 5.1 4.5 6.4l-1 3.6c-.1.3.3.6.6.4l4.3-2.8c.4 0 .9.1 1.3.1 5.4 0 9.7-3.4 9.7-7.7S17.4 3.2 12 3.2z"/></svg>';
+  /* ===== 대표 전용: 예식 당일 단계별 안내 (카카오톡 공유 · 문자) ===== */
+  let dayDate = null, dayOpen = null; const dayData = {}, dayErr = {}, dayLoading = {}, dayEdit = {}, dayPhotos = {};
+  const isPhoneUA = () => /Android|iPhone|iPad/i.test(navigator.userAgent);
+  function daySent(rid){ try{ return JSON.parse(localStorage.getItem('pp_day_'+rid)||'{}'); }catch(_){ return {}; } }
+  function dayMark(rid, key, how){ try{ const s = daySent(rid); s[key] = {at: Date.now(), how}; localStorage.setItem('pp_day_'+rid, JSON.stringify(s)); }catch(_){} }
+  function dayText(rid, key){ const k = rid+':'+key; if(dayEdit[k]!==undefined) return dayEdit[k]; const r = dayData[rid]; const st = r && (r.steps||[]).find(x=>x.key===key); return st ? st.text : ''; }
+  async function dayLoad(rid, force){
+    if(!H.onDayReport){ dayErr[rid] = '미리보기에서는 불러오지 않아요'; render(); return; }
+    if(dayLoading[rid] || (dayData[rid] && !force)) return;
+    dayLoading[rid] = true; dayErr[rid] = ''; render();
+    try{ const r = await H.onDayReport(rid); if(!r || !r.ok) throw new Error((r && r.error) || '불러오지 못했어요'); dayData[rid] = r;
+      Object.keys(dayEdit).forEach(k=>{ if(k.indexOf(rid+':')===0) delete dayEdit[k]; }); }
+    catch(err){ dayErr[rid] = err.message || '불러오지 못했어요'; }
+    finally{ dayLoading[rid] = false; render(); }
+  }
+  function copyPlain(text){ try{ if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text); return true; } }catch(_){}
+    const t = document.createElement('textarea'); t.value = text; t.style.cssText='position:fixed;opacity:0'; document.body.appendChild(t); t.select(); try{ document.execCommand('copy'); }catch(_){} t.remove(); return true; }
+  function smsHrefTo(phone, text){ const p = String(phone||'').replace(/[^0-9]/g,''); return `sms:${p}${/iPhone|iPad|Mac/i.test(navigator.userAgent)?'&':'?'}body=${encodeURIComponent(text)}`; }
+  function dayHTML(){
+    const t = today(); if(!dayDate) dayDate = 'today';
+    const all = (view.allEvents||view.events||[]).slice();
+    const R = {today:[t,t], tomorrow:[addDays(t,1),addDays(t,1)], week:[t,addDays(t,6)], all:[t,'9999-12-31'], past:[addDays(t,-30),addDays(t,-1)]};
+    const rg = R[dayDate] || [dayDate, dayDate];
+    const byT = (a,b)=> String(a.date).localeCompare(String(b.date)) || String(a.weddingTime||'').localeCompare(String(b.weddingTime||''));
+    let list = all.filter(ev=> ev.date && ev.date>=rg[0] && ev.date<=rg[1]).sort(byT); if(dayDate==='past') list.reverse();
+    const chip = (k,l,sub)=> `<button class="pp-day-chip ${dayDate===k?'on':''}" data-pp="dayDate" data-v="${k}">${l}<small>${sub}</small></button>`;
+    const cnt = k=> { const r = R[k]; return all.filter(ev=> ev.date && ev.date>=r[0] && ev.date<=r[1]).length+'건'; };
+    let groups = '', last = '';
+    list.forEach(ev=>{ if(rg[0]!==rg[1] && ev.date!==last){ last = ev.date; groups += `<div class="pp-day-date">${fdate(ev.date)} <small>${dLabel(ev.date)}</small></div>`; } groups += dayCard(ev); });
+    return `<div class="pp-ev-head"><div><b>고객 안내</b> <small>대표 전용 · 모든 예식의 마이모먼트 · 설정서 요청 · 당일 단계별 안내를 카카오톡 · 문자로</small></div></div>
+      <div class="pp-day-chips">${chip('today','오늘',cnt('today'))}${chip('tomorrow','내일',cnt('tomorrow'))}${chip('week','7일',cnt('week'))}${chip('all','예정 전체',cnt('all'))}${chip('past','지난 예식',cnt('past'))}</div>
+      <div class="pp-day-pick"><label>날짜로 찾기 <input type="date" data-ppdaypick value="${/^\d{4}-/.test(dayDate)? dayDate:''}"></label></div>
+      ${list.length? groups : `<div class="pp-empty">해당 기간에 예식이 없어요</div>`}`;
+  }
+  function dayCard(ev){
+    const rid = ev.recordId, open = dayOpen===rid, r = dayData[rid], sent = daySent(rid);
+    const head = `<button class="pp-day-head" data-pp="dayOpen" data-rid="${rid}"><span class="pp-day-time">${e(ev.weddingTime||'--:--')}</span>
+      <span class="pp-day-tt"><b>${e((r && r.couple) || ev.clientName || '')}</b><small>${e(ev.venueName||'')}${ev.hallName? ' · '+e(ev.hallName):''} · ${e(ev.productType||'')}</small></span>
+      <span class="pp-day-prog">${Object.keys(sent).length? `✓ ${Object.keys(sent).length}`:''}</span><span class="pp-day-arr">${open?'▲':'▼'}</span></button>`;
+    if(!open) return `<div class="pp-day-card">${head}</div>`;
+    let body = '';
+    if(dayLoading[rid]) body = '<div class="pp-day-wait">안내 문구를 만드는 중… (축의 집계 포함)</div>';
+    else if(dayErr[rid]) body = `<div class="pp-day-wait">⚠️ ${e(dayErr[rid])} <button class="pp-btn" data-pp="dayReload" data-rid="${rid}">다시 시도</button></div>`;
+    else if(r){
+      const people = (r.people||[]);
+      body = `<div class="pp-day-people">${people.map(p=> `<span class="${p.phone?'':'none'}">${e(p.label)} ${p.phone? e(p.phone.replace(/(\d{3})(\d{3,4})(\d{4})/,'$1-$2-$3')) : '· 연락처 없음'}</span>`).join('')}
+          <button class="pp-btn" data-pp="dayReload" data-rid="${rid}">↻ 최신 집계로 새로고침</button></div>
+        ${(()=>{ const pre = (r.steps||[]).filter(st=> st.group==='pre'), dayS = (r.steps||[]).filter(st=> st.group!=='pre'), pn = pre.filter(st=> sent[st.key]).length;
+          return (pre.length? `<details class="pp-day-pre" ${ev.date>today()?'open':''}><summary>📨 사전 안내 <small>마이모먼트 · 설정서 요청${pn? ' · ✓ '+pn:''}</small></summary>${pre.map(stepCard).join('')}</details>`:'')
+            + `<div class="pp-day-gh">🎊 예식 당일 안내</div>` + dayS.map(stepCard).join(''); })()}`;
+    }
+    function stepCard(st){
+          const people = (r.people||[]);
+          const k = rid+':'+st.key, s = sent[st.key], ph = dayPhotos[rid] || [];
+          return `<div class="pp-day-step ${s?'sent':''}"><div class="pp-day-sh"><b>${e(st.no)}) ${e(st.label)}</b>${s? `<span class="pp-day-ok">✓ ${new Date(s.at).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})} ${s.how==='sms'?'문자':s.how==='copy'?'복사':'카톡'}</span>`:''}</div>
+            ${st.warn? `<div class="pp-day-warn">⚠️ ${e(st.warn)}</div>`:''}${st.hint? `<div class="pp-day-hint">${e(st.hint)}</div>`:''}
+            <textarea class="pp-day-ta" data-dayt="${k}" rows="${Math.min(12, Math.max(2, dayText(rid, st.key).split('\n').length))}">${e(dayText(rid, st.key))}</textarea>
+            ${st.step==='photos'? `<div class="pp-day-ph"><label class="pp-btn">📷 사진 고르기<input type="file" accept="image/*" multiple data-ppdayfile="${rid}" hidden></label>${ph.length? `<button class="pp-btn pp-kk" data-pp="dayPhotoShare" data-rid="${rid}" data-v="${st.key}">${PP_KK}사진 ${ph.length}장 공유</button><button class="pp-btn" data-pp="dayPhotoClear" data-rid="${rid}">비우기</button>`:''}</div>`:''}
+            <div class="pp-day-acts"><button class="pp-btn pp-kk" data-pp="dayKakao" data-rid="${rid}" data-v="${st.key}">${PP_KK}카카오톡 공유</button>
+              ${people.map((p,i)=> (!st.to || st.to.indexOf(p.side)>=0) ? `<button class="pp-btn" data-pp="daySms" data-rid="${rid}" data-v="${st.key}" data-i="${i}">📱 ${e(p.side==='groom'?'신랑':'신부')}에게 문자</button>` : '').join('')}
+              <button class="pp-btn ghost" data-pp="dayCopy" data-rid="${rid}" data-v="${st.key}">복사</button></div></div>`;
+    }
+    return `<div class="pp-day-card open" id="ev-${rid}">${head}<div class="pp-day-body">${body}</div></div>`;
+  }
+  async function dayAction(act, el){
+    const rid = el.dataset.rid, key = el.dataset.v;
+    if(act==='dayDate'){ dayDate = key; dayOpen = null; render(); return true; }
+    if(act==='dayOpen'){ dayOpen = dayOpen===rid ? null : rid; render(); if(dayOpen) dayLoad(rid); return true; }
+    if(act==='dayReload'){ dayLoad(rid, true); return true; }
+    if(act==='dayPhotoClear'){ dayPhotos[rid] = []; render(); return true; }
+    const text = key ? dayText(rid, key) : '';
+    if(act==='dayCopy'){ copyPlain(text); dayMark(rid, key, 'copy'); toast('문구를 복사했어요'); render(); return true; }
+    if(act==='dayKakao'){
+      if(navigator.share && isPhoneUA()){ try{ await navigator.share({text}); dayMark(rid, key, 'kakao'); render(); }catch(_){ } }
+      else { copyPlain(text); dayMark(rid, key, 'kakao'); toast('문구를 복사했어요 · 카카오톡에 붙여넣어 보내주세요'); render(); }
+      return true;
+    }
+    if(act==='dayPhotoShare'){
+      const files = dayPhotos[rid] || [];
+      if(navigator.canShare && navigator.canShare({files})){ try{ await navigator.share({files, text}); dayMark(rid, key, 'kakao'); render(); }catch(_){ } }
+      else toast('이 기기에서는 사진 공유가 안 돼요 · 휴대폰에서 이용해주세요');
+      return true;
+    }
+    if(act==='daySms'){
+      const p = ((dayData[rid]||{}).people||[])[Number(el.dataset.i)] || {};
+      copyPlain(text); dayMark(rid, key, 'sms');
+      if(isPhoneUA()){ location.href = smsHrefTo(p.phone, text); }
+      else toast('문구를 복사했어요 · 휴대폰에서 누르면 문자 앱이 바로 열려요');
+      render(); return true;
+    }
+    return false;
+  }
   function doneHTML(){
     const list = doneEvents();
     if(!list.length) return '<div class="pp-ev-head"><div><b>완료 예식</b></div></div><div class="pp-empty">아직 완료된 예식이 없어요. 예식이 끝나면 이곳으로 자동으로 옮겨져요.</div>';
@@ -2788,7 +2892,7 @@ const PartnerPortal = (function(){
     computeNew();
     if(H.onCache){ try{ H.onCache(view); }catch(e){} }
     const pendingCount = upcoming().filter(ev=>!ev.confirmed).length;
-    const body = tab==='home'?homeHTML(): tab==='work'?workHTML(): tab==='schedule'?scheduleHTML(): tab==='confirm'?confirmHTML(): tab==='done'?doneHTML(): tab==='all'?allHTML(): tab==='arrange'?arrangeHTML(): tab==='route'?routeHTML(): tab==='pay'?payHTML(): tab==='avail'?availHTML(): noticeHTML();
+    const body = tab==='home'?homeHTML(): tab==='work'?workHTML(): tab==='schedule'?scheduleHTML(): tab==='confirm'?confirmHTML(): tab==='done'?doneHTML(): tab==='all'?allHTML(): tab==='day'?dayHTML(): tab==='arrange'?arrangeHTML(): tab==='route'?routeHTML(): tab==='pay'?payHTML(): tab==='avail'?availHTML(): noticeHTML();
     const updated = view.generatedAt ? new Date(view.generatedAt) : new Date();
     // 상단 메뉴바의 가로 스크롤 위치를 기억 → 다시 그린 뒤 그대로 복원 (뒤쪽 메뉴를 눌러도 앞으로 돌아가지 않게)
     const oldNav = root.querySelector('.pp-tabs');
@@ -2842,6 +2946,7 @@ const PartnerPortal = (function(){
   async function onClick(ev){
     const el = ev.target.closest('[data-pp]'); if(!el) return;
     const act=el.dataset.pp, v=el.dataset.v, rid=el.dataset.rid;
+    if(act.indexOf('day')===0 && await dayAction(act, el)) return;
     if(act==='pendingList'){ tab='confirm'; schedFilter=null; selDay=null; sheet=null; render(); window.scrollTo(0,0); return; }
     if(act==='nmap'){
       // 네이버지도 앱 길찾기 (키 없이 무료) · 앱이 없으면 네이버지도 웹에서 도착지 검색
@@ -2996,6 +3101,7 @@ const PartnerPortal = (function(){
     }
   }
   function onInput(ev){
+    if(ev.target.dataset && ev.target.dataset.dayt){ dayEdit[ev.target.dataset.dayt] = ev.target.value; return; }
     if(!sheet) return;
     const fk = ev.target.dataset && ev.target.dataset.ppfield;
     if(fk){ // 대인·소인 수량 입력 → 보고 문구에 바로 반영
@@ -3009,6 +3115,10 @@ const PartnerPortal = (function(){
     if(ev.target.id==='pwTicketPhone') sheet.ticket = ev.target.value;
   }
   function onChange(ev){
+    const dpk = ev.target.closest && ev.target.closest('[data-ppdaypick]');
+    if(dpk){ if(dpk.value){ dayDate = dpk.value; dayOpen = null; render(); } return; }
+    const dfi = ev.target.closest && ev.target.closest('[data-ppdayfile]');
+    if(dfi){ const rid = dfi.dataset.ppdayfile; dayPhotos[rid] = (dayPhotos[rid]||[]).concat([...(dfi.files||[])]).slice(0,30); dfi.value=''; render(); return; }
     const fi = ev.target.closest && ev.target.closest('[data-ppfile]');
     if(fi){ const ta=document.getElementById('pwMsg'); if(ta && sheet) sheet.text = ta.value; const before = photoFiles.length; photoFiles = photoFiles.concat([...(fi.files||[])].filter(f=> /^image\//.test(f.type||'image/'))).slice(0, PHOTO_MAX); const added = photoFiles.length - before; fi.value = ''; render(); if(added) toast(`사진 ${added}장을 추가했어요 · 모두 ${photoFiles.length}장`); else if((fi.files||[]).length) toast(`사진은 최대 ${PHOTO_MAX}장까지 모을 수 있어요`); return; }
     const cb = ev.target.closest('[data-ppcheck]');
@@ -3216,6 +3326,7 @@ function openPortal(view){
     onOp: (op)=> postOp(op),
     onOps: (ops)=> postOp(null, ops),
     onRoute: async (until)=>{ const r = await fetch(apiUrl({action:'routePlan', code: CODE, until: until||''}), {method:'GET'}); return await r.json(); },
+    onDayReport: async (rid)=>{ const r = await fetch(apiUrl({action:'dayReport', code: CODE, rid}), {method:'GET'}); return await r.json(); },
     onLogout: ()=>{ if(confirm('로그아웃할까요? 자동 로그인도 해제돼요.')){ try{ localStorage.removeItem(viewKey(CODE)); }catch(e){} ls(LS_CODE, null); CODE=''; screenLogin(); } }
   });
 }
