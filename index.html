@@ -596,6 +596,39 @@ details.pp-past summary{cursor:pointer;font-size:13px;font-weight:700;color:var(
 .pp-pop-later{border:0;background:none;color:#888;font-size:12.5px;margin-top:8px;padding:6px;cursor:pointer}
 .pp-cf-warn{background:#FDECEC;border:2px solid #D32F2F;color:#7A1414;border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.6;margin:0 0 12px}
 .pp-cf-warn b.red{color:#B71C1C}
+/* ===== 사진 보고: 연속 촬영 · 앨범 업로드 ===== */
+.pw-photo-acts .pw-cam{flex-direction:column;gap:3px;border:0;font-family:inherit;line-height:1.25}
+.pw-photo-acts .pw-cam small{font-size:10.5px;font-weight:600;opacity:.85}
+.pw-cam-native{display:block;text-align:center;font-size:12px;color:var(--pp-slate);text-decoration:underline;margin:-2px 0 10px;cursor:pointer}
+.pw-cam-native input{display:none}
+.pw-thumbs-h{display:flex;align-items:center;gap:6px;font-size:12.5px;margin:0 0 6px;color:var(--pp-ink,#241F22)}
+.pw-thumbs-h button{margin-left:auto;border:0;background:none;color:#B3261E;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+body.pp-cam-on{overflow:hidden}
+.pp-cam{position:fixed;inset:0;z-index:10000;background:#000;color:#fff;display:flex;flex-direction:column;font-family:'Pretendard',-apple-system,'Apple SD Gothic Neo',sans-serif}
+.pp-cam-top{display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top,0px) + 8px) 12px 8px}
+.pp-cam-top button{border:0;background:rgba(255,255,255,.15);color:#fff;width:40px;height:40px;border-radius:50%;font-size:17px;cursor:pointer}
+.pp-cam-top span{font-size:14px;font-weight:700}.pp-cam-top b{color:#FFD86B}
+.pp-cam-view{position:relative;flex:1;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.pp-cam-view video{width:100%;height:100%;object-fit:cover}
+.pp-cam-msg{position:absolute;text-align:center;font-size:14px;padding:20px;line-height:1.6}
+.pp-cam:not(.err) .pp-cam-msg{pointer-events:none}
+.pp-cam video:not([src]) + .pp-cam-msg{}
+.pp-cam-msg small{color:#ccc}
+.pp-cam-native{margin-top:12px;border:0;border-radius:999px;background:#fff;color:#111;font-weight:800;padding:10px 18px;font-family:inherit;cursor:pointer}
+.pp-cam-flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+.pp-cam-flash.on{animation:ppflash .25s ease-out}
+@keyframes ppflash{0%{opacity:.85}100%{opacity:0}}
+.pp-cam-bottom{padding:10px 16px calc(env(safe-area-inset-bottom,0px) + 14px);background:linear-gradient(transparent,rgba(0,0,0,.6))}
+.pp-cam-strip{display:flex;gap:5px;justify-content:center;min-height:46px;margin-bottom:10px}
+.pp-cam-strip img{width:46px;height:46px;object-fit:cover;border-radius:6px;border:2px solid rgba(255,255,255,.8)}
+.pp-cam-row{display:flex;align-items:center;justify-content:space-between}
+.pp-cam-side{width:64px;display:flex;flex-direction:column;align-items:center;font-size:22px;cursor:pointer}
+.pp-cam-side small{font-size:11px;margin-top:2px}.pp-cam-side input{display:none}
+.pp-cam-shutter{width:74px;height:74px;border-radius:50%;border:4px solid #fff;background:transparent;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.pp-cam-shutter i{display:block;width:58px;height:58px;border-radius:50%;background:#fff}
+.pp-cam-shutter:active i{transform:scale(.9)}
+.pp-cam-done{width:64px;border:0;background:#FFD86B;color:#111;border-radius:999px;padding:9px 0;font-weight:800;font-size:12.5px;cursor:pointer;font-family:inherit}
+.pp-cam-bottom p{text-align:center;font-size:11.5px;color:#ddd;margin:10px 0 0}
 /* ===== 대시보드 ===== */
 .pp-ev-list,.pp-ev-detail,.pp-ev-head,.pp-ev-tip,.pp-ev-row,.pp-d-next,.pp-d-today,.pp-d-grid button,.pp-d-day,.pp-d-pay,.pp-d-notices button,.pp-d-quick button,.pp-d-sec{color:var(--pp-ink,#241F22)}
 .pp-ev-detail .pp-meta>div{color:var(--pp-ink,#241F22)}
@@ -1864,6 +1897,71 @@ const PartnerPortal = (function(){
     return (view.owners||[]).filter(o=>o.phone).map(o=>({label:'대표 '+o.name, phone:o.phone}));
   }
   let photoFiles = []; // 촬영한 사진 (공유 전까지 이 화면에만 보관)
+  const PHOTO_MAX = 30;
+  /* ---------- 앱 안 연속 촬영 카메라 (셔터를 누를 때마다 사진이 쌓임) ---------- */
+  let camStream = null, camFacing = 'environment';
+  function camStop(){ if(camStream){ camStream.getTracks().forEach(t=> t.stop()); camStream = null; } }
+  async function camStart(box){
+    camStop();
+    const video = box.querySelector('video');
+    try{
+      camStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal: camFacing}, width:{ideal:1920}, height:{ideal:1440}}, audio:false});
+      video.srcObject = camStream; await video.play().catch(()=>{});
+      box.classList.remove('err'); box.querySelector('.pp-cam-msg').innerHTML = '';
+      return true;
+    }catch(err){
+      box.classList.add('err');
+      box.querySelector('.pp-cam-msg').innerHTML = '카메라를 열 수 없어요 😢<br><small>브라우저 설정에서 카메라 권한을 허용하거나, 아래 「기본 카메라」로 찍어주세요</small>';
+      return false;
+    }
+  }
+  function camThumbs(box){
+    const n = photoFiles.length;
+    box.querySelector('.pp-cam-count').textContent = n ? `${n}장` : '0장';
+    box.querySelector('.pp-cam-done').textContent = n ? `완료 (${n}장)` : '닫기';
+    box.querySelector('.pp-cam-strip').innerHTML = photoFiles.slice(-6).map(f=> `<img src="${URL.createObjectURL(f)}" alt="">`).join('');
+  }
+  async function openCamera(){
+    if(!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)){ const nc = document.getElementById('pwNativeCam'); if(nc) nc.click(); else toast('이 브라우저는 연속 촬영을 지원하지 않아요 · 앨범에서 업로드해주세요'); return; }
+    let box = document.getElementById('ppCam'); if(box) box.remove();
+    box = document.createElement('div'); box.id = 'ppCam'; box.className = 'pp-cam';
+    box.innerHTML = `<div class="pp-cam-top"><button data-cam="close" aria-label="닫기">✕</button><span>📸 연속 촬영 · <b class="pp-cam-count">0장</b></span><button data-cam="flip" aria-label="카메라 전환">🔄</button></div>
+      <div class="pp-cam-view"><video playsinline muted autoplay></video><div class="pp-cam-msg">카메라를 여는 중…</div><div class="pp-cam-flash"></div></div>
+      <div class="pp-cam-bottom">
+        <div class="pp-cam-strip"></div>
+        <div class="pp-cam-row"><label class="pp-cam-side">🖼<small>앨범</small><input type="file" accept="image/*" multiple data-camfile="1"></label><button class="pp-cam-shutter" data-cam="shot" aria-label="촬영"><i></i></button><button class="pp-cam-done" data-cam="done">닫기</button></div>
+        <p>셔터를 누를 때마다 사진이 계속 쌓여요 · 다 찍으면 「완료」</p>
+      </div>`;
+    document.body.appendChild(box);
+    document.body.classList.add('pp-cam-on');
+    camThumbs(box);
+    const finish = ()=>{ camStop(); box.remove(); document.body.classList.remove('pp-cam-on'); render(); if(photoFiles.length) toast(`사진 ${photoFiles.length}장 준비됐어요 · 공유하기를 눌러주세요`); };
+    box.addEventListener('change', ev=>{
+      const fi = ev.target.closest('[data-camfile]'); if(!fi) return;
+      photoFiles = photoFiles.concat([...(fi.files||[])].filter(f=> /^image\//.test(f.type||'image/'))).slice(0, PHOTO_MAX); fi.value = ''; camThumbs(box);
+    });
+    box.addEventListener('click', async ev=>{
+      const b = ev.target.closest('[data-cam]'); if(!b) return;
+      const k = b.dataset.cam;
+      if(k==='close' || k==='done'){ finish(); return; }
+      if(k==='flip'){ camFacing = camFacing==='environment' ? 'user' : 'environment'; await camStart(box); return; }
+      if(k==='shot'){
+        if(photoFiles.length >= PHOTO_MAX){ toast(`사진은 최대 ${PHOTO_MAX}장까지 모을 수 있어요`); return; }
+        const video = box.querySelector('video'); if(!camStream || !video.videoWidth){ toast('카메라가 아직 준비 중이에요'); return; }
+        const c = document.createElement('canvas'); c.width = video.videoWidth; c.height = video.videoHeight;
+        c.getContext('2d').drawImage(video, 0, 0, c.width, c.height);
+        const fl = box.querySelector('.pp-cam-flash'); fl.classList.remove('on'); void fl.offsetWidth; fl.classList.add('on');
+        try{ if(navigator.vibrate) navigator.vibrate(30); }catch(_){}
+        c.toBlob(blob=>{
+          if(!blob) return;
+          const d = new Date(), nm = `momentworks_${d.getFullYear()}${pd(d.getMonth()+1)}${pd(d.getDate())}_${pd(d.getHours())}${pd(d.getMinutes())}${pd(d.getSeconds())}_${photoFiles.length+1}.jpg`;
+          photoFiles.push(new File([blob], nm, {type:'image/jpeg', lastModified: Date.now()}));
+          camThumbs(box);
+        }, 'image/jpeg', 0.88);
+      }
+    });
+    if(!(await camStart(box))){ const nc = document.getElementById('pwNativeCam'); box.querySelector('.pp-cam-msg').insertAdjacentHTML('beforeend', '<br><button class="pp-cam-native" type="button">기본 카메라 열기</button>'); const nb = box.querySelector('.pp-cam-native'); if(nb && nc) nb.onclick = ()=>{ finish(); nc.click(); }; }
+  }
   const canShareFiles = (f)=>{ try{ return !!(navigator.canShare && navigator.canShare({files:f})); }catch(e){ return false; } };
   async function copyText(t){ try{ await navigator.clipboard.writeText(t); return true; }catch(e){ const ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); let ok=false; try{ ok=document.execCommand('copy'); }catch(_){} ta.remove(); return ok; } }
   function installHidden(){ try{ return localStorage.getItem('pp_install_hide')==='1'; }catch(e){ return false; } }
@@ -1895,7 +1993,7 @@ const PartnerPortal = (function(){
         <div class="pw-cur-top"><span>STEP ${curIdx+1} / ${steps.length}</span>${stepTime(ev,cur)?`<b>목표 ${stepTime(ev,cur)}</b>`:(cur.when?`<b>${e(cur.when)}</b>`:'')}</div>
         <h3>${e(cur.title)}</h3>
         <p>${e(cur.detail||'')}</p>
-        ${cur.photo?`<button class="pw-photo-btn" data-pp="photo" data-v="${e(cur.id)}">📷 사진 촬영 · 카톡 공유</button>`:''}
+        ${cur.photo?`<button class="pw-photo-btn" data-pp="photo" data-v="${e(cur.id)}">📷 사진 여러 장 촬영 · 앨범 업로드 · 공유</button>`:''}
         <div class="pw-acts">
           ${(cur.msgs||[]).map(id=>{ const m=msgById(id); return m?`<button class="pp-btn gold" data-pp="compose" data-v="${e(m.id)}">💬 ${e(m.label)}</button>`:''; }).join('')}
           ${cur.report?'<button class="pp-btn" data-pp="reports">🚨 특이사항 보고</button>':''}
@@ -1933,10 +2031,11 @@ const PartnerPortal = (function(){
       const thumbs = photoFiles.map((f,i)=>`<div class="pw-thumb"><img src="${URL.createObjectURL(f)}" alt=""><button data-pp="photoDel" data-v="${i}">✕</button></div>`).join('');
       return `<div class="pw-sheet-bg" data-pp="sheetClose"></div><div class="pw-sheet"><div class="pw-sheet-h"><b>📷 ${e(st ? st.title : '사진 공유')}</b><button data-pp="sheetClose">✕</button></div>
         <div class="pw-photo-acts">
-          <label class="pw-cam">📷 촬영하기<input type="file" accept="image/*" capture="environment" data-ppfile="cam"></label>
-          <label class="pw-cam alt">🖼 앨범에서 선택<input type="file" accept="image/*" multiple data-ppfile="album"></label>
+          <button class="pw-cam" data-pp="camOpen">📸 연속 촬영<small>셔터를 누를 때마다 계속 찍혀요</small></button>
+          <label class="pw-cam alt">🖼 앨범에서 업로드<small>미리 찍은 사진 여러 장 선택</small><input type="file" accept="image/*" multiple data-ppfile="album"></label>
         </div>
-        ${photoFiles.length? `<div class="pw-thumbs">${thumbs}</div>` : '<div class="pp-empty" style="padding:14px;">촬영한 사진이 여기에 모여요 · 여러 장 찍은 뒤 한 번에 공유할 수 있어요</div>'}
+        <label class="pw-cam-native">휴대폰 기본 카메라로 1장씩 찍기<input type="file" accept="image/*" capture="environment" data-ppfile="cam" id="pwNativeCam"></label>
+        ${photoFiles.length? `<div class="pw-thumbs-h">사진 <b>${photoFiles.length}</b>장 · 최대 ${PHOTO_MAX}장 <button data-pp="photoClear">모두 지우기</button></div><div class="pw-thumbs">${thumbs}</div>` : '<div class="pp-empty" style="padding:14px;">촬영하거나 앨범에서 고른 사진이 여기에 모여요 · 여러 장을 한 번에 공유할 수 있어요</div>'}
         <textarea id="pwMsg" rows="2">${e(sheet.text)}</textarea>
         <button class="pw-kakao-btn" data-pp="sharePhotos" ${photoFiles.length?'':'disabled'}>카카오톡으로 사진 ${photoFiles.length? photoFiles.length+'장 ':''}공유하기</button>
         <p class="pw-sheet-sub">공유하기 창에서 <b>카카오톡 → 보고할 개인 톡방</b>을 선택하세요. 공유가 끝나면 사진은 이 화면에서 지워져요 (휴대폰 앨범에는 촬영 앱 설정에 따라 저장돼요).</p></div>`;
@@ -2785,6 +2884,8 @@ const PartnerPortal = (function(){
       render(); return;
     }
     if(act==='photoDel'){ photoFiles.splice(Number(v),1); render(); return; }
+    if(act==='photoClear'){ if(confirm('모은 사진을 모두 지울까요?')){ photoFiles = []; render(); } return; }
+    if(act==='camOpen'){ const ta=document.getElementById('pwMsg'); if(ta && sheet) sheet.text = ta.value; openCamera(); return; }
     if(act==='sharePhotos'){
       const ta = document.getElementById('pwMsg'); const text = ta ? ta.value : (sheet && sheet.text) || '';
       if(!photoFiles.length){ toast('먼저 사진을 촬영해주세요'); return; }
@@ -2879,7 +2980,7 @@ const PartnerPortal = (function(){
   }
   function onChange(ev){
     const fi = ev.target.closest && ev.target.closest('[data-ppfile]');
-    if(fi){ const ta=document.getElementById('pwMsg'); if(ta && sheet) sheet.text = ta.value; photoFiles = photoFiles.concat([...(fi.files||[])]).slice(0, 20); render(); return; }
+    if(fi){ const ta=document.getElementById('pwMsg'); if(ta && sheet) sheet.text = ta.value; const before = photoFiles.length; photoFiles = photoFiles.concat([...(fi.files||[])].filter(f=> /^image\//.test(f.type||'image/'))).slice(0, PHOTO_MAX); const added = photoFiles.length - before; fi.value = ''; render(); if(added) toast(`사진 ${added}장을 추가했어요 · 모두 ${photoFiles.length}장`); else if((fi.files||[]).length) toast(`사진은 최대 ${PHOTO_MAX}장까지 모을 수 있어요`); return; }
     const cb = ev.target.closest('[data-ppcheck]');
     const sel = ev.target.closest('[data-ppsel]');
     if(sel && sel.dataset.ppsel==='payMonth'){ payMonth=sel.value; render(); }
@@ -2896,7 +2997,7 @@ const PartnerPortal = (function(){
     render();
   }
   function update(v){ view=v; reapply(); if(sheet && sheet.mode==='photo') return; softRender(); }
-  function unmount(){ const pb = document.getElementById('ppNewPop'); if(pb) pb.remove(); const np = document.getElementById('ppNoticePop'); if(np) np.remove(); if(root){ root.removeEventListener('click', onClick); root.removeEventListener('change', onChange); root.removeEventListener('input', onInput); root.innerHTML=''; } root=null; view=null; }
+  function unmount(){ camStop(); const cb = document.getElementById('ppCam'); if(cb) cb.remove(); const pb = document.getElementById('ppNewPop'); if(pb) pb.remove(); const np = document.getElementById('ppNoticePop'); if(np) np.remove(); if(root){ root.removeEventListener('click', onClick); root.removeEventListener('change', onChange); root.removeEventListener('input', onInput); root.innerHTML=''; } root=null; view=null; }
   return {mount, update, unmount, toast, buildIcs};
 })();
 
