@@ -577,6 +577,128 @@ details.pp-past summary{cursor:pointer;font-size:13px;font-weight:700;color:var(
 .pp-stat b.bad{color:#B3261E}
 .pp-mg-row .m i small{font-size:10px;color:var(--pp-soft);font-weight:700}
 
+/* 신규 배정 팝업 · 확정 기한 강조 */
+.pp-pop{position:fixed;inset:0;z-index:9999;background:rgba(20,16,18,.55);display:flex;align-items:center;justify-content:center;padding:18px}
+.pp-pop-card{position:relative;background:#fff;border-radius:14px;max-width:380px;width:100%;padding:22px 18px 14px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.25);max-height:92vh;overflow:auto}
+.pp-pop-x{position:absolute;top:8px;right:8px;border:0;background:none;font-size:18px;color:#888;padding:6px 9px;cursor:pointer}
+.pp-pop-ic{font-size:34px;line-height:1}
+.pp-pop-card h3{margin:8px 0 4px;font-size:18px}
+.pp-pop-card p{margin:0 0 10px;font-size:13.5px;color:#444}
+.pp-pop-warn{background:#FDECEC;border:2px solid #D32F2F;color:#8A1414;border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.5;margin-bottom:10px}
+.pp-pop-warn small{display:block;font-size:11.5px;color:#9A3A3A;margin-top:4px;font-weight:600}
+.pp-pop-card ul{list-style:none;margin:0 0 12px;padding:0;text-align:left;font-size:13px}
+.pp-pop-card li{padding:7px 2px;border-top:1px dashed #E6DED4}.pp-pop-card li:first-child{border-top:0}
+.pp-pop-card li em{display:block;font-style:normal;font-size:11.5px;color:#B3261E;font-weight:700;margin-top:1px}
+.pp-pop-card li.more{color:#888;text-align:center}
+.pp-pop-go{display:block;width:100%;padding:13px;font-size:15px;font-weight:800;border:0;border-radius:10px;background:#7A2E3A;color:#fff;cursor:pointer;font-family:inherit}
+.pp-pop-go:active{opacity:.85}
+.pp-pop{font-family:'Pretendard',-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif}
+.pp-pop-later{border:0;background:none;color:#888;font-size:12.5px;margin-top:8px;padding:6px;cursor:pointer}
+.pp-cf-warn{background:#FDECEC;border:2px solid #D32F2F;color:#7A1414;border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.6;margin:0 0 12px}
+.pp-cf-warn b.red{color:#B71C1C}
+/* ===== 대시보드 ===== */
+.pp-ev-list,.pp-ev-detail,.pp-ev-head,.pp-ev-tip,.pp-ev-row,.pp-d-next,.pp-d-today,.pp-d-grid button,.pp-d-day,.pp-d-pay,.pp-d-notices button,.pp-d-quick button,.pp-d-sec{color:var(--pp-ink,#241F22)}
+.pp-ev-detail .pp-meta>div{color:var(--pp-ink,#241F22)}
+.pp-d-hero{background:linear-gradient(135deg,#2A1F23 0%,#4A2A33 60%,#7A2E3A 100%);color:#fff;border-radius:16px;padding:20px 18px 16px;margin:0 0 12px;position:relative;overflow:hidden;box-shadow:0 8px 24px rgba(42,31,35,.18)}
+.pp-d-hero:after{content:'';position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:rgba(201,169,110,.18)}
+.pp-d-date{font-size:11.5px;letter-spacing:.06em;color:#E8D6B0;font-weight:700;margin-bottom:6px;position:relative}
+.pp-d-hero h2{font-size:19px;line-height:1.45;margin:0 0 8px;font-weight:800;position:relative;word-break:keep-all}
+.pp-d-hero p{font-size:13px;margin:0 0 12px;color:#F2E9EA;position:relative;line-height:1.55}
+.pp-d-hero p b{color:#fff}
+.pp-d-noticebtn{position:relative;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.pp-d-noticebtn i{font-style:normal;background:#C9A96E;color:#2A1F23;border-radius:999px;padding:0 6px;margin-left:3px;font-size:11px}
+.pp-d-alert{display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;text-align:left;border:0;border-radius:12px;background:#FDECEC;color:#8A1414;padding:12px 14px;margin:0 0 10px;cursor:pointer;font-family:inherit;font-size:13.5px;border-left:4px solid #D32F2F}
+.pp-d-alert small{display:block;font-size:11.5px;color:#A33;margin-top:2px}
+.pp-d-alert>b{white-space:nowrap;font-size:13px}
+.pp-d-alert.soft{background:#EEF3FB;color:#24427A;border-left-color:#3F6FC2}
+.pp-d-today{background:#fff;border:2px solid #C9A96E;border-radius:14px;padding:14px;margin:0 0 12px}
+.pp-d-today.fin{border-color:#7FB08F;background:#F4FAF5}
+.pp-d-today .h{font-weight:800;font-size:15px;margin-bottom:8px}.pp-d-today .h small{color:var(--pp-soft);font-weight:700;margin-left:4px}
+.pp-d-today .r{font-size:13.5px;padding:6px 0;border-top:1px dashed var(--pp-line)}.pp-d-today .r:first-of-type{border-top:0}
+.pp-d-today .r small{display:block;color:var(--pp-soft);font-size:12px}
+.pp-d-today p{font-size:13px;margin:8px 0}
+.pp-d-today .pw-start{margin-top:10px}
+.pp-d-next{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--pp-line);border-radius:14px;padding:14px;margin:0 0 6px;cursor:pointer;box-shadow:0 2px 8px rgba(26,22,24,.05)}
+.pp-d-next.empty{cursor:default}
+.pp-d-dday{flex:none;width:74px;height:74px;border-radius:14px;background:#F6EFE3;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.pp-d-dday b{font-size:18px;color:#7A2E3A;font-weight:900;letter-spacing:-.5px}.pp-d-dday small{font-size:11px;color:var(--pp-slate);font-weight:700;margin-top:2px}
+.pp-d-nx{flex:1;min-width:0}.pp-d-nx>span{font-size:11px;color:var(--pp-soft);font-weight:800;letter-spacing:.04em}
+.pp-d-nx>b{display:block;font-size:16px;margin:2px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pp-d-nx>small{display:block;font-size:12.5px;color:var(--pp-slate)}
+.pp-d-team{display:flex;align-items:center;gap:4px;margin-top:7px;flex-wrap:wrap}
+.pp-d-team i{font-style:normal;width:26px;height:26px;border-radius:50%;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 0 0 1px var(--pp-line)}
+.pp-d-team em{font-style:normal;font-size:11px;font-weight:800;border-radius:4px;padding:2px 7px;margin-left:4px}.pp-d-team em.ok{background:#E3F1E9;color:#2F7D57}.pp-d-team em.bad{background:#FDECEC;color:#B3261E}
+.pp-d-go{font-size:26px;color:var(--pp-soft)}
+.pp-d-sec{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:800;margin:16px 2px 8px;color:var(--pp-ink,#241F22)}
+.pp-d-link{border:0;background:none;color:var(--pp-slate);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.pp-d-week{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.pp-d-day{background:#fff;border:1px solid var(--pp-line);border-radius:10px;padding:7px 2px;text-align:center;min-width:0}
+.pp-d-day small{display:block;font-size:10.5px;color:var(--pp-soft);font-weight:700}.pp-d-day b{display:block;font-size:15px;margin:1px 0 3px}
+.pp-d-day i{display:block;font-style:normal;font-size:10px;font-weight:800;color:#fff;background:#7A2E3A;border-radius:4px;padding:1px 0;margin:0 3px;white-space:nowrap;overflow:hidden}
+.pp-d-day i.off{background:#E4E1D7;color:#555}.pp-d-day i.none{background:none;color:#ccc}
+.pp-d-day.has{cursor:pointer;border-color:#C9A96E}.pp-d-day.now{background:#FBF6EC;border-color:#C9A96E;border-width:2px}
+.pp-d-day.sun small{color:#C0392B}.pp-d-day.sat small{color:#2E5AAC}
+.pp-d-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pp-d-grid button{background:#fff;border:1px solid var(--pp-line);border-radius:12px;padding:11px 9px;text-align:left;cursor:pointer;font-family:inherit;min-width:0}
+.pp-d-grid span{display:block;font-size:11px;color:var(--pp-slate);font-weight:700}
+.pp-d-grid b{display:block;font-size:22px;font-weight:900;margin:3px 0 2px;color:#241F22}.pp-d-grid b small{font-size:12px;font-weight:700;margin-left:2px;color:var(--pp-slate)}
+.pp-d-grid b.bad{color:#B3261E}
+.pp-d-grid em{display:block;font-style:normal;font-size:10.5px;color:var(--pp-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pp-d-pay{display:block;width:100%;margin-top:10px;background:#fff;border:1px solid var(--pp-line);border-radius:12px;padding:12px 14px;text-align:left;cursor:pointer;font-family:inherit}
+.pp-d-pay .h{display:flex;justify-content:space-between;font-size:13px;font-weight:800}.pp-d-pay .h b{font-size:16px}
+.pp-d-pay .bar{height:7px;background:#EFE9E1;border-radius:99px;margin:9px 0 6px;overflow:hidden}.pp-d-pay .bar i{display:block;height:100%;background:linear-gradient(90deg,#5E9C76,#2F7D57);border-radius:99px}
+.pp-d-pay .f{display:flex;justify-content:space-between;font-size:11.5px;color:var(--pp-slate)}
+.pp-d-notices{display:flex;flex-direction:column;gap:6px}
+.pp-d-notices button{background:#fff;border:1px solid var(--pp-line);border-radius:10px;padding:10px 12px;text-align:left;cursor:pointer;font-family:inherit}
+.pp-d-notices b{display:block;font-size:13.5px}.pp-d-notices b em{font-style:normal;font-size:10px;color:#fff;background:#7A2E3A;border-radius:3px;padding:1px 5px;margin-right:5px;vertical-align:2px}
+.pp-d-notices small{display:block;font-size:12px;color:var(--pp-slate);margin-top:2px}
+.pp-d-quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0 4px}
+.pp-d-quick button{background:#fff;border:1px solid var(--pp-line);border-radius:12px;padding:12px 4px;font-size:20px;cursor:pointer;font-family:inherit}
+.pp-d-quick span{display:block;font-size:11.5px;font-weight:700;margin-top:4px;color:#241F22}
+@media (max-width:360px){.pp-d-grid{grid-template-columns:repeat(2,1fr)}.pp-d-hero h2{font-size:17px}}
+/* ===== 공지 · 유의사항 팝업 ===== */
+.pp-np{text-align:left;padding-top:16px}
+.pp-np-tabs{display:flex;gap:6px;margin:4px 30px 12px 0}
+.pp-np-tabs button{flex:1;border:1px solid #E2DACF;background:#FAF7F2;border-radius:999px;padding:8px 6px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;color:#5B5650}
+.pp-np-tabs button.on{background:#2A1F23;color:#fff;border-color:#2A1F23}
+.pp-np-tabs small{font-size:10.5px;background:#C9A96E;color:#2A1F23;border-radius:999px;padding:0 5px;margin-left:2px}
+.pp-np-body{max-height:52vh;overflow:auto;margin-bottom:12px}
+.pp-np-notice{border:1px solid #EEE6DB;border-radius:10px;padding:10px 12px;margin-bottom:8px}
+.pp-np-notice.pin{border-color:#C9A96E;background:#FFFBF3}
+.pp-np-notice h4{margin:0 0 4px;font-size:14px}.pp-np-notice h4 em{font-style:normal;font-size:10px;color:#fff;background:#7A2E3A;border-radius:3px;padding:1px 5px;margin-right:5px;vertical-align:2px}
+.pp-np-notice p{margin:0;font-size:13px;line-height:1.6;white-space:pre-line;color:#333}
+.pp-np-notice time{display:block;font-size:11px;color:#999;margin-top:4px}
+.pp-np-all{border:0;background:none;color:#7A2E3A;font-weight:800;font-size:12.5px;cursor:pointer;font-family:inherit;padding:4px 0}
+.pp-np-empty{text-align:center;color:#888;font-size:13px;padding:24px 0}
+.pp-np-rules{list-style:none;margin:0;padding:0}
+.pp-np-rules li{display:flex;gap:10px;padding:9px 2px;border-top:1px dashed #E6DED4;font-size:13px}.pp-np-rules li:first-child{border-top:0}
+.pp-np-rules li>span{flex:none;font-size:18px;line-height:1.2}.pp-np-rules b{display:block}.pp-np-rules small{display:block;color:#666;font-size:12px;margin-top:2px;line-height:1.5}
+/* ===== 내 예식정보 · 완료 예식 ===== */
+.pp-ev-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 2px 6px;font-size:15px}
+.pp-ev-head small{display:block;font-size:11.5px;color:var(--pp-soft);font-weight:700}
+.pp-ev-tip{font-size:12px;color:var(--pp-slate);margin:0 2px 10px;line-height:1.55}
+.pp-ev-list{background:#fff;border:1px solid var(--pp-line);border-radius:12px;overflow:hidden}
+.pp-ev-month{font-size:12px;font-weight:800;padding:9px 12px 7px;background:#F7F3EE;border-top:1px solid var(--pp-line);color:#5B4A3E}
+.pp-ev-month:first-child{border-top:0}.pp-ev-month small{color:var(--pp-soft);margin-left:4px}
+.pp-evi{border-top:1px solid var(--pp-line)}
+.pp-ev-month+.pp-evi{border-top:0}
+.pp-evi.today{background:#FFFBF2}
+.pp-ev-row{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;text-align:left;padding:12px;cursor:pointer;font-family:inherit;color:inherit}
+.pp-ev-date{flex:none;width:46px;text-align:center}.pp-ev-date b{display:block;font-size:14px}.pp-ev-date small{display:block;font-size:11px;color:var(--pp-soft);font-weight:700}
+.pp-ev-date small.sun{color:#C0392B}.pp-ev-date small.sat{color:#2E5AAC}
+.pp-ev-main{flex:1;min-width:0}.pp-ev-main b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pp-ev-main small{display:block;font-size:11.5px;color:var(--pp-slate);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pp-ev-main .dd{font-style:normal;font-weight:800;color:#7A2E3A}
+.pp-evi .st{flex:none;font-style:normal;font-size:11px;font-weight:800;border-radius:6px;padding:4px 7px;background:#F1EFEC;color:#666}
+.pp-evi .st.ok{background:#E3F1E9;color:#2F7D57}.pp-evi .st.bad{background:#FDECEC;color:#B3261E}.pp-evi .st.wait{background:#FFF3DF;color:#8A5300}.pp-evi .st.pin{background:#EEF0FA;color:#3F4FB0}
+.pp-ev-caret{flex:none;color:var(--pp-soft);font-size:12px}
+.pp-ev-detail{padding:0 12px 14px;border-top:1px dashed var(--pp-line);background:#FCFBF9}
+.pp-ev-detail .pp-timeline{margin-top:12px}
+.pp-ev-detail .pp-cf-due{margin:10px -12px 0;}
+.pp-ev-sec h4{font-size:12.5px;margin:12px 0 6px}
+.pp-mate.open{border-color:#E6A8A3;color:#B3261E;background:#FDECEC}
+.pp-btn.pp-no{color:#B3261E;border-color:#E6A8A3}
+.pp-ev-more{width:100%;margin-top:10px}
+
 /* ================= 접속 메인화면 (모먼트웍스 로고) ================= */
 .mw-entry{position:fixed;inset:0;z-index:500;overflow-y:auto;background:#F7F5F0;background-image:radial-gradient(ellipse at 50% 38%, #FFFFFF 0%, #F7F5F0 55%, #EFEBE3 100%);color:#1A1618;
   font-family:'Pretendard',-apple-system,BlinkMacSystemFont,sans-serif;display:flex;align-items:center;justify-content:center;padding:56px 22px;box-sizing:border-box;}
@@ -661,9 +783,9 @@ function pvDefaultSettings(){
     minWage: 10320,          // 2026년 최저시급
     officeUrl: '',           // 분리 운영하는 파트너스오피스 주소
     availabilityLockDays: 3, // 예식 며칠 전부터 휴무 변경을 막을지
-    responseHours: 24,       // 자동배정 후 이 시간 안에 확정/진행불가가 없으면 다음 순위로 자동 넘김 (0 = 사용 안 함)
+    responseHours: 48,       // 자동배정 후 이 시간 안에 확정/진행불가가 없으면 다음 순위로 자동 넘김 (0 = 사용 안 함)
     urgentDays: 7,           // 예식이 며칠 이내면 '급한 배정'
-    urgentResponseHours: 24, // 급한 배정의 응답 기한(시간) · 기본은 일반 배정과 같은 24시간
+    urgentResponseHours: 48, // 급한 배정의 응답 기한(시간) · 기본은 일반 배정과 같은 48시간
     strikeLimit: 2,          // 최근 strikeDays 동안 무응답이 이만큼 쌓이면 추천에서 제외 (대표가 기록 초기화하면 복귀)
     strikeDays: 30,
     staleDays: 14            // 파트너스오피스에 이 기간 넘게 접속하지 않은 인원은 추천 순서를 뒤로
@@ -879,7 +1001,7 @@ function buildPartnerView(records, db, code, todayStr){
     owners: members.filter(function(m){ return m.active!==false && (m.kind==='owner' || m.title==='대표'); }).map(function(m){ return {name: m.name, phone: m.phone||''}; }),
     reportPhone: (db.settings && db.settings.reportPhone) || '010-5730-0614', // 대표 전화
     availability: (db.availability||{})[member.id] || {},
-    settings: {minWage: settings.minWage, availabilityLockDays: settings.availabilityLockDays, workMinutes: settings.workMinutes, callOffset: settings.callOffset},
+    settings: {minWage: settings.minWage, availabilityLockDays: settings.availabilityLockDays, workMinutes: settings.workMinutes, callOffset: settings.callOffset, responseHours: settings.responseHours},
     generatedAt: new Date().toISOString()
   };
 }
@@ -1382,14 +1504,14 @@ function sweepTimeouts(db, records, nowIso, todayStr){
 ============================================================================================== */
 const PartnerPortal = (function(){
   const WD = ['일','월','화','수','목','금','토'];
-  const TABS = [['home','홈'],['work','오늘 업무'],['schedule','내 일정'],['confirm','배정 확인'],['route','추천 동선'],['info','예식정보'],['arrange','축의대 내역정리'],['pay','근무·급여'],['avail','휴무 신청'],['notice','공지']];
+  const TABS = [['home','홈'],['work','오늘 업무'],['schedule','내 예식정보'],['done','완료 예식'],['confirm','배정 확인'],['route','추천 동선'],['arrange','축의대 내역정리'],['pay','근무·급여'],['avail','휴무 신청'],['notice','공지']];
   let navScroll = 0;
   let workRid=null, sheet=null, root=null, view=null, H={}, tab='home', selRecord=null, calCursor=null, availCursor=null, payMonth=null, selDay=null, busy=false;
 
   const pd = n => String(n).padStart(2,'0');
   // 전체 일정 관리자 계정 (보기 전용)
   const MGR = () => !!(view && view.member && view.member.allView);
-  const MGR_TABS = [['home','홈'],['schedule','전체 일정'],['info','예식정보'],['arrange','축의대 내역정리'],['notice','공지']];
+  const MGR_TABS = [['home','홈'],['schedule','전체 일정'],['done','완료 예식'],['arrange','축의대 내역정리'],['notice','공지']];
   const tabsNow = () => MGR() ? MGR_TABS : TABS;
   const e = s => (s===undefined||s===null) ? '' : String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const money = n => (Number(n)||0).toLocaleString('ko-KR')+'원';
@@ -1616,7 +1738,7 @@ const PartnerPortal = (function(){
       </div></div>
       ${Object.keys(items).length? `<div class="pp-info-sec"><h4>하객 안내사항</h4><div class="pp-info-kv">${INFO_ITEMS.filter(x=> items[x[0]]).map(x=> kv(x[1], items[x[0]])).join('')}</div>
         ${(inf.notes&&inf.notes.groom)? `<p class="pp-info-note">🤵 신랑측 안내 · ${e(inf.notes.groom)}</p>`:''}${(inf.notes&&inf.notes.bride)? `<p class="pp-info-note">👰 신부측 안내 · ${e(inf.notes.bride)}</p>`:''}</div>`:''}
-      ${all ? summaryHTML(rows) : (rows.length? `<div class="pp-info-more"><button class="pp-btn" data-pp="tab" data-v="info">운영 설정서 전체 ${rows.length}개 항목 보기 →</button></div>`:'')}`
+      ${all ? summaryHTML(rows) : (rows.length? `<div class="pp-info-more"><button class="pp-btn" data-pp="schGo" data-rid="${e(ev.recordId)}">운영 설정서 전체 ${rows.length}개 항목 보기 →</button></div>`:'')}`
       : `<div class="pp-info-empty">${ev.settingsSubmitted? '운영 설정서는 제출됐지만 내용이 아직 연결되지 않았어요. 대표가 설정서를 불러오면 표시돼요.' : '운영 설정서가 제출되면 이곳에 예식 정보가 표시돼요.'}</div>`;
     return `<section class="pp-info"><div class="pp-info-h">📋 예식 정보 <small>파트너 안내카드</small></div>${body}</section>`;
   }
@@ -1745,7 +1867,7 @@ const PartnerPortal = (function(){
   const canShareFiles = (f)=>{ try{ return !!(navigator.canShare && navigator.canShare({files:f})); }catch(e){ return false; } };
   async function copyText(t){ try{ await navigator.clipboard.writeText(t); return true; }catch(e){ const ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); let ok=false; try{ ok=document.execCommand('copy'); }catch(_){} ta.remove(); return ok; } }
   function installHidden(){ try{ return localStorage.getItem('pp_install_hide')==='1'; }catch(e){ return false; } }
-  function todayEvents(){ const t=today(); return view.events.filter(ev=> ev.date===t); }
+  function todayEvents(){ const t=today(); return view.events.filter(ev=> ev.date===t).sort((a,b)=> String(a.callTime||a.weddingTime||'').localeCompare(String(b.callTime||b.weddingTime||''))); }
   function workEvent(){
     const te = todayEvents();
     if(te.length){ if(!workRid || !te.some(x=>x.recordId===workRid)) workRid = te[0].recordId; return {ev: eventById(workRid), live:true, list:te}; }
@@ -1873,6 +1995,40 @@ const PartnerPortal = (function(){
   let opChain = Promise.resolve(), offlineNoted = false;
   function typing(){ const a = document.activeElement; return !!(a && root && root.contains(a) && /^(INPUT|TEXTAREA)$/.test(a.tagName) && a.type!=='checkbox'); }
   function softRender(){ if(!typing()) render(); }
+  /* ---------- 신규 배정 팝업 (닫을 수 있음 · 새 배정이 생기면 다시 표시) ---------- */
+  function respHours(){ return Number((view && view.settings && view.settings.responseHours) || 48); }
+  function popKey(){ return 'pp_newpop_'+(view && view.member ? view.member.id : ''); }
+  function pendingNew(){ if(!view || MGR() || H.preview) return []; return upcoming().filter(ev=> !ev.confirmed && !ev.pinned).sort((a,b)=> (a.respondBy||'9').localeCompare(b.respondBy||'9') || a.date.localeCompare(b.date)); }
+  function checkPopup(){
+    if(navigator.webdriver && !window.PP_FORCE_POPUP) return; // 자동 테스트 브라우저에서는 표시하지 않음
+    const list = pendingNew();
+    let seen = []; try{ seen = JSON.parse(localStorage.getItem(popKey())||'[]'); }catch(_){}
+    const fresh = list.filter(ev=> !seen.includes(ev.recordId));
+    let box = document.getElementById('ppNewPop');
+    if(tab==='confirm' && list.length){ try{ localStorage.setItem(popKey(), JSON.stringify(list.map(x=>x.recordId))); }catch(_){} } // 배정 확인 화면을 봤으면 확인한 것으로
+    if(!fresh.length || tab==='confirm'){ if(box) box.remove(); setTimeout(()=> showNoticePopup(false), 0); return; }
+    if(box) return;
+    box = document.createElement('div'); box.id = 'ppNewPop'; box.className = 'pp-pop';
+    const fmt = iso=>{ const d = new Date(iso); return `${pd(d.getMonth()+1)}/${pd(d.getDate())} ${pd(d.getHours())}:${pd(d.getMinutes())}`; };
+    box.innerHTML = `<div class="pp-pop-card" role="dialog" aria-modal="true">
+      <button class="pp-pop-x" data-pop="close" aria-label="닫기">✕</button>
+      <div class="pp-pop-ic">📩</div>
+      <h3>새로운 배정이 ${list.length}건 있어요</h3>
+      <p>배정 내용을 확인한 뒤 <b>반드시 「확정」</b>을 눌러주세요.</p>
+      <div class="pp-pop-warn">⚠️ <b>${respHours()}시간 안에 확정하지 않으면<br>해당 배정은 자동으로 취소돼요</b><small>취소된 일정은 다른 파트너에게 넘어가요 · 근무가 어려우면 「진행불가」를 눌러주세요</small></div>
+      <ul>${list.slice(0,5).map(ev=>{ const d = parseD(ev.date); return `<li><b>${pd(d.getMonth()+1)}.${pd(d.getDate())}(${WD[d.getDay()]}) ${e(ev.weddingTime||'')}</b> ${e(ev.venueName||'')}${ev.respondBy? `<em>확정 기한 ${fmt(ev.respondBy)}</em>`:''}</li>`; }).join('')}${list.length>5? `<li class="more">외 ${list.length-5}건</li>`:''}</ul>
+      <button class="pp-pop-go" data-pop="go">배정 확인하러 가기</button>
+      <button class="pp-pop-later" data-pop="close">나중에 확인할게요</button>
+    </div>`;
+    box.addEventListener('click', ev=>{
+      const b = ev.target.closest('[data-pop]'); if(!b && ev.target!==box) return;
+      try{ localStorage.setItem(popKey(), JSON.stringify(list.map(x=>x.recordId))); }catch(_){}
+      box.remove();
+      if(b && b.dataset.pop==='go'){ tab='confirm'; schedFilter=null; selDay=null; sheet=null; render(); window.scrollTo(0,0); }
+      else setTimeout(()=> showNoticePopup(false), 200);
+    });
+    document.body.appendChild(box);
+  }
   async function refreshAfterReject(msg){
     toast(msg || '저장하지 못했어요');
     try{ const nv = await H.onRefresh(); if(nv){ view = nv; reapply(); } }catch(_){}
@@ -1939,26 +2095,188 @@ const PartnerPortal = (function(){
       <div class="pp-mg-list">${rows || '<div class="pp-empty">앞으로 30일 동안 예정된 예식이 없어요</div>'}</div>
       ${up.length>soon.length? `<button class="pp-btn" style="width:100%;margin-top:10px;" data-pp="tab" data-v="schedule">전체 일정 보기 (${up.length}건)</button>`:''}`;
   }
+  /* ---------- 웰컴 문구 (시간대 · 요일 · 예식 당일 · 예식 후 등 상황별 34가지) ---------- */
+  const WELCOME = [
+    // 시간대
+    {k:'dawn', t:'{n}님, 별빛처럼 반짝이는 하루를 보내셨군요 ✨ 오늘도 정말 멋졌어요!'},
+    {k:'dawn', t:'포근한 꿈 꾸세요, {n}님 🌙💫 내일은 더 즐거운 일이 가득할 거예요!'},
+    {k:'morning', t:'좋은 아침이에요, {n}님! ☀️ 오늘도 행복이 가득한 하루 되세요 😊'},
+    {k:'morning', t:'{n}님, 상쾌한 아침이에요! 🌼 오늘은 왠지 좋은 일이 생길 것 같아요 🍀'},
+    {k:'morning', t:'반짝반짝 빛나는 아침이에요, {n}님! ☕✨ 오늘도 웃음 가득한 하루 보내요'},
+    {k:'lunch', t:'{n}님, 맛있는 점심으로 에너지 충전하셨나요? 🍱💛 오후도 신나게 보내요!'},
+    {k:'lunch', t:'든든한 한 끼와 함께 기분도 업! 🌈 {n}님의 오후를 응원해요 💪'},
+    {k:'afternoon', t:'햇살 좋은 오후예요, {n}님! 🌤 오늘도 웃는 일만 가득하길 바라요 😄'},
+    {k:'afternoon', t:'{n}님, 기분 좋은 오후 보내고 계시죠? 🍀 함께해서 늘 든든해요 🤗'},
+    {k:'evening', t:'{n}님, 오늘 하루도 빛나셨어요! 🌆✨ 기분 좋은 저녁 보내세요'},
+    {k:'evening', t:'포근한 저녁이에요, {n}님! 🍵💛 맛있는 저녁 드시고 편히 쉬세요'},
+    {k:'night', t:'{n}님, 오늘도 최고였어요! 🌟 달콤한 밤 보내세요 🌙'},
+    // 요일
+    {k:'d1', t:'설레는 한 주의 시작이에요, {n}님! 🚀 이번 주도 즐겁게 함께해요 🙌'},
+    {k:'d2', t:'{n}님, 산뜻한 화요일이에요! 🌷 오늘도 좋은 기운 가득 보내드려요 💕'},
+    {k:'d3', t:'벌써 한 주의 절반! 🎈 {n}님, 오늘도 반짝반짝 빛나는 하루 되세요 ✨'},
+    {k:'d4', t:'{n}님, 신나는 주말이 코앞이에요! 🎉 오늘도 기분 좋게 시작해요 😊'},
+    {k:'d5', t:'두근두근 금요일이에요, {n}님! 💐 행복한 주말 미리 축하해요 🥳'},
+    {k:'d6', t:'사랑이 가득한 토요일이에요, {n}님! 💍💕 오늘도 행복을 함께 만들어요'},
+    {k:'d0', t:'행복 가득한 일요일이에요, {n}님! 🌸 웃음꽃 활짝 피는 하루 되세요 😊'},
+    // 예식
+    {k:'todayEarly', t:'오늘은 축복 가득한 예식 날이에요, {n}님! 💍✨ 멋진 하루 함께 만들어요'},
+    {k:'todaySoon', t:'{n}님, 곧 반가운 출근 시간이에요! 🚗💨 오늘도 행복을 전하러 가볼까요? 😊'},
+    {k:'todayLive', t:'{n}님 덕분에 오늘 예식이 더 빛나고 있어요! 🌟 언제나 응원해요 📣'},
+    {k:'todayLive', t:'두 분의 가장 행복한 날을 함께 만드는 {n}님, 정말 최고예요! 👏💕'},
+    {k:'todayDone', t:'오늘도 완벽했어요, {n}님! 🎉 정말 수고 많으셨어요. 푹 쉬세요 💛'},
+    {k:'todayDone', t:'{n}님 덕분에 오늘 축의대가 반짝반짝 빛났어요! ✨🥰 고마워요!'},
+    {k:'yesterday', t:'어제 정말 멋지셨어요, {n}님! 👍✨ 오늘은 여유롭고 행복한 하루 보내세요 🛁'},
+    {k:'tomorrow', t:'{n}님, 내일은 설레는 예식 날이에요! 💍 오늘 푹 쉬고 내일 반갑게 만나요 😊'},
+    {k:'tomorrow', t:'두근두근, 내일은 예식 가는 날! 🎒✨ {n}님과 함께라 든든해요 💪'},
+    {k:'multi', t:'오늘은 예식이 {k}건이나! 🎊 {n}님의 멋진 활약을 기대할게요 🙌 이동 동선도 꼭 확인해요 🗺'},
+    // 상황
+    {k:'pending', t:'{n}님, 반가운 새 배정 소식이 도착했어요! 📩💕 확인하고 확정해주세요 😊'},
+    {k:'empty', t:'{n}님, 곧 반가운 배정 소식으로 찾아올게요! 🎁 오늘도 좋은 하루 보내세요 🌈'},
+    {k:'monthStart', t:'새로운 달이 활짝 열렸어요, {n}님! 🗓🌟 이번 달도 행복 가득 함께해요'},
+    {k:'any', t:'{n}님과 함께라서 모먼트웍스는 늘 행복해요! 💛 오늘도 반가워요 😊'},
+    {k:'any', t:'언제나 밝은 에너지를 주는 {n}님, 정말 고마워요! 🤗🌻 오늘도 화이팅!'}
+  ];
+  function welcomeLine(){
+    const now = new Date(), h = now.getHours(), t = today(), name = view.member.name;
+    const te = todayEvents().slice().sort(byTime), nm = nowMin();
+    const ctx = [];
+    if(te.length){
+      const call = hmMin(te[0].callTime), end = hmMin(te[te.length-1].endTime);
+      if(te.length>1 && (call===null || nm < call)) ctx.push('multi');
+      if(end!==null && nm > end) ctx.push('todayDone');
+      else if(call!==null && nm >= call) ctx.push('todayLive');
+      else if(call!==null && call - nm <= 120) ctx.push('todaySoon');
+      else ctx.push('todayEarly');
+    } else {
+      if(view.events.some(ev=> ev.date===addDays(t,-1))) ctx.push('yesterday');
+      if(view.events.some(ev=> ev.date===addDays(t,1))) ctx.push('tomorrow');
+      if(upcoming().some(ev=> !ev.confirmed && !ev.pinned)) ctx.push('pending');
+    }
+    const ev2 = ctx.length ? ctx : [];
+    const tod = h<5?'dawn': h<11?'morning': h<14?'lunch': h<18?'afternoon': h<22?'evening':'night';
+    const general = [tod, 'd'+now.getDay(), 'any'];
+    if(now.getDate()<=3) general.push('monthStart');
+    if(!upcoming().length) general.push('empty');
+    const keys = ev2.length ? ev2 : general;
+    const pool = WELCOME.filter(w=> keys.includes(w.k));
+    // 같은 시간대 안에서는 같은 문구 (새로고침해도 깜빡이지 않게) · 시간대가 바뀌면 다른 문구
+    const seed = String(view.member.id)+t+Math.floor(h/3)+keys.join(',');
+    let hs = 0; for(let i=0;i<seed.length;i++) hs = (hs*31 + seed.charCodeAt(i)) >>> 0;
+    const pick = pool[hs % pool.length] || WELCOME[WELCOME.length-1];
+    return pick.t.replace('{n}', e(name)).replace('{k}', te.length);
+  }
+  /* ---------- 공지 · 유의사항 팝업 ---------- */
+  const RULES = [
+    ['⏰','출근 시간 10분 전 도착', '단정한 복장(검정 계열)과 명찰 · 준비물을 미리 확인해주세요.'],
+    ['💰','축의금은 절대 개인 소지 · 외부 반출 금지', '정해진 인계자에게만, 인계서 작성 후 전달해주세요.'],
+    ['👥','축의대를 비울 때는 반드시 팀원과 교대', '현금 · 봉투가 하객에게 노출되지 않게 관리해주세요.'],
+    ['🔒','하객 개인정보 촬영 · 외부 공유 금지', '방명록 · 명단 · 계좌 정보는 업무 외 사용을 금지해요.'],
+    ['🎫','식권은 수량 확인 후 배부', '남은 식권은 인계할 때 함께 전달해주세요.'],
+    ['🚨','특이사항은 즉시 보고', '분실 · 다툼 · 금액 오류는 「오늘 업무 → 특이사항 보고」로 대표에게 바로 공유해주세요.'],
+    ['📝','예식 후 내역정리 바로 입력', '「축의대 내역정리」에서 정리 시트를 바로 작성해주세요.'],
+    ['📅','근무가 어려우면 미리 알려주세요', '휴무 신청은 미리 · 배정된 일정은 「진행불가」 또는 대표에게 연락해주세요.']
+  ];
+  function noticeSig(){ return (view.notices||[]).map(n=> n.id+':'+(n.createdAt||'')).join('|'); }
+  function noticeKey(){ return 'pp_notice_'+(view && view.member ? view.member.id : ''); }
+  function showNoticePopup(force){
+    if(!view || !root) return;
+    if(!force){
+      if(navigator.webdriver && !window.PP_FORCE_POPUP) return;
+      if(MGR() || H.preview || document.getElementById('ppNewPop') || document.getElementById('ppNoticePop')) return;
+      let st = null; try{ st = JSON.parse(localStorage.getItem(noticeKey())||'null'); }catch(_){}
+      if(st && st.day===today() && st.sig===noticeSig()) return; // 오늘 이미 확인했고 새 공지가 없으면 표시 안 함
+    }
+    const old = document.getElementById('ppNoticePop'); if(old) old.remove();
+    const ns = (view.notices||[]).slice(0,3);
+    const box = document.createElement('div'); box.id = 'ppNoticePop'; box.className = 'pp-pop';
+    box.innerHTML = `<div class="pp-pop-card pp-np" role="dialog" aria-modal="true">
+      <button class="pp-pop-x" data-np="close" aria-label="닫기">✕</button>
+      <div class="pp-np-tabs"><button class="on" data-np="t" data-v="n">📢 공지사항${ns.length? ` <small>${(view.notices||[]).length}</small>`:''}</button><button data-np="t" data-v="r">⚠️ 유의사항</button></div>
+      <div class="pp-np-body" data-pane="n">${ns.length? ns.map(n=>`<div class="pp-np-notice ${n.pinned?'pin':''}"><h4>${n.pinned?'<em>고정</em>':''}${e(n.title)}</h4><p>${e(n.body)}</p><time>${n.createdAt? fdate(n.createdAt.slice(0,10),true):''}</time></div>`).join('') + ((view.notices||[]).length>3? `<button class="pp-np-all" data-np="all">공지 전체 보기 (${(view.notices||[]).length}건) ›</button>`:'') : '<div class="pp-np-empty">새 공지가 없어요</div>'}</div>
+      <div class="pp-np-body" data-pane="r" hidden><ol class="pp-np-rules">${RULES.map(r=>`<li><span>${r[0]}</span><div><b>${r[1]}</b><small>${r[2]}</small></div></li>`).join('')}</ol></div>
+      <button class="pp-pop-go" data-np="ok">확인했어요</button>
+      <button class="pp-pop-later" data-np="close">닫기 (오늘은 다시 안 보여요)</button>
+    </div>`;
+    box.addEventListener('click', ev=>{
+      const b = ev.target.closest('[data-np]');
+      if(b && b.dataset.np==='t'){ box.querySelectorAll('.pp-np-tabs button').forEach(x=> x.classList.toggle('on', x===b)); box.querySelectorAll('[data-pane]').forEach(p=> p.hidden = p.dataset.pane!==b.dataset.v); return; }
+      if(!b && ev.target!==box) return;
+      try{ localStorage.setItem(noticeKey(), JSON.stringify({day: today(), sig: noticeSig()})); }catch(_){}
+      box.remove();
+      if(b && b.dataset.np==='all'){ tab='notice'; render(); window.scrollTo(0,0); }
+    });
+    document.body.appendChild(box);
+  }
+  /* ---------- 홈 대시보드 ---------- */
   function homeHTML(){
     if(MGR()) return managerHomeHTML();
-    const up=upcoming(), next=up[0], mon=today().slice(0,7);
-    const monthEv=view.events.filter(ev=>ev.date.slice(0,7)===mon);
-    const pending=up.filter(ev=>!ev.confirmed);
-    const pinned=(view.notices||[]).find(n=>n.pinned);
+    const t = today(), now = new Date(), mon = t.slice(0,7), nextMon = addDays(t.slice(0,8)+'01', 32).slice(0,7);
+    const act = activeEvents(), done = doneEvents(), te = todayEvents().slice().sort(byTime);
+    const next = act.find(ev=> ev.date>t) || act.find(ev=> !isDone(ev) && ev.date===t) || null;
+    const monthEv = view.events.filter(ev=> ev.date.slice(0,7)===mon);
+    const monthPay = monthEv.reduce((s,x)=> s+(x.pay||0), 0), monthPaid = monthEv.filter(x=> x.paid).reduce((s,x)=> s+(x.pay||0), 0);
+    const pending = upcoming().filter(ev=> !ev.confirmed && !ev.pinned).sort((a,b)=> (a.respondBy||'9').localeCompare(b.respondBy||'9'));
+    const av = view.availability||{}, offDays = Object.keys(av).filter(d=> d>=t).sort();
+    const fmtDue = iso=>{ const d=new Date(iso); return `${pd(d.getMonth()+1)}/${pd(d.getDate())} ${pd(d.getHours())}:${pd(d.getMinutes())}`; };
+    const multiDay = (()=>{ const c={}; act.forEach(ev=>{ c[ev.date]=(c[ev.date]||0)+1; }); return Object.keys(c).filter(d=> c[d]>1).sort()[0]; })();
+    const pinned = (view.notices||[]).filter(n=> n.pinned), latest = (view.notices||[]).slice(0,2);
+    // 오늘의 예식
+    const todayBox = te.length ? (()=>{
+      const ev = te[0], end = hmMin(te[te.length-1].endTime), allDone = end!==null && nowMin() > end;
+      const pr = typeof wprog==='function' ? wprog(ev) : null;
+      return `<div class="pp-d-today ${allDone?'fin':''}">
+        <div class="h">${allDone? '🎉 오늘 예식 완료' : '💍 오늘의 예식'} <small>${te.length}건</small></div>
+        ${te.map(x=> `<div class="r"><b>${e(x.callTime||'-')}</b> 출근 · ${e(x.venueName||'')}<small>예식 ${e(x.weddingTime||'-')} · 종료 예상 ${e(x.endTime||'-')}</small></div>`).join('')}
+        ${allDone? `<p>오늘도 정말 수고 많으셨어요! 내역정리 입력을 잊지 마세요.</p><button class="pp-btn" data-pp="tab" data-v="arrange">📝 축의대 내역정리</button>` : `${pr? `<div class="pp-progress"><div style="width:${pr.pct}%"></div></div><div class="pp-progress-l">업무 진행 ${pr.done}/${pr.total}</div>`:''}<button class="pw-start" data-pp="tab" data-v="work"><span>${e(te[0].callTime||'')} 출근</span><b>▶ 오늘 업무 ${pr && pr.done? '이어서 하기':'시작하기'}</b></button>`}
+      </div>`; })() : '';
+    // 다음 예식
+    const nextBox = next ? `<div class="pp-d-next" data-pp="schGo" data-rid="${e(next.recordId)}">
+        <div class="pp-d-dday"><b>${dLabel(next.date)}</b><small>${fdate(next.date)}</small></div>
+        <div class="pp-d-nx"><span>다음 예식</span><b>${e(next.venueName||'예식장 미정')}</b><small>출근 ${e(next.callTime||'-')} · 예식 ${e(next.weddingTime||'-')}${next.hallName? ' · '+e(next.hallName):''}</small>
+          <div class="pp-d-team">${(next.team||[]).map(m=>`<i style="background:${e(m.color)}" title="${e(m.name)}">${e(String(m.name||'').slice(-2))}</i>`).join('')}${next.pinned? '<em class="ok">📌 지정</em>' : next.confirmed? '<em class="ok">확정</em>' : '<em class="bad">확정 대기</em>'}</div></div>
+        <span class="pp-d-go">›</span></div>` : `<div class="pp-d-next empty"><div class="pp-d-nx"><span>다음 예식</span><b>아직 배정된 예식이 없어요</b><small>배정되면 여기에 가장 먼저 보여요</small></div></div>`;
+    // 앞으로 7일
+    let week = '';
+    for(let i=0;i<7;i++){
+      const d = addDays(t, i), dd = parseD(d), evs = act.filter(ev=> ev.date===d), off = av[d];
+      week += `<div class="pp-d-day ${i===0?'now':''} ${evs.length?'has':''} ${dd.getDay()===0?'sun':dd.getDay()===6?'sat':''}" ${evs.length? `data-pp="schGo" data-rid="${e(evs[0].recordId)}"`:''}><small>${WD[dd.getDay()]}</small><b>${dd.getDate()}</b>${evs.length? `<i>${evs.length>1? evs.length+'건' : e(evs[0].callTime||'')}</i>` : off? `<i class="off">${off.type==='off'?'휴무':off.type==='am'?'오전':'오후'}</i>` : '<i class="none">·</i>'}</div>`;
+    }
     return `
-      <div class="pp-hello-t">${e(view.member.name)}님, 안녕하세요 👋</div>
-      <div class="pp-hello-s">${next ? `다음 예식은 <b>${fdate(next.date)} ${e(next.callTime)} 출근</b> · ${e(next.venueName)}이에요.` : '아직 배정된 예식이 없어요. 배정되면 여기에 바로 보여요.'}</div>
+      <section class="pp-d-hero">
+        <div class="pp-d-date">${now.getMonth()+1}월 ${now.getDate()}일 ${WD[now.getDay()]}요일</div>
+        <h2>${welcomeLine()}</h2>
+        <p>${te.length? `오늘 예식 <b>${te.length}건</b> · 첫 출근 <b>${e(te[0].callTime||'-')}</b>` : next? `다음 예식 <b>${fdate(next.date)} ${e(next.callTime||'')} 출근</b> · ${e(next.venueName||'')}` : '새 배정이 생기면 알림으로 알려드릴게요'}</p>
+        <button class="pp-d-noticebtn" data-pp="dashNotice">📢 공지 · 유의사항${pinned.length? ` <i>${pinned.length}</i>`:''}</button>
+      </section>
       ${H.onInstall && !(H.isInstalled && H.isInstalled()) && !installHidden() ? `<div class="pp-install"><span>📲 <b>홈 화면에 추가</b>하면 앱처럼 바로 열려요</span><button data-pp="install">추가하기</button><button class="x" data-pp="installHide" title="닫기">✕</button></div>` : ''}
-      ${todayEvents().length? `<button class="pw-start" data-pp="tab" data-v="work"><span>오늘 예식 ${todayEvents().length}건 · ${e(todayEvents()[0].callTime)} 출근</span><b>▶ 오늘 업무 시작하기</b></button>` : `<button class="pw-learn" data-pp="tab" data-v="work">처음이신가요? <b>당일 업무 순서 미리 보기 →</b></button>`}
-      ${pending.length? `<div class="pp-alert"><span>확인이 필요한 새 배정 <b>${pending.length}건</b></span><button data-pp="pendingList">확인하기</button></div>`:''}
-      <div class="pp-stats">
-        <div class="pp-stat"><span>이번달 예식</span><b>${monthEv.length}건</b></div>
-        <div class="pp-stat"><span>이번달 근무</span><b>${hours(monthEv.reduce((s,x)=>s+x.minutes,0))}</b></div>
-        <div class="pp-stat"><span>이번달 인건비</span><b>${money(monthEv.reduce((s,x)=>s+x.pay,0))}</b></div>
+      ${pending.length? `<button class="pp-d-alert" data-pp="pendingList"><span>📩 확정이 필요한 새 배정 <b>${pending.length}건</b>${pending[0].respondBy? `<small>가장 빠른 기한 ${fmtDue(pending[0].respondBy)} · 기한이 지나면 자동 취소</small>`:''}</span><b>확정하기 ›</b></button>`:''}
+      ${multiDay? `<button class="pp-d-alert soft" data-pp="tab" data-v="route"><span>🗺 ${fdate(multiDay)} 하루 2건 이상 · 이동 동선을 확인하세요</span><b>추천 동선 ›</b></button>`:''}
+      ${todayBox}
+      ${nextBox}
+      <div class="pp-d-sec">앞으로 7일</div>
+      <div class="pp-d-week">${week}</div>
+      <div class="pp-d-sec">한눈에 보기</div>
+      <div class="pp-d-grid">
+        <button data-pp="tab" data-v="schedule"><span>예정된 예식</span><b>${act.length}<small>건</small></b><em>확정 ${act.filter(x=>x.confirmed).length} · 대기 ${act.filter(x=>!x.confirmed).length}</em></button>
+        <button data-pp="tab" data-v="schedule"><span>이번 달 예식</span><b>${monthEv.length}<small>건</small></b><em>다음 달 ${view.events.filter(ev=> ev.date.slice(0,7)===nextMon).length}건</em></button>
+        <button data-pp="tab" data-v="pay"><span>이번 달 근무</span><b>${hours(monthEv.reduce((s,x)=>s+x.minutes,0)).replace('시간','')}<small>시간</small></b><em>출근부터 최대 기준</em></button>
+        <button data-pp="tab" data-v="done"><span>완료 예식</span><b>${done.length}<small>건</small></b><em>올해 ${done.filter(x=> x.date.slice(0,4)===t.slice(0,4)).length}건</em></button>
+        <button data-pp="tab" data-v="avail"><span>등록한 휴무</span><b>${offDays.length}<small>일</small></b><em>${offDays[0]? '가까운 날 '+fdate(offDays[0]) : '휴무 신청하기'}</em></button>
+        <button data-pp="tab" data-v="confirm"><span>확정 대기</span><b class="${pending.length?'bad':''}">${pending.length}<small>건</small></b><em>${pending.length? '48시간 안에 확정' : '모두 확정했어요'}</em></button>
       </div>
-      ${next? `<div class="pp-h">다음 예식</div>${eventCard(next,true)}`:''}
-      ${pinned? `<div class="pp-h">📌 공지</div><div class="pp-notice pin"><h4>${e(pinned.title)}</h4><p>${e(pinned.body)}</p></div>`:''}
-      ${up.length>1? `<div class="pp-h">이후 일정 <small>${up.length-1}건</small></div>${up.slice(1,4).map(ev=>eventCard(ev,false)).join('')}${up.length>4?`<button class="pp-btn" style="width:100%" data-pp="tab" data-v="schedule">전체 일정 보기</button>`:''}`:''}`;
+      <button class="pp-d-pay" data-pp="tab" data-v="pay">
+        <div class="h"><span>💳 ${now.getMonth()+1}월 인건비</span><b>${money(monthPay)}</b></div>
+        <div class="bar"><i style="width:${monthPay? Math.round(monthPaid/monthPay*100) : 0}%"></i></div>
+        <div class="f"><span>지급 완료 ${money(monthPaid)}</span><span>지급 예정 ${money(monthPay-monthPaid)}</span></div>
+      </button>
+      <div class="pp-d-sec">공지 <button class="pp-d-link" data-pp="tab" data-v="notice">전체 ›</button></div>
+      ${latest.length? `<div class="pp-d-notices">${latest.map(n=>`<button data-pp="dashNotice"><b>${n.pinned?'<em>고정</em>':''}${e(n.title)}</b><small>${e(String(n.body||'').slice(0,60))}${String(n.body||'').length>60?'…':''}</small></button>`).join('')}</div>` : '<div class="pp-empty" style="padding:16px;">등록된 공지가 없어요</div>'}
+      <div class="pp-d-quick">
+        <button data-pp="tab" data-v="schedule">📋<span>내 예식정보</span></button>
+        <button data-pp="tab" data-v="done">✔<span>완료 예식</span></button>
+        <button data-pp="tab" data-v="arrange">📝<span>내역정리</span></button>
+        <button data-pp="tab" data-v="avail">🗓<span>휴무 신청</span></button>
+      </div>`;
   }
 
   let schedFilter = null;
@@ -2136,34 +2454,116 @@ const PartnerPortal = (function(){
         ${ev.pinned ? `<span class="pp-cf-btn pin" title="대표가 지정한 배정이라 자동으로 확정됐어요">📌 지정</span>` : ev.confirmed ? `<button class="pp-cf-btn ok" data-pp="unconfirm" data-rid="${e(ev.recordId)}" title="누르면 확정 취소">✓ 확정</button>` : `<span class="pp-cf-acts"><button class="pp-cf-btn" data-pp="confirm" data-rid="${e(ev.recordId)}">확정</button><button class="pp-cf-btn no" data-pp="decline" data-rid="${e(ev.recordId)}" title="이 일정은 근무할 수 없어요">진행불가</button></span>`}
         <button class="pp-cf-map" data-pp="map" data-rid="${e(ev.recordId)}" title="네이버지도로 예식장 위치 보기" aria-label="네이버지도">🗺️<small>지도</small></button>
         <span class="pp-cf-caret">${open?'▴':'▾'}</span>
-      </div>${!ev.confirmed && ev.respondBy ? (()=>{ const d = new Date(ev.respondBy), left = d.getTime()-Date.now(); return `<div class="pp-cf-due ${left<6*3600000?'soon':''}">⏰ <b>${pd(d.getMonth()+1)}/${pd(d.getDate())} ${pd(d.getHours())}:${pd(d.getMinutes())}</b>까지 확정 또는 진행불가를 눌러주세요 · 응답이 없으면 다음 순위 파트너에게 넘어가요</div>`; })() : ''}${open? `<div class="pp-cf-detail">${eventCard(ev,true)}</div>`:''}</div>`;
+      </div>${!ev.confirmed && ev.respondBy ? (()=>{ const d = new Date(ev.respondBy), left = d.getTime()-Date.now(); return `<div class="pp-cf-due ${left<6*3600000?'soon':''}">⏰ <b>${pd(d.getMonth()+1)}/${pd(d.getDate())} ${pd(d.getHours())}:${pd(d.getMinutes())}</b>까지 확정해주세요 · <b>기한이 지나면 이 배정은 자동 취소</b>되고 다른 파트너에게 넘어가요</div>`; })() : ''}${open? `<div class="pp-cf-detail">${eventCard(ev,true)}</div>`:''}</div>`;
     };
-    return `${smartCal('cfday', cfDay)}
+    const dueCnt = pend.filter(ev=> ev.respondBy).length;
+    return `${dueCnt? `<div class="pp-cf-warn">⚠️ <b>신규 배정 ${dueCnt}건</b> · 내용을 확인한 뒤 <b>반드시 「확정」</b>을 눌러주세요.<br><b class="red">${respHours()}시간 안에 확정하지 않으면 해당 배정은 자동으로 취소</b>되고 다른 파트너에게 넘어가요. 근무가 어려우면 「진행불가」를 눌러주세요.</div>`:''}
+      ${smartCal('cfday', cfDay)}
       ${cfDay? `<div class="pp-cf-filter">${fdate(cfDay,true)} 일정만 보는 중 <button class="pp-btn" data-pp="cfday" data-v="${cfDay}">전체 보기</button></div>`:''}
       <div class="pp-cfhead"><div><b>배정 확인</b> <small>확정 대기 ${pend.length}건 · 확정 ${done.length}건 · 일정을 누르면 상세내용이 펼쳐져요</small></div>${pend.length>1?`<button class="pp-btn primary" data-pp="confirmAll">모두 확정 (${pend.length})</button>`:''}</div>
       ${up.length? `${pend.length? `<div class="pp-h">확정 대기 <small>${pend.length}건</small></div><div class="pp-cflist">${pend.map(row).join('')}</div>`:'<div class="pp-empty">✅ 확정할 일정이 없어요. 모두 확정하셨어요!</div>'}
         ${done.length? `<div class="pp-h">확정 완료 <small>${done.length}건</small></div><div class="pp-cflist">${done.map(row).join('')}</div>`:''}` : '<div class="pp-empty">배정된 예정 일정이 없어요</div>'}
       <p class="pp-cf-note">자세한 내용은 「내 일정」 탭에서 볼 수 있어요.</p>`;
   }
+  /* ---------- 내 예식정보 · 완료 예식 ---------- */
+  let schOpen = {}, pendingScroll = null;
+  const tKey = ev => ev.date+' '+(ev.callTime||ev.weddingTime||'99:99');
+  const byTime = (a,b)=> tKey(a).localeCompare(tKey(b));
+  function hmMin(s){ const m=/^(\d{1,2}):(\d{2})/.exec(String(s||'')); return m ? (+m[1])*60+(+m[2]) : null; }
+  function nowMin(){ const n=new Date(); return n.getHours()*60+n.getMinutes(); }
+  // 끝난 예식: 지난 날짜 또는 오늘 종료 예상 시각이 지난 예식
+  function isDone(ev){ const t=today(); if(ev.date<t) return true; if(ev.date>t) return false; const end=hmMin(ev.endTime); return end!==null && nowMin() > end; }
+  function activeEvents(){ return view.events.filter(ev=> !isDone(ev)).sort(byTime); }
+  function doneEvents(){ return view.events.filter(isDone).sort((a,b)=> byTime(b,a)); }
+  function openEvent(rid){
+    const x = eventById(rid); if(!x) return;
+    tab = isDone(x) ? 'done' : 'schedule'; schedFilter = null; selDay = null; sheet = null;
+    schOpen[rid] = true; pendingScroll = rid; render();
+  }
+  function statusChip(ev, done){
+    if(MGR()){ const un=(ev.team||[]).filter(m=>!m.confirmed && !m.owner).length; return ev.open? `<i class="st bad">빈 자리 ${ev.open}</i>` : un? `<i class="st wait">미확정 ${un}</i>` : `<i class="st ok">배정 완료</i>`; }
+    if(done) return ev.pay ? (ev.paid? '<i class="st ok">지급완료</i>' : '<i class="st wait">지급대기</i>') : '<i class="st">완료</i>';
+    if(ev.pinned) return '<i class="st pin">📌 지정</i>';
+    return ev.confirmed ? '<i class="st ok">확정</i>' : '<i class="st bad">확정 대기</i>';
+  }
+  function detailHTML(ev, done){
+    const team = (ev.team||[]).length ? `<div class="pp-ev-sec"><h4>👥 함께하는 팀</h4><div class="pp-team">${ev.team.map(m=>`<span class="pp-mate ${m.me?'me':''}"><i style="background:${e(m.color)}"></i>${e(m.name)}${m.me?' (나)':''}${m.owner?' <small>대표</small>':((m.me? ev.confirmed : m.confirmed)? '<em class="pp-ok-badge">확정</em>':'')}${m.phone?` <a href="tel:${e(m.phone)}">📞</a>`:''}</span>`).join('')}${MGR() && ev.open? `<span class="pp-mate open">빈 자리 ${ev.open}</span>`:''}</div></div>` : (MGR()? `<div class="pp-ev-sec"><h4>👥 배정 인원</h4><div class="pp-team"><span class="pp-mate open">아직 배정 전 · 빈 자리 ${ev.open||ev.need||'-'}</span></div></div>`:'');
+    const n = diffDays(today(), ev.date);
+    const acts = [];
+    if(!done && !MGR()){
+      if(ev.pinned) acts.push('<span class="pp-confirmed">📌 대표 지정 배정 · 자동 확정</span>');
+      else if(ev.confirmed) acts.push(`<button class="pp-confirmed pp-unconfirm" data-pp="unconfirm" data-rid="${e(ev.recordId)}">✓ 배정 확인 완료<small>누르면 취소</small></button>`);
+      else acts.push(`<button class="pp-btn primary" data-pp="confirm" data-rid="${e(ev.recordId)}">배정 확정하기</button><button class="pp-btn pp-no" data-pp="decline" data-rid="${e(ev.recordId)}">진행불가</button>`);
+      if(n===0) acts.push(`<button class="pp-btn gold" data-pp="tab" data-v="work">▶ 오늘 업무</button>`);
+    }
+    acts.push(`<button class="pp-btn" data-pp="map" data-rid="${e(ev.recordId)}">📍 길찾기</button>`);
+    if(!done) acts.push(`<button class="pp-btn" data-pp="ics" data-rid="${e(ev.recordId)}">📅 캘린더</button>`);
+    return `<div class="pp-ev-detail">
+      ${!done && !ev.confirmed && ev.respondBy && !MGR() ? (()=>{ const d=new Date(ev.respondBy); return `<div class="pp-cf-due">⏰ <b>${pd(d.getMonth()+1)}/${pd(d.getDate())} ${pd(d.getHours())}:${pd(d.getMinutes())}</b>까지 확정해주세요 · <b>기한이 지나면 이 배정은 자동 취소</b>돼요</div>`; })() : ''}
+      <div class="pp-timeline">
+        <div><span>출근</span><b>${e(ev.callTime||'-')}</b></div><i></i>
+        <div><span>예식</span><b>${e(ev.weddingTime||'-')}</b></div><i></i>
+        <div><span>종료 예상</span><b>${e(ev.endTime||'-')}</b></div>
+      </div>
+      <div class="pp-meta">
+        <div><span>계약자</span>${e(ev.clientName||'-')}${ev.region?` <small style="color:var(--pp-slate)">· ${e(ev.region)}</small>`:''}</div>
+        <div><span>패키지</span>축의대 ${e(ev.productType||'-')}</div>
+        <div><span>예상 하객</span>신랑측 ${ev.groomGuests}명 · 신부측 ${ev.brideGuests}명</div>
+        <div><span>운영 설정서</span>${ev.settingsSubmitted?'<b class="ok">제출완료</b>':'<b class="wait">제출 대기</b>'}</div>
+        ${MGR()? '' : `<div><span>근무 · 인건비</span>최대 ${hours(ev.minutes)}${ev.pay? ' · '+money(ev.pay)+(ev.paid?' <b class="ok">지급완료</b>':''):''}${allowanceText(ev)}</div>`}
+      </div>
+      ${ev.note? `<div class="pp-note">📌 ${e(ev.note)}</div>`:''}
+      ${team}
+      ${contactsHTML(ev)}
+      ${ev.info ? infoHTML(ev, true) : infoHTML(ev, false)}
+      <div class="pp-card-actions">${acts.join('')}</div>
+    </div>`;
+  }
+  function evRow(ev, done){
+    const d = parseD(ev.date), dow = d.getDay(), open = !!schOpen[ev.recordId];
+    const n = diffDays(today(), ev.date);
+    return `<div class="pp-evi ${open?'open':''} ${n===0&&!done?'today':''}" id="ev-${e(ev.recordId)}">
+      <button class="pp-ev-row" data-pp="schx" data-rid="${e(ev.recordId)}" aria-expanded="${open}">
+        <span class="pp-ev-date"><b>${pd(d.getMonth()+1)}.${pd(d.getDate())}</b><small class="${dow===0?'sun':dow===6?'sat':''}">${WD[dow]}</small></span>
+        <span class="pp-ev-main"><b>${e(ev.venueName||'예식장 미정')}</b><small>${done? '' : `<em class="dd">${dLabel(ev.date)}</em> `}출근 ${e(ev.callTime||'-')} · 예식 ${e(ev.weddingTime||'-')}${ev.hallName? ' · '+e(ev.hallName):''}</small></span>
+        ${NEWMAP[ev.recordId]? `<span class="pp-newtag ${NEWMAP[ev.recordId]}">${NEWMAP[ev.recordId]==='new'?'NEW':'변경'}</span>`:''}
+        ${statusChip(ev, done)}
+        <span class="pp-ev-caret">${open?'▴':'▾'}</span>
+      </button>
+      ${open? detailHTML(ev, done) : ''}
+    </div>`;
+  }
+  function monthGroups(list, done){
+    let out = '', last = '';
+    list.forEach(ev=>{ const mk = ev.date.slice(0,7); if(mk!==last){ last = mk; const cnt = list.filter(x=> x.date.slice(0,7)===mk).length; out += `<div class="pp-ev-month">${monthLabel(mk)} <small>${cnt}건</small></div>`; } out += evRow(ev, done); });
+    return out;
+  }
   function scheduleHTML(){
     if(schedFilter==='pending'){
-      const pend = upcoming().filter(ev=>!ev.confirmed).sort((a,b)=> a.date<b.date?-1:a.date>b.date?1:0);
-      return `<div class="pp-pendhead"><div><b>배정 확인이 필요한 일정</b> <small>${pend.length}건</small></div><button class="pp-btn" data-pp="allList">전체 일정 보기</button></div>
+      const pend = upcoming().filter(ev=>!ev.confirmed).sort(byTime);
+      return `<div class="pp-pendhead"><div><b>배정 확인이 필요한 일정</b> <small>${pend.length}건</small></div><button class="pp-btn" data-pp="allList">전체 보기</button></div>
         ${pend.length ? pend.map(ev=>eventCard(ev,true)).join('') : '<div class="pp-empty">✅ 확인이 필요한 일정이 없어요. 모두 확인하셨어요!</div>'}`;
     }
-    if(!calCursor) calCursor = today().slice(0,7);
-    const byDate={}; view.events.forEach(ev=>{ (byDate[ev.date]=byDate[ev.date]||[]).push(ev); });
-    const av=view.availability||{}, t=today();
-    const up=upcoming(), past=pastEvents();
-    const dayEvs = selDay ? (byDate[selDay]||[]) : [];
-    let groups='', lastMonth='';
-    up.forEach(ev=>{ const mk=ev.date.slice(0,7); if(mk!==lastMonth){ groups+=`<div class="pp-h">${monthLabel(mk)} <small>${up.filter(x=>x.date.slice(0,7)===mk).length}건</small></div>`; lastMonth=mk; } groups+=eventCard(ev,true); });
-    return `
-      ${smartCal('day', selDay)}
-      ${selDay ? `<div class="pp-h">${fdate(selDay,true)}</div>${dayEvs.length? dayEvs.map(ev=>eventCard(ev,true)).join('') : '<div class="pp-empty">이 날은 배정된 예식이 없어요</div>'}`:''}
-      <div class="pp-h">다가오는 일정 <button class="pp-btn" data-pp="icsAll">📅 전체 캘린더에 추가</button></div>
-      ${up.length? groups : '<div class="pp-empty">다가오는 배정이 없어요</div>'}
-      ${past.length? `<details class="pp-past"><summary>지난 근무 ${past.length}건 보기</summary>${past.map(ev=>eventCard(ev,false)).join('')}</details>`:''}`;
+    const list = activeEvents();
+    const conf = list.filter(ev=> ev.confirmed).length;
+    return `<div class="pp-ev-head"><div><b>${MGR()? '전체 예식정보' : '내 예식정보'}</b> <small>예정 ${list.length}건${MGR()? '' : ` · 확정 ${conf} · 확정 대기 ${list.length-conf}`} · 시간 순서</small></div>${!MGR() && list.length? '<button class="pp-btn" data-pp="icsAll">📅 캘린더에 추가</button>':''}</div>
+      <p class="pp-ev-tip">예식을 누르면 <b>축의대 설정서 전체 내용</b>(예식 정보 · 하객 안내 · 현장 연락처 · 식권 · 축의금 인계 등)이 펼쳐져요.</p>
+      ${list.length? `<div class="pp-ev-list">${monthGroups(list, false)}</div>` : '<div class="pp-empty">다가오는 예식이 없어요. 배정되면 여기에 시간 순서대로 보여요.</div>'}
+      ${doneEvents().length? `<button class="pp-btn pp-ev-more" data-pp="tab" data-v="done">✔ 완료 예식 ${doneEvents().length}건 보기</button>`:''}`;
+  }
+  function doneHTML(){
+    const list = doneEvents();
+    if(!list.length) return '<div class="pp-ev-head"><div><b>완료 예식</b></div></div><div class="pp-empty">아직 완료된 예식이 없어요. 예식이 끝나면 이곳으로 자동으로 옮겨져요.</div>';
+    const y = today().slice(0,4), thisYear = list.filter(ev=> ev.date.slice(0,4)===y);
+    const pay = list.reduce((s,x)=> s+(x.pay||0), 0), unpaid = list.filter(x=> x.pay && !x.paid).reduce((s,x)=> s+x.pay, 0);
+    return `<div class="pp-ev-head"><div><b>완료 예식</b> <small>끝난 예식은 자동으로 이곳에 모여요 · 최근 순</small></div></div>
+      <div class="pp-stats">
+        <div class="pp-stat"><span>누적 완료</span><b>${list.length}건</b></div>
+        <div class="pp-stat"><span>${y}년</span><b>${thisYear.length}건</b></div>
+        <div class="pp-stat"><span>${MGR()? '이번 달' : '누적 근무'}</span><b>${MGR()? list.filter(ev=>ev.date.slice(0,7)===today().slice(0,7)).length+'건' : hours(list.reduce((s,x)=>s+x.minutes,0))}</b></div>
+      </div>
+      ${MGR()? '' : `<div class="pp-stats" style="grid-template-columns:repeat(2,1fr);"><div class="pp-stat"><span>누적 인건비</span><b>${money(pay)}</b></div><div class="pp-stat"><span>지급 대기</span><b style="color:${unpaid?'var(--pp-wine)':'var(--pp-sage)'}">${money(unpaid)}</b></div></div>`}
+      <div class="pp-ev-list">${monthGroups(list, true)}</div>`;
   }
 
   function payHTML(){
@@ -2259,7 +2659,7 @@ const PartnerPortal = (function(){
     computeNew();
     if(H.onCache){ try{ H.onCache(view); }catch(e){} }
     const pendingCount = upcoming().filter(ev=>!ev.confirmed).length;
-    const body = tab==='home'?homeHTML(): tab==='work'?workHTML(): tab==='schedule'?scheduleHTML(): tab==='confirm'?confirmHTML(): tab==='info'?infoPageHTML(): tab==='arrange'?arrangeHTML(): tab==='route'?routeHTML(): tab==='pay'?payHTML(): tab==='avail'?availHTML(): noticeHTML();
+    const body = tab==='home'?homeHTML(): tab==='work'?workHTML(): tab==='schedule'?scheduleHTML(): tab==='confirm'?confirmHTML(): tab==='done'?doneHTML(): tab==='arrange'?arrangeHTML(): tab==='route'?routeHTML(): tab==='pay'?payHTML(): tab==='avail'?availHTML(): noticeHTML();
     const updated = view.generatedAt ? new Date(view.generatedAt) : new Date();
     // 상단 메뉴바의 가로 스크롤 위치를 기억 → 다시 그린 뒤 그대로 복원 (뒤쪽 메뉴를 눌러도 앞으로 돌아가지 않게)
     const oldNav = root.querySelector('.pp-tabs');
@@ -2286,7 +2686,9 @@ const PartnerPortal = (function(){
       ${sheetHTML()}
       ${H.onInstall && !(H.isInstalled && H.isInstalled()) ? '<div style="text-align:center;margin-top:18px;"><button class="pp-install-link" data-pp="install">📲 홈 화면에 바로가기 추가</button></div>' : ''}
       <div class="pp-foot">${typeof MW_LOGO_MARK!=='undefined' ? `<img src="${MW_LOGO_MARK}" alt="">` : ''}<b>MOMENT WORKS</b>마지막 업데이트 ${pd(updated.getMonth()+1)}.${pd(updated.getDate())} ${pd(updated.getHours())}:${pd(updated.getMinutes())} · 모먼트웍스 파트너스오피스</div>
-    </div>`;    const nav = root.querySelector('.pp-tabs');
+    </div>`;    setTimeout(checkPopup, 0);
+    if(pendingScroll){ const id = pendingScroll; pendingScroll = null; setTimeout(()=>{ const el = document.getElementById('ev-'+id); if(el) el.scrollIntoView({block:'start', behavior:'smooth'}); }, 30); }
+    const nav = root.querySelector('.pp-tabs');
     if(nav){
       nav.scrollLeft = navScroll;
       // 선택된 메뉴가 화면 밖에 있을 때만 보이도록 살짝 이동 (그 외에는 위치 그대로)
@@ -2326,7 +2728,9 @@ const PartnerPortal = (function(){
     }
     if(act==='routeReload'){ routeData=null; routeErr=''; loadRoutes(true); return; }
     if(act==='routeMore'){ routeMonths++; routeErr=''; render(); return; }
-    if(act==='mgOpen'){ const x = eventById(rid); if(x){ selRecord = rid; tab = 'schedule'; schedFilter = null; selDay = x.date; render(); window.scrollTo(0,0); } return; }
+    if(act==='mgOpen' || act==='schGo'){ openEvent(rid); return; }
+    if(act==='schx'){ schOpen[rid] = !schOpen[rid]; render(); return; }
+    if(act==='dashNotice'){ showNoticePopup(true); return; }
     if(act==='cfx'){ cfOpen[rid] = !cfOpen[rid]; render(); return; }
     if(act==='cfday'){ cfDay = (cfDay===v)? null : v; render(); return; }
     if(act==='arrCopy' || act==='arrGo'){
@@ -2446,7 +2850,7 @@ const PartnerPortal = (function(){
     if(act==='map'){ const x=eventById(rid); if(x) openMap(x); return; }
     if(act==='ics'){ const x=eventById(rid); if(x) downloadIcs([x], 'momentworks-'+x.date+'.ics'); return; }
     if(act==='seenAll'){ markSeen(); render(); return; }
-    if(act==='newgo'){ const x=eventById(rid); if(x){ tab='schedule'; calCursor=x.date.slice(0,7); selDay=x.date; } render(); return; }
+    if(act==='newgo'){ openEvent(rid); return; }
     if(act==='icsAll'){ downloadIcs(upcoming(), 'momentworks-schedule.ics'); return; }
     if(act==='cal'){ calCursor=shiftMonth(calCursor, Number(v)); render(); return; }
     if(act==='acal'){ availCursor=shiftMonth(availCursor, Number(v)); render(); return; }
@@ -2492,7 +2896,7 @@ const PartnerPortal = (function(){
     render();
   }
   function update(v){ view=v; reapply(); if(sheet && sheet.mode==='photo') return; softRender(); }
-  function unmount(){ if(root){ root.removeEventListener('click', onClick); root.removeEventListener('change', onChange); root.removeEventListener('input', onInput); root.innerHTML=''; } root=null; view=null; }
+  function unmount(){ const pb = document.getElementById('ppNewPop'); if(pb) pb.remove(); const np = document.getElementById('ppNoticePop'); if(np) np.remove(); if(root){ root.removeEventListener('click', onClick); root.removeEventListener('change', onChange); root.removeEventListener('input', onInput); root.innerHTML=''; } root=null; view=null; }
   return {mount, update, unmount, toast, buildIcs};
 })();
 
