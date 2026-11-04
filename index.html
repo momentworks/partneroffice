@@ -629,6 +629,7 @@ body.pp-cam-on{overflow:hidden}
 .pp-cam-shutter:active i{transform:scale(.9)}
 .pp-cam-done{width:64px;border:0;background:#FFD86B;color:#111;border-radius:999px;padding:9px 0;font-weight:800;font-size:12.5px;cursor:pointer;font-family:inherit}
 .pp-cam-bottom p{text-align:center;font-size:11.5px;color:#ddd;margin:10px 0 0}
+.pp-all-past{margin-top:12px}.pp-all-past summary{cursor:pointer;font-size:13px;font-weight:800;padding:10px 4px;color:var(--pp-ink,#241F22)}
 /* ===== 대시보드 ===== */
 .pp-ev-list,.pp-ev-detail,.pp-ev-head,.pp-ev-tip,.pp-ev-row,.pp-d-next,.pp-d-today,.pp-d-grid button,.pp-d-day,.pp-d-pay,.pp-d-notices button,.pp-d-quick button,.pp-d-sec{color:var(--pp-ink,#241F22)}
 .pp-ev-detail .pp-meta>div{color:var(--pp-ink,#241F22)}
@@ -1021,12 +1022,21 @@ function buildPartnerView(records, db, code, todayStr){
     return String(y.createdAt||'').localeCompare(String(x.createdAt||''));
   });
 
+  // 대표 계정: 본인 일정과 별도로 전체 일정(미배정 포함)을 함께 보냄 → 파트너스오피스 맨 끝 「전체 일정」 메뉴
+  var allEvents = null;
+  if(!member.allView && (member.kind==='owner' || member.title==='대표')){
+    var db2 = {}; Object.keys(db).forEach(function(k){ db2[k] = db[k]; });
+    db2.members = members.map(function(m){ if(m.id!==member.id) return m; var c = {}; Object.keys(m).forEach(function(k){ c[k] = m[k]; }); c.allView = true; return c; });
+    var v2 = buildPartnerView(records, db2, code, todayStr);
+    if(v2 && v2.ok) allEvents = v2.events;
+  }
   return {
     ok: true,
     v: 8, // 7 이상: 여러 건 한 번에 저장(ops) 지원 · 8: 식권 실수량(대인·소인) 양식
     today: todayStr || '',
     member: {id: member.id, name: member.name, title: member.title||'', color: member.color||'#7A2E3A', kind: member.kind||'partner', allView: !!member.allView},
     events: events,
+    allEvents: allEvents,
     notices: notices,
     template: db.template || [],
     workflow: (db.settings && Array.isArray(db.settings.workflow) && db.settings.workflow.length) ? db.settings.workflow : pvDefaultWorkflow(),
@@ -1307,7 +1317,9 @@ function buildCustomerView(records, db, code, todayStr, withFile){
       settled: !!r.settlementDone},
     live: (function(){
       var base = String(s.giftBaseUrl || 'https://momentworks.github.io/arrange/').trim();
-      var code = String((side && side.giftCode) || client.giftCode || '').trim();
+      var arrV = ((rp['arrange:' + recordId] || {}).viewers) || {};   // 예식 10일 전 자동 생성된 현황판 코드
+      var arrCode = sideKey ? arrV[sideKey] : (arrV[client.mainSide] || arrV.groom || arrV.bride);
+      var code = String((side && side.giftCode) || client.giftCode || arrCode || '').trim();
       var custom = String((side && side.giftUrl) || client.giftUrl || '').trim();
       var url = code ? base.split('#')[0] + '#code=' + encodeURIComponent(code) : (custom || base);
       var yg = String(client.youtubeGroom||'').trim(), yb = String(client.youtubeBride||'').trim(), streams = [];
@@ -1543,9 +1555,10 @@ const PartnerPortal = (function(){
 
   const pd = n => String(n).padStart(2,'0');
   // 전체 일정 관리자 계정 (보기 전용)
-  const MGR = () => !!(view && view.member && view.member.allView);
+  let allMode = false; // 대표 계정의 「전체 일정」 화면을 그리는 동안 true (보기 전용 표시)
+  const MGR = () => allMode || !!(view && view.member && view.member.allView);
   const MGR_TABS = [['home','홈'],['schedule','전체 일정'],['done','완료 예식'],['arrange','축의대 내역정리'],['notice','공지']];
-  const tabsNow = () => MGR() ? MGR_TABS : TABS;
+  const tabsNow = () => (view && view.member && view.member.allView) ? MGR_TABS : (view && Array.isArray(view.allEvents) ? TABS.concat([['all','전체 일정']]) : TABS);
   const e = s => (s===undefined||s===null) ? '' : String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const money = n => (Number(n)||0).toLocaleString('ko-KR')+'원';
   const dstr = dt => dt.getFullYear()+'-'+pd(dt.getMonth()+1)+'-'+pd(dt.getDate());
@@ -1566,7 +1579,7 @@ const PartnerPortal = (function(){
     const w = Number((view && view.settings && view.settings.workMinutes)||180);
     return `근무 예상시간은 출근 시간부터 최대 ${Math.round(w/6)/10}시간이며, 예식 진행 상황에 따라 달라질 수 있어요.`;
   }
-  function eventById(id){ return view.events.find(ev=>ev.recordId===id); }
+  function eventById(id){ return view.events.find(ev=>ev.recordId===id) || (view.allEvents||[]).find(ev=>ev.recordId===id); }
   function toast(msg){
     let t=document.getElementById('ppToast');
     if(!t){ t=document.createElement('div'); t.id='ppToast'; t.className='pp-toast'; document.body.appendChild(t); }
@@ -2650,6 +2663,23 @@ const PartnerPortal = (function(){
       ${list.length? `<div class="pp-ev-list">${monthGroups(list, false)}</div>` : '<div class="pp-empty">다가오는 예식이 없어요. 배정되면 여기에 시간 순서대로 보여요.</div>'}
       ${doneEvents().length? `<button class="pp-btn pp-ev-more" data-pp="tab" data-v="done">✔ 완료 예식 ${doneEvents().length}건 보기</button>`:''}`;
   }
+  /* 대표 계정 전용: 전체 일정 (모든 예식 · 배정 현황 · 보기 전용) */
+  function allHTML(){
+    const mine = view.events; allMode = true; view.events = view.allEvents || [];
+    try{
+      const act = activeEvents(), past = doneEvents();
+      const openN = act.filter(ev=> ev.open>0).length, unconf = act.reduce((n,ev)=> n + (ev.team||[]).filter(m=> !m.confirmed && !m.owner).length, 0);
+      return `<div class="pp-ev-head"><div><b>전체 일정</b> <small>대표 전용 · 모든 예식의 배정 현황 · 시간 순서</small></div></div>
+        <div class="pp-stats">
+          <div class="pp-stat"><span>예정 예식</span><b>${act.length}건</b></div>
+          <div class="pp-stat"><span>빈 자리 있는 예식</span><b class="${openN?'bad':''}">${openN}건</b></div>
+          <div class="pp-stat"><span>미확정 인원</span><b>${unconf}명</b></div>
+        </div>
+        <p class="pp-ev-tip">예식을 누르면 배정 인원 · 확정 여부 · 연락처와 <b>축의대 설정서 전체 내용</b>이 펼쳐져요. 배정 변경은 통합관리시스템에서 해주세요.</p>
+        ${act.length? `<div class="pp-ev-list">${monthGroups(act, false)}</div>` : '<div class="pp-empty">예정된 예식이 없어요</div>'}
+        ${past.length? `<details class="pp-all-past"><summary>지난 예식 ${Math.min(past.length, 60)}건 보기</summary><div class="pp-ev-list">${monthGroups(past.slice(0,60), true)}</div></details>`:''}`;
+    } finally { view.events = mine; allMode = false; }
+  }
   function doneHTML(){
     const list = doneEvents();
     if(!list.length) return '<div class="pp-ev-head"><div><b>완료 예식</b></div></div><div class="pp-empty">아직 완료된 예식이 없어요. 예식이 끝나면 이곳으로 자동으로 옮겨져요.</div>';
@@ -2758,7 +2788,7 @@ const PartnerPortal = (function(){
     computeNew();
     if(H.onCache){ try{ H.onCache(view); }catch(e){} }
     const pendingCount = upcoming().filter(ev=>!ev.confirmed).length;
-    const body = tab==='home'?homeHTML(): tab==='work'?workHTML(): tab==='schedule'?scheduleHTML(): tab==='confirm'?confirmHTML(): tab==='done'?doneHTML(): tab==='arrange'?arrangeHTML(): tab==='route'?routeHTML(): tab==='pay'?payHTML(): tab==='avail'?availHTML(): noticeHTML();
+    const body = tab==='home'?homeHTML(): tab==='work'?workHTML(): tab==='schedule'?scheduleHTML(): tab==='confirm'?confirmHTML(): tab==='done'?doneHTML(): tab==='all'?allHTML(): tab==='arrange'?arrangeHTML(): tab==='route'?routeHTML(): tab==='pay'?payHTML(): tab==='avail'?availHTML(): noticeHTML();
     const updated = view.generatedAt ? new Date(view.generatedAt) : new Date();
     // 상단 메뉴바의 가로 스크롤 위치를 기억 → 다시 그린 뒤 그대로 복원 (뒤쪽 메뉴를 눌러도 앞으로 돌아가지 않게)
     const oldNav = root.querySelector('.pp-tabs');
