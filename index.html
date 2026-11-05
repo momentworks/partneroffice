@@ -1203,7 +1203,7 @@ function applyPartnerUpdate(db, records, code, op, todayStr){
 ========================================================= */
 function guideNormalize(input){
   var FIELDS = [
-    ['parking','주차 등록 · 무료 주차',['주차정산','주차','주차안내','주차등록','주차권']],
+    ['parking','주차 정산',['주차정산','주차','주차안내','주차등록','주차권']],
     ['atm','ATM 위치',['info_atm','atm위치','atm','현금인출기','atm기','atm안내']],
     ['banquet','연회장 위치',['info_hall','연회장위치','연회장','식당위치','식당','피로연장','식사장소']],
     ['bridalRoom','신부대기실 위치',['info_bride_room','신부대기실','신부대기실위치','신부대기실안내','대기실']],
@@ -1346,6 +1346,25 @@ function applySettingsGuide(records, db, payload, trusted){
     rows.push({key: String(k), label: LAB[k] || String(k).replace(/_/g,' ').trim(), value: v});
   });
   if(rows.length){ db.referralPay['card:'+hit.id] = {rows: rows.slice(0,200), updatedAt: new Date().toISOString()}; }
+  // 양측 · 통합: 설정서의 신랑 · 신부 성함 · 연락처 → 고객페이지 「접속코드 2개 운영」 카드 (직접 고친 칸은 그대로 둠)
+  if(hit.productType==='양측' || hit.productType==='통합'){
+    var ck = 'client:'+hit.id, cl = db.referralPay[ck];
+    if(cl && typeof cl==='object'){
+      var fmtPh = function(x){ var d = String(x||'').replace(/\D/g,''); return /^01\d{8,9}$/.test(d) ? d.replace(/^(\d{3})(\d{3,4})(\d{4})$/, '$1-$2-$3') : ''; };
+      var nmC = function(x){ return String(x||'').replace(/[^가-힣a-zA-Z\s]/g,'').trim().slice(0,20); };
+      var info = {groom: {name: nmC(payload.groom_name) || db.referralPay[k].groomName, phone: fmtPh(payload.groom_phone)}, bride: {name: nmC(payload.bride_name) || db.referralPay[k].brideName, phone: fmtPh(payload.bride_phone)}};
+      var sides = {}; Object.keys(cl.sides||{}).forEach(function(s2){ sides[s2] = cl.sides[s2]; });
+      var touched = false;
+      ['groom','bride'].forEach(function(sk){
+        var sd = {}; Object.keys(sides[sk]||{}).forEach(function(q){ sd[q] = sides[sk][q]; });
+        var ch = false;
+        if(info[sk].name && (!sd.name || sd.nameAuto) && sd.name!==info[sk].name){ sd.name = info[sk].name; sd.nameAuto = true; ch = true; }
+        if(info[sk].phone && (!sd.phone || sd.phoneAuto) && sd.phone!==info[sk].phone){ sd.phone = info[sk].phone; sd.phoneAuto = true; ch = true; }
+        if(ch){ sides[sk] = sd; touched = true; }
+      });
+      if(touched){ var c2 = {}; Object.keys(cl).forEach(function(q){ c2[q] = cl[q]; }); c2.sides = sides; c2.updatedAt = new Date().toISOString(); db.referralPay[ck] = c2; }
+    }
+  }
   return {ok:true, db:db, recordId: hit.id, contractCode: hit.contractCode||'', items: Object.keys(g.items).length};
 }
 
@@ -1419,7 +1438,9 @@ function buildCustomerView(records, db, code, todayStr, withFile){
   return {
     ok: true, v: 1,
     today: today,
-    client: {name: (side && side.name) || r.clientName||'', contractName: r.clientName||'', code: myCode, side: sideKey, sideLabel: sideKey==='groom' ? '신랑측' : sideKey==='bride' ? '신부측' : ''},
+    // 고객 전용페이지: 접속코드 2개 운영이어도 '신랑 · 신부' 표시 없이 'ㅇㅇㅇ님' (이름만)
+    client: {name: (function(){ var gd = rp['guide:'+recordId] || {}; var nn = (side && side.name) || (sideKey==='groom' ? gd.groomName : sideKey==='bride' ? gd.brideName : '') || r.clientName || '';
+      return String(nn).replace(/\s+(신랑|신부)(측)?\s*(님)?\s*$/, '').replace(/\s*님$/, '').trim() || String(r.clientName||''); })(), contractName: r.clientName||'', code: myCode, side: sideKey, sideLabel: ''},
     wedding: {date: r.weddingDate||'', time: r.weddingTime||'', venue: r.venueName||'', hall: r.hallName||'', region: r.region||'',
       product: r.productType||'', groomGuests: n(r.groomGuests), brideGuests: n(r.brideGuests), settingsSubmitted: !!r.settingsSubmitted},
     contract: {date: r.contractDate||'', code: myCode, hasFile: !!String(client.contractUrl||'').trim(),
