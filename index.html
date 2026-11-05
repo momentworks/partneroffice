@@ -644,6 +644,47 @@ body.pp-cam-on{overflow:hidden}
 .pp-den{border:1px solid #EADFC9;background:#FFFBF2;border-radius:10px;padding:9px 10px;margin-top:8px;color:var(--pp-ink,#241F22)}.pp-den b{font-size:13px}.pp-den small{display:block;font-size:11.5px;color:#8A7F78}.pp-den-in{display:flex;gap:10px;margin-top:6px;flex-wrap:wrap}.pp-den-in label{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700}.pp-den-in input{width:76px;border:1px solid #E5DBD2;border-radius:8px;padding:7px 8px;font:inherit;font-size:15px;text-align:right;color:var(--pp-ink,#241F22);background:#fff}.pp-den-msg{font-size:12.5px;font-weight:700;margin-top:6px;color:#8A7F78}.pp-den-msg.ok{color:#2F7D57}.pp-den-msg.bad{color:#B71C1C}.pp-day-acts.locked .pp-btn{opacity:.4}
 .pp-asg-row{display:grid;grid-template-columns:64px 1fr auto;gap:6px 8px;align-items:center;padding:7px 0;border-top:1px dashed #EFE6DD}.pp-asg-row:first-of-type{border-top:0}.pp-asg-pos{font-size:12.5px;font-weight:800;color:var(--pp-ink,#241F22)}.pp-asg-row select{width:100%;min-width:0;border:1px solid #E5DBD2;border-radius:9px;padding:8px;font:inherit;font-size:13.5px;background:#fff;color:var(--pp-ink,#241F22)}.pp-asg-st{font-size:11.5px;font-weight:800;border-radius:999px;padding:3px 8px;white-space:nowrap}.pp-asg-st.ok{background:#E3F1E9;color:#2F7D57}.pp-asg-st.wait{background:#FFF1D6;color:#9A5B13}.pp-asg-st.none{background:#F4EEE8;color:#8A7F78}.pp-asg-warn{grid-column:2/4;font-size:11.5px;color:#B04A2E;font-weight:700}.pp-asg-tip{font-size:11.5px;color:#8A7F78;margin:6px 0 0}
 .pw-close-acts.locked .pw-kakao-btn,.pw-close-acts.locked .pp-btn{opacity:.4}
+.pp-paylock{text-align:center;padding:48px 20px;color:var(--pp-ink,#241F22)}.pp-paylock-ic{font-size:40px}.pp-paylock b{display:block;font-size:16px;margin:10px 0 6px}.pp-paylock p{font-size:13px;color:#8A7F78;margin:0 0 16px}
+.pp-pinsheet .pp-pin{width:100%;box-sizing:border-box;border:1px solid #E5DBD2;border-radius:12px;padding:13px 14px;font:inherit;font-size:20px;letter-spacing:8px;text-align:center;margin-top:10px;color:var(--pp-ink,#241F22);background:#fff}.pp-pin-msg{min-height:18px;font-size:12.5px;font-weight:700;color:#B71C1C;margin:8px 0 4px;text-align:center}.pp-pin-go{width:100%;padding:13px;font-size:15px}.pp-pin-help{font-size:12px;color:#8A7F78;text-align:center;margin:10px 0 0}
+.pp-wx{margin:12px 0 4px;border-radius:16px;padding:12px 14px;background:linear-gradient(135deg,#EAF3FB,#F7F2EA);border:1px solid #E1E8EF;color:var(--pp-ink,#241F22)}.pp-wx.empty{display:flex;flex-direction:column;gap:6px;align-items:flex-start}.pp-wx.empty small{font-size:11.5px;color:#7C8A96}
+.pp-wx-go{border:0;background:#fff;border-radius:999px;padding:8px 14px;font:inherit;font-size:13px;font-weight:800;color:#2C5C86;box-shadow:0 1px 3px rgba(0,0,0,.08);cursor:pointer}.pp-wx-wait{font-size:13px;font-weight:700;color:#2C5C86}
+.pp-wx-main{display:flex;align-items:center;gap:10px}.pp-wx-ic{font-size:34px;line-height:1}.pp-wx-main>b{font-size:34px;font-weight:900;letter-spacing:-1px}.pp-wx-tx{display:flex;flex-direction:column;font-size:14px;font-weight:800}.pp-wx-tx small{font-size:12px;font-weight:600;color:#6F7C88}
+.pp-wx-sub{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;color:#4E5B66;margin-top:8px}.pp-wx-sub b{color:var(--pp-ink,#241F22)}
+.pp-wx-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:11.5px;color:#7C8A96;margin-top:6px}.pp-wx-foot button{border:0;background:none;font:inherit;font-size:11.5px;color:#2C5C86;font-weight:700;cursor:pointer;padding:2px 0}
+.pp-wx-tip{margin-top:8px;font-size:12.5px;font-weight:800;color:#2C5C86;background:rgba(255,255,255,.7);border-radius:10px;padding:6px 10px}.pp-wx-err{font-size:11.5px;color:#B04A2E;margin-top:4px;display:block}
+/* ===== 대시보드 재정비 (하나의 흐름 · 같은 카드 언어) ===== */
+.pp .pp-d-sec{display:flex;align-items:flex-end;justify-content:space-between;margin:22px 4px 10px;font-size:15px;font-weight:900;color:var(--pp-ink,#241F22)}
+.pp .pp-d-sec>span{display:flex;flex-direction:column;gap:2px}.pp .pp-d-sec em{font-style:normal;font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:.22em;color:var(--pp-gold,#A9823C);font-weight:700}
+.pp-d-hero .pp-wx{margin:14px 0 0;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);color:#fff;position:relative;backdrop-filter:blur(2px)}
+.pp-d-hero .pp-wx-tx small,.pp-d-hero .pp-wx-sub,.pp-d-hero .pp-wx-foot,.pp-d-hero .pp-wx.empty small{color:#E9DCDD}.pp-d-hero .pp-wx-sub b,.pp-d-hero .pp-wx-main>b{color:#fff}
+.pp-d-hero .pp-wx-foot button,.pp-d-hero .pp-wx-wait{color:#F3DFA9}.pp-d-hero .pp-wx-tip{background:rgba(255,255,255,.12);color:#FBEFD2}.pp-d-hero .pp-wx-go{background:rgba(255,255,255,.95);color:#5C1F29}
+.pp-d-hero .pp-wx-ic{font-size:28px}.pp-d-hero .pp-wx-main>b{font-size:28px}
+.pp-dp,.pp-r3,.pp-tm,.pp-off,.pp-rec,.pp-boss{display:block;width:100%;box-sizing:border-box;text-align:left;font:inherit;background:#fff;border:1px solid var(--pp-line,#D9D6C9);border-radius:16px;padding:14px 15px;margin:0 0 10px;color:var(--pp-ink,#241F22);box-shadow:0 1px 2px rgba(36,31,34,.04)}
+.pp-dp{border-left:4px solid var(--pp-sage,#4F6F52)}.pp-dp.soon{border-left-color:var(--pp-gold,#A9823C)}.pp-dp.bad{border-left-color:#B23A3A;background:#FFF8F6}.pp-dp.ok{background:#fff}
+.pp-dp-h,.pp-r3-h,.pp-tm-h,.pp-boss-h{display:flex;align-items:center;gap:10px}.pp-dp-h b,.pp-r3-h b,.pp-tm-h b,.pp-boss-h b{font-size:14.5px;font-weight:900}.pp-dp-h small,.pp-r3-h small,.pp-tm-h small,.pp-boss-h small{display:block;font-size:12px;color:var(--pp-soft,#5B5650);margin-top:1px}
+.pp-r3-h,.pp-tm-h,.pp-boss-h{justify-content:space-between;align-items:baseline}.pp-dp-ic{font-size:22px}
+.pp-dp.bad .pp-dp-h b{color:#B23A3A}.pp-dp.soon .pp-dp-h b{color:#8A6420}.pp-dp.ok .pp-dp-h b,.pp-dp:not(.bad):not(.soon) .pp-dp-h b{color:var(--pp-sage,#4F6F52)}
+.pp-dp-modes{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px}.pp-dp-modes button{border:1px solid var(--pp-line,#D9D6C9);background:#FAFAF6;border-radius:10px;padding:8px;font:inherit;font-size:12.5px;color:var(--pp-soft,#5B5650);cursor:pointer}.pp-dp-modes button b{color:var(--pp-ink,#241F22);margin-left:2px}.pp-dp-modes button.on{background:var(--pp-ink,#241F22);border-color:var(--pp-ink,#241F22);color:#E9DFD6}.pp-dp-modes button.on b{color:#fff}
+.pp-dp-leave{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px;margin-top:12px;font-size:13px;color:var(--pp-soft,#5B5650)}.pp-dp-leave b{font-size:26px;font-weight:900;color:var(--pp-ink,#241F22);letter-spacing:-.5px}.pp-dp-leave small{flex-basis:100%;font-size:11.5px}
+.pp-dp-sum{font-size:12px;color:var(--pp-soft,#5B5650);margin-top:8px;line-height:1.5}.pp-dp-note{font-size:11px;color:#9A9188;margin-top:8px}.pp-dp-wait{font-size:13px;color:var(--pp-soft,#5B5650);margin-top:10px}.pp-dp-err{font-size:12px;color:#B04A2E;margin-top:6px}
+.pp-dp-go{width:100%;margin-top:12px;border:0;border-radius:12px;padding:11px;background:var(--pp-ink,#241F22);color:#fff;font:inherit;font-size:13.5px;font-weight:800;cursor:pointer}
+.pp-dp-maps{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;align-items:center}.pp-dp-map{border:1px solid var(--pp-line,#D9D6C9);border-radius:999px;padding:6px 12px;font-size:12px;font-weight:800;color:var(--pp-ink,#241F22);text-decoration:none;background:#fff}.pp-dp-re{margin-left:auto;border:0;background:none;font:inherit;font-size:11.5px;color:var(--pp-soft,#5B5650);cursor:pointer}
+.pp-r3{cursor:pointer;background:linear-gradient(180deg,#FFFDF8,#fff);border-color:#E7D9BC}.pp-r3 ol{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}.pp-r3 li{display:flex;gap:10px;align-items:flex-start}
+.pp-r3 .n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--pp-wine,#7A2E3A);color:#fff;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;margin-top:1px}.pp-r3 li b{font-size:13.5px;font-weight:800}.pp-r3 li small{display:block;font-size:12.5px;color:var(--pp-soft,#5B5650);line-height:1.5;margin-top:1px}
+.pp-r3-empty{font-size:12.5px;color:var(--pp-soft,#5B5650);margin:10px 0 0}.pp-r3-more{display:block;text-align:right;font-size:11.5px;font-weight:700;color:var(--pp-gold,#A9823C);margin-top:8px}
+.pp-tm-h small em{font-style:normal;font-weight:800;color:var(--pp-sage,#4F6F52)}.pp-tm-r{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid #F1EDE4}.pp-tm-r:first-of-type{margin-top:8px}
+.pp-tm-r>i{flex:none;width:32px;height:32px;border-radius:50%;color:#fff;font-style:normal;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}.pp-tm-n{flex:1;min-width:0}.pp-tm-n b{font-size:13.5px}.pp-tm-n b small{font-size:10.5px;background:#F1ECE6;border-radius:999px;padding:1px 6px;margin-left:3px;color:var(--pp-soft,#5B5650)}.pp-tm-n>small{display:block;font-size:11.5px;color:var(--pp-soft,#5B5650)}
+.pp-tm-s{font-size:11.5px;font-weight:800;border-radius:999px;padding:3px 9px;white-space:nowrap}.pp-tm-s.in{background:#E3F1E9;color:#2F7D57}.pp-tm-s.ok{background:#F1ECE6;color:var(--pp-soft,#5B5650)}.pp-tm-s.wait{background:#FFF1D6;color:#9A5B13}
+.pp-tm-call{flex:none;width:32px;height:32px;border-radius:50%;border:1px solid var(--pp-line,#D9D6C9);display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:14px}.pp-tm-call.none{border:0}
+.pp-d-pair{display:grid;grid-template-columns:1fr;gap:0}
+.pp-rec{cursor:pointer}.pp-rec-h{display:flex;align-items:center;gap:12px}.pp-rec-b{flex:none;width:42px;height:42px;border-radius:12px;background:var(--pp-gold-s,#EFE3C6);display:flex;align-items:center;justify-content:center;font-size:22px}.pp-rec-h b{font-size:14.5px;font-weight:900}.pp-rec-h small{display:block;font-size:12px;color:var(--pp-soft,#5B5650);margin-top:1px}
+.pp-rec-bar{height:6px;border-radius:999px;background:#F1ECE6;margin:12px 0 10px;overflow:hidden}.pp-rec-bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--pp-wine,#7A2E3A),var(--pp-gold,#A9823C))}
+.pp-rec-n{display:grid;grid-template-columns:repeat(3,1fr);text-align:center}.pp-rec-n span{font-size:11.5px;color:var(--pp-soft,#5B5650);display:flex;flex-direction:column}.pp-rec-n span+span{border-left:1px solid #F1EDE4}.pp-rec-n b{font-size:18px;font-weight:900;color:var(--pp-ink,#241F22)}
+.pp-off{display:flex;align-items:center;gap:12px;cursor:pointer}.pp-off-ic{flex:none;width:42px;height:42px;border-radius:12px;background:#EAF1EC;display:flex;align-items:center;justify-content:center;font-size:20px}.pp-off-t{flex:1;min-width:0}.pp-off-t b{font-size:14.5px;font-weight:900}.pp-off-t small{display:block;font-size:12px;color:var(--pp-soft,#5B5650);margin-top:2px;line-height:1.5}.pp-off-t em{font-style:normal;font-weight:800;color:var(--pp-sage,#4F6F52)}.pp-off-go{font-size:22px;color:#B9B2A8}
+.pp-boss{background:linear-gradient(135deg,#2A1F23,#4A2A33);border:0;color:#fff}.pp-boss-h b{color:#fff}.pp-boss-h small{color:#D9C8CB}.pp-boss-r{display:flex;align-items:center;gap:10px;padding:10px 0 0}.pp-boss-r+.pp-boss-r{border-top:1px solid rgba(255,255,255,.12);margin-top:10px}
+.pp-boss-r>i{flex:none;width:34px;height:34px;border-radius:50%;background:var(--pp-gold,#A9823C);color:#fff;font-style:normal;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}.pp-boss-r>div{flex:1;min-width:0}.pp-boss-r b{font-size:13.5px}.pp-boss-r small{display:block;font-size:11.5px;color:#D9C8CB}
+.pp-boss-btn{flex:none;border-radius:999px;padding:7px 12px;font-size:12px;font-weight:800;text-decoration:none;background:#fff;color:#4A2A33}.pp-boss-btn.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.4)}
+@media (min-width:720px){.pp-d-pair{grid-template-columns:1fr 1fr;gap:10px}.pp-d-pair>*{margin:0}}
 /* ===== 대시보드 ===== */
 .pp-ev-list,.pp-ev-detail,.pp-ev-head,.pp-ev-tip,.pp-ev-row,.pp-d-next,.pp-d-today,.pp-d-grid button,.pp-d-day,.pp-d-pay,.pp-d-notices button,.pp-d-quick button,.pp-d-sec{color:var(--pp-ink,#241F22)}
 .pp-ev-detail .pp-meta>div{color:var(--pp-ink,#241F22)}
@@ -1005,7 +1046,7 @@ function buildPartnerView(records, db, code, todayStr){
       var rs = ((db.responses||{})[recordId]||{})[s.memberId] || {};
       return {name: m.name||'(미정)', title: m.title||'', role: s.role||'', color: m.color||'#7A2E3A', confirmed: !!rs.confirmed || !!s.pinned, owner: m.kind==='owner' || m.title==='대표',
               phone: (settings.showTeamPhone && s.memberId!==member.id) ? (m.phone||'') : '',
-              me: s.memberId===member.id};
+              me: s.memberId===member.id, checkinAt: rs.checkinAt || ''};
     });
     var pay = mine.reduce(function(sum,s){ return sum + (Number(s.pay)||0) + (Number(s.allowance)||0); }, 0);
     var payDetail = mine.map(function(s){ return {role: s.role||'', base: Number(s.pay)||0, allowance: Number(s.allowance)||0, allowanceNote: s.allowanceNote||''}; });
@@ -1075,6 +1116,7 @@ function buildPartnerView(records, db, code, todayStr){
     member: {id: member.id, name: member.name, title: member.title||'', color: member.color||'#7A2E3A', kind: member.kind||'partner', allView: !!member.allView},
     events: events,
     allEvents: allEvents,
+    payPinSet: !!(((db.referralPay||{})['paypin:'+member.id])||{}).hash,
     assignables: (typeof assignables!=='undefined') ? assignables : undefined,
     notices: notices,
     template: db.template || [],
@@ -1958,7 +2000,7 @@ const PartnerPortal = (function(){
         <div><span>계약자</span>${e(ev.clientName||'-')} ${ev.region?`<small style="color:var(--pp-slate)">· ${e(ev.region)}</small>`:''}</div>
         <div><span>예상 하객</span>신랑측 ${ev.groomGuests}명 · 신부측 ${ev.brideGuests}명</div>
         <div><span>운영 설정서</span>${ev.settingsSubmitted?'<b class="ok">제출완료</b>':'<b class="wait">제출 대기</b>'}</div>
-        <div><span>근무 예상</span>최대 ${hours(ev.minutes)}${ev.pay? ' · '+money(ev.pay)+(ev.paid?' <b class="ok">지급완료</b>':''):''}${allowanceText(ev)}</div>
+        <div><span>근무 예상</span>최대 ${hours(ev.minutes)}</div>
       </div>
       ${team}
       ${full ? contactsHTML(ev) : ""}
@@ -2185,6 +2227,7 @@ const PartnerPortal = (function(){
         <button class="pw-kakao-btn" data-pp="sharePhotos" ${photoFiles.length?'':'disabled'}>카카오톡으로 사진 ${photoFiles.length? photoFiles.length+'장 ':''}공유하기</button>
         <p class="pw-sheet-sub">공유하기 창에서 <b>카카오톡 → 보고할 개인 톡방</b>을 선택하세요. 공유가 끝나면 사진은 이 화면에서 지워져요 (휴대폰 앨범에는 촬영 앱 설정에 따라 저장돼요).</p></div>`;
     }
+    if(sheet.mode==='paypin') return payPinSheetHTML();
     if(sheet.mode==='close') return closeSheetHTML();
     const m = msgById(sheet.mid); if(!m || !ev) return '';
     const fields = Array.isArray(m.fields) ? m.fields : [];
@@ -2482,75 +2525,220 @@ const PartnerPortal = (function(){
     document.body.appendChild(box);
   }
   /* ---------- 홈 대시보드 ---------- */
+  /* ===== 대시보드 날씨: 휴대폰 위치 → Open-Meteo(무료 · 키 없음) · 30분 캐시 · 처음 한 번은 버튼으로 위치 허용 ===== */
+  let wx = null, wxBusy = false, wxErr = '';
+  const WX_CODE = c=> c===0? ['☀️','맑음'] : c===1? ['🌤','대체로 맑음'] : c===2? ['⛅','구름 조금'] : c===3? ['☁️','흐림'] : (c===45||c===48)? ['🌫','안개']
+    : (c>=51&&c<=57)? ['🌦','이슬비'] : (c>=61&&c<=67)? ['🌧','비'] : (c>=71&&c<=77)? ['🌨','눈'] : (c>=80&&c<=82)? ['🌦','소나기'] : (c===85||c===86)? ['🌨','눈 소나기'] : c>=95? ['⛈','뇌우'] : ['🌡','날씨'];
+  function wxCache(){ try{ const c = JSON.parse(localStorage.getItem('pp_wx')||'null'); return c && c.at ? c : null; }catch(_){ return null; } }
+  function wxAllowed(){ try{ return localStorage.getItem('pp_wx_ok')==='1'; }catch(_){ return false; } }
+  function wxUpd(){ const el = root && root.querySelector('#ppWx'); if(el) el.outerHTML = wxHTML(); }
+  function wxFetch(){
+    if(wxBusy) return;
+    if(!navigator.geolocation){ wxErr = '이 기기에서는 위치를 사용할 수 없어요'; wxUpd(); return; }
+    wxBusy = true; wxErr = ''; wxUpd();
+    navigator.geolocation.getCurrentPosition(async pos=>{
+      try{
+        const lat = pos.coords.latitude.toFixed(3), lon = pos.coords.longitude.toFixed(3);
+        posSave({lat: pos.coords.latitude, lng: pos.coords.longitude, at: Date.now()});
+        const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,weather_code,is_day&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto&forecast_days=1`);
+        const j = await r.json(); if(!j || !j.current) throw new Error('no data');
+        let place = '';
+        try{ const g = await (await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=ko`)).json();
+          const a = g.city || g.principalSubdivision || '', b = g.locality || ''; place = [a, b && b!==a ? b : ''].filter(Boolean).join(' '); }catch(_){}
+        const d = j.daily || {};
+        wx = {at: Date.now(), place, t: j.current.temperature_2m, feel: j.current.apparent_temperature, code: j.current.weather_code, day: j.current.is_day,
+          max: (d.temperature_2m_max||[])[0], min: (d.temperature_2m_min||[])[0], pop: (d.precipitation_probability_max||[])[0]};
+        try{ localStorage.setItem('pp_wx', JSON.stringify(wx)); localStorage.setItem('pp_wx_ok','1'); }catch(_){}
+      }catch(_){ wxErr = '날씨를 불러오지 못했어요 · 잠시 후 다시 눌러주세요'; }
+      finally{ wxBusy = false; wxUpd(); }
+    }, err=>{
+      wxBusy = false;
+      wxErr = err && err.code===1 ? '위치 권한이 꺼져 있어요 · 휴대폰 설정에서 이 앱(브라우저)의 위치를 허용한 뒤 다시 눌러주세요' : '현재 위치를 찾지 못했어요 · 다시 눌러주세요';
+      if(err && err.code===1){ try{ localStorage.removeItem('pp_wx_ok'); }catch(_){} }
+      wxUpd();
+    }, {enableHighAccuracy:false, timeout:12000, maximumAge:15*60000});
+  }
+  function wxHTML(){
+    const c = wx, r = n=> (n===undefined||n===null||isNaN(n)) ? '-' : Math.round(n);
+    if(!c) return `<div class="pp-wx empty" id="ppWx">${wxBusy? '<span class="pp-wx-wait">📍 현재 위치의 날씨를 불러오는 중…</span>'
+      : `<button class="pp-wx-go" data-pp="wxGo">📍 내 위치 오늘 날씨 보기</button>${wxErr? `<small class="pp-wx-err">${e(wxErr)}</small>` : '<small>처음 한 번 위치 사용을 허용하면 다음부터 자동으로 보여요</small>'}`}</div>`;
+    const [ic, tx] = WX_CODE(Number(c.code)), icon = (Number(c.code)===0 && !c.day) ? '🌙' : (Number(c.code)===1 && !c.day) ? '🌙' : ic;
+    const tip = (c.pop>=60) ? '☔ 비 소식이 있어요 · 우산 챙기세요' : (c.code>=71 && c.code<=86 && c.code!==80 && c.code!==81 && c.code!==82) ? '❄️ 눈 소식 · 이동 시간 넉넉히' : (c.min!==undefined && c.min<=0) ? '🧣 영하권이에요 · 따뜻하게 입으세요' : (c.max>=30) ? '🥵 더운 날이에요 · 물 자주 드세요' : (c.pop>=30) ? '🌂 비 올 수도 있어요 · 작은 우산 추천' : '';
+    const age = Math.round((Date.now()-c.at)/60000);
+    return `<div class="pp-wx" id="ppWx">
+      <div class="pp-wx-main"><span class="pp-wx-ic">${icon}</span><b>${r(c.t)}°</b><span class="pp-wx-tx">${e(tx)}<small>체감 ${r(c.feel)}°</small></span></div>
+      <div class="pp-wx-sub"><span>최고 <b>${r(c.max)}°</b> · 최저 <b>${r(c.min)}°</b></span><span>강수 <b>${r(c.pop)}%</b></span></div>
+      <div class="pp-wx-foot"><span>📍 ${e(c.place||'현재 위치')}</span><button data-pp="wxGo" ${wxBusy?'disabled':''}>${wxBusy? '불러오는 중…' : `↻ ${age<1? '방금' : age<60? age+'분 전' : Math.floor(age/60)+'시간 전'}`}</button></div>
+      ${tip? `<div class="pp-wx-tip">${tip}</div>`:''}${wxErr? `<div class="pp-wx-err">${e(wxErr)}</div>`:''}</div>`;
+  }
+  /* ===== 대시보드 공통: 현재 위치 (날씨 · 출발 안내가 함께 사용) ===== */
+  function posCache(){ try{ const p = JSON.parse(localStorage.getItem('pp_pos')||'null'); return p && p.at ? p : null; }catch(_){ return null; } }
+  function posSave(p){ try{ localStorage.setItem('pp_pos', JSON.stringify(p)); }catch(_){} }
+  /* ===== 출발 안내 ===== */
+  let dep = null, depBusy = false, depErr = '', depFor = '';
+  function depMode(){ try{ return localStorage.getItem('pp_dep_mode') || 'transit'; }catch(_){ return 'transit'; } }
+  function depUpd(){ const el = root && root.querySelector('#ppDep'); if(el){ const ev = eventById(depFor); if(ev) el.outerHTML = depHTML(ev); } }
+  function depFetch(rid){
+    if(depBusy || !H.onDepart) return;
+    depFor = rid; depBusy = true; depErr = ''; depUpd();
+    const go = async p=>{
+      try{ const r = await H.onDepart(rid, p.lat, p.lng); if(!r || !r.ok) throw new Error((r && r.error) || '이동 시간을 계산하지 못했어요'); dep = Object.assign({}, r, {got: Date.now()}); }
+      catch(err){ depErr = err.message || '이동 시간을 계산하지 못했어요'; }
+      finally{ depBusy = false; depUpd(); }
+    };
+    const c = posCache();
+    if(c && Date.now()-c.at < 10*60000){ go(c); return; }
+    if(!navigator.geolocation){ depBusy = false; depErr = '이 기기에서는 위치를 사용할 수 없어요'; depUpd(); return; }
+    navigator.geolocation.getCurrentPosition(pos=>{
+      const p = {lat: pos.coords.latitude, lng: pos.coords.longitude, at: Date.now()}; posSave(p); try{ localStorage.setItem('pp_wx_ok','1'); }catch(_){} go(p);
+    }, err=>{ depBusy = false; depErr = err && err.code===1 ? '위치 권한이 꺼져 있어요 · 휴대폰 설정에서 위치를 허용해 주세요' : '현재 위치를 찾지 못했어요'; depUpd(); }, {enableHighAccuracy:false, timeout:12000, maximumAge:5*60000});
+  }
+  function depTarget(te){ const n = nowMin(); return te.find(ev=> !ev.checkinAt && hmMin(ev.callTime)!==null && hmMin(ev.callTime) + 30 > n) || null; }
+  function depHTML(ev){
+    const call = hmMin(ev.callTime), n = nowMin(), d = (dep && dep.rid===ev.recordId) ? dep : null, mode = depMode();
+    const hm = m=> `${pd(Math.floor(((m%1440)+1440)%1440/60))}:${pd(((m%1440)+1440)%1440%60)}`;
+    const mapBtns = d && d.to ? `<a class="pp-dp-map" href="https://map.kakao.com/link/to/${encodeURIComponent(d.to.name||ev.venueName||'예식장')},${d.to.lat},${d.to.lng}" target="_blank" rel="noopener">카카오맵 길찾기</a><a class="pp-dp-map" href="https://map.naver.com/p/search/${encodeURIComponent(((ev.region||'')+' '+(ev.venueName||'')).trim())}" target="_blank" rel="noopener">네이버 지도</a>`
+      : `<a class="pp-dp-map" href="https://map.naver.com/p/search/${encodeURIComponent(((ev.region||'')+' '+(ev.venueName||'')).trim())}" target="_blank" rel="noopener">지도에서 보기</a>`;
+    if(!d) return `<div class="pp-dp" id="ppDep"><div class="pp-dp-h"><span class="pp-dp-ic">🧭</span><div><b>출발 안내</b><small>${e(ev.callTime||'')} 출근 · ${e(ev.venueName||'')}</small></div></div>
+      ${depBusy? '<div class="pp-dp-wait">현재 위치에서 예식장까지 이동 시간을 계산하는 중…</div>' : `<button class="pp-dp-go" data-pp="depGo" data-rid="${e(ev.recordId)}">📍 지금 위치에서 출발 시간 계산하기</button>${depErr? `<div class="pp-dp-err">${e(depErr)}</div>`:''}`}
+      <div class="pp-dp-maps">${mapBtns}</div></div>`;
+    if(d.near) return `<div class="pp-dp ok" id="ppDep"><div class="pp-dp-h"><span class="pp-dp-ic">📍</span><div><b>예식장 근처에 있어요</b><small>${e(ev.callTime||'')} 출근 · 도착하면 오늘 업무에서 도착 체크인을 눌러주세요</small></div></div></div>`;
+    const leg = mode==='car' ? d.car : d.transit, travel = leg ? leg.min : 0, leave = call===null ? null : call - travel - 10, left = leave===null ? null : leave - n;
+    const st = left===null ? ['','출발 안내'] : left <= 0 ? ['bad','지금 바로 출발하세요'] : left <= 30 ? ['soon','곧 출발할 시간이에요'] : ['ok','지금 출발하면 늦지 않아요'];
+    const age = Math.round((Date.now()-d.got)/60000);
+    return `<div class="pp-dp ${st[0]}" id="ppDep">
+      <div class="pp-dp-h"><span class="pp-dp-ic">${st[0]==='bad'?'⏰':'🧭'}</span><div><b>${st[1]}</b><small>${e(ev.callTime||'')} 출근 · ${e(ev.venueName||'')}</small></div></div>
+      <div class="pp-dp-modes"><button class="${mode==='transit'?'on':''}" data-pp="depMode" data-v="transit">🚇 대중교통 <b>${d.transit? d.transit.min+'분':'-'}</b></button><button class="${mode==='car'?'on':''}" data-pp="depMode" data-v="car">🚗 자동차 <b>${d.car? d.car.min+'분':'-'}</b></button></div>
+      ${leave!==null? `<div class="pp-dp-leave"><span>늦어도</span><b>${hm(leave)}</b><span>에는 출발하세요</span><small>${left>0? (left>=60? Math.floor(left/60)+'시간 '+(left%60)+'분 남음' : left+'분 남음') : '출근 '+e(ev.callTime||'')+'까지 '+Math.max(0, call-n)+'분'} · 여유 10분 포함</small></div>`:''}
+      ${leg && leg.summary && mode==='transit'? `<div class="pp-dp-sum">${e(leg.summary)}</div>`:''}
+      <div class="pp-dp-maps">${mapBtns}<button class="pp-dp-re" data-pp="depGo" data-rid="${e(ev.recordId)}" ${depBusy?'disabled':''}>${depBusy? '계산 중…' : '↻ '+(age<1?'방금':age+'분 전')}</button></div>
+      ${(leg && leg.est)? '<div class="pp-dp-note">거리 기준 예상 시간이에요 · 실제 교통 상황은 지도 앱에서 확인하세요</div>':''}</div>`;
+  }
+  /* ===== 오늘 꼭 기억할 3가지 (설정서에서 실수하기 쉬운 것만) ===== */
+  function remember3(ev){
+    const c = (ev && ev.info && ev.info.card) || {}, out = [];
+    const v = k=> String(c[k]==null?'':c[k]).trim();
+    const op = v('money_op');
+    if(/권종/.test(op)) out.push(['💴','지폐 권종별 정리','5만원권 · 1만원권 장수를 세어 마감 보고에서 검산해요']);
+    else if(op) out.push(['💰','축의금 정리 방식', op]);
+    const ho = ['groom','bride'].map(sk=> [v('handover_relation_'+sk), v('handover_name_'+sk)].filter(x=> x && x!=='-').join(' ')).filter(Boolean);
+    if(ho.length) out.push(['🤝','축의금 인수자', ho.join(' · ')]);
+    const cross = v('ticket_cross_use');
+    if(cross) out.push(['🎫','식권 교차 사용', /가능/.test(cross) && !/불가/.test(cross) ? '신랑 · 신부측 식권을 섞어 써도 돼요' : '교차 사용 불가 · 측별로 따로 지급해요']);
+    if(v('vip_yn')==='있음') out.push(['⭐','VIP 명단','명단에 있는 분은 확인 후 식권을 드려요']);
+    if(v('ticket_paid_way')) out.push(['📱','계좌이체 하객 식권', v('ticket_paid_way')==='기타' ? (v('ticket_paid_way_etc')||'기타') : v('ticket_paid_way')]);
+    if(v('gift_yn')==='있음') out.push(['🎁','답례품', [v('gift_type'), v('gift_place')].filter(Boolean).join(' · ') || '답례품이 있어요']);
+    return out.slice(0,3);
+  }
+  function rememberHTML(ev, label){
+    const it = remember3(ev);
+    return `<div class="pp-r3" data-pp="schGo" data-rid="${e(ev.recordId)}"><div class="pp-r3-h"><b>${label} 꼭 기억할 3가지</b><small>${e(ev.venueName||'')} · 설정서 기준</small></div>
+      ${it.length? `<ol>${it.map(([ic,t,d],i)=> `<li><span class="n">${i+1}</span><div><b>${ic} ${e(t)}</b><small>${e(d)}</small></div></li>`).join('')}</ol>` : '<p class="pp-r3-empty">아직 운영설정서가 들어오지 않았어요 · 들어오면 여기에 자동으로 정리돼요</p>'}
+      <span class="pp-r3-more">설정서 전체 보기 ›</span></div>`;
+  }
+  /* ===== 오늘 함께하는 팀 ===== */
+  function teamHTML(ev){
+    const tm = ev.team || []; if(!tm.length) return '';
+    const arrived = tm.filter(m=> m.checkinAt || (m.me && ev.checkinAt)).length;
+    const tt = iso=>{ const d = new Date(iso); return isNaN(d) ? '' : pd(d.getHours())+':'+pd(d.getMinutes()); };
+    return `<div class="pp-tm"><div class="pp-tm-h"><b>오늘 함께하는 팀</b><small>${tm.length}명 중 <em>${arrived}명 도착</em></small></div>
+      ${tm.map(m=>{ const ci = m.checkinAt || (m.me && ev.checkinAt) || '';
+        return `<div class="pp-tm-r"><i style="background:${e(m.color||'#7A2E3A')}">${e(String(m.name||'').slice(-2))}</i>
+          <div class="pp-tm-n"><b>${e(m.name||'')}${m.me?' <small>나</small>':''}</b><small>${e(m.role||m.title||'파트너')}</small></div>
+          <span class="pp-tm-s ${ci?'in':m.confirmed?'ok':'wait'}">${ci? '도착 '+tt(ci) : m.confirmed? '확정' : '확인 대기'}</span>
+          ${m.phone && !m.me? `<a class="pp-tm-call" href="tel:${e(String(m.phone).replace(/[^0-9+]/g,''))}" title="전화">📞</a>` : '<span class="pp-tm-call none"></span>'}</div>`; }).join('')}</div>`;
+  }
+  /* ===== 휴무 신청 안내 ===== */
+  function offInfoHTML(t, offDays){
+    const lock = Number((view.settings||{}).availabilityLockDays); const L = isNaN(lock) ? 3 : lock;
+    const first = addDays(t, L), nm = addDays(t.slice(0,8)+'01', 32).slice(0,7), nmN = offDays.filter(d=> d.slice(0,7)===nm).length, mNum = Number(nm.slice(5,7));
+    return `<button class="pp-off" data-pp="tab" data-v="avail"><div class="pp-off-ic">🗓</div><div class="pp-off-t"><b>휴무 신청</b>
+      <small>예식 ${L}일 전까지 신청할 수 있어요 · 지금은 <em>${fdate(first)}</em>부터 가능</small>
+      <small>${offDays.length? `등록한 휴무 ${offDays.slice(0,3).map(d=> fdate(d)).join(', ')}${offDays.length>3? ' 외 '+(offDays.length-3)+'일':''}` : '등록한 휴무가 없어요'}${nmN? '' : ` · ${mNum}월 휴무를 미리 등록해 두면 배정에 반영돼요`}</small></div><span class="pp-off-go">›</span></button>`;
+  }
+  /* ===== 완료 기록 ===== */
+  function recordHTML(t, done){
+    const mon = done.filter(x=> x.date.slice(0,7)===t.slice(0,7)).length, yr = done.filter(x=> x.date.slice(0,4)===t.slice(0,4)).length, all = done.length;
+    const MS = [1,10,30,50,100,200,300,500,1000], next = MS.find(m=> m>all) || (Math.ceil((all+1)/500)*500), prev = [0].concat(MS).filter(m=> m<=all).pop() || 0;
+    const pct = Math.round((all-prev)/Math.max(1,next-prev)*100), badge = all>=100 ? '👑' : all>=50 ? '🏆' : all>=30 ? '🥇' : all>=10 ? '🎖' : all>=1 ? '🌱' : '✨';
+    return `<button class="pp-rec" data-pp="tab" data-v="done"><div class="pp-rec-h"><span class="pp-rec-b">${badge}</span><div><b>${all? `함께한 예식 ${all}건` : '첫 예식을 기다리고 있어요'}</b><small>${all? `다음 목표 ${next}건까지 ${next-all}건` : '첫 예식을 마치면 기록이 시작돼요'}</small></div></div>
+      <div class="pp-rec-bar"><i style="width:${all? pct : 0}%"></i></div>
+      <div class="pp-rec-n"><span><b>${mon}</b>이번 달</span><span><b>${yr}</b>올해</span><span><b>${all}</b>누적</span></div></button>`;
+  }
+  /* ===== 대표에게 바로 연락 ===== */
+  function bossHTML(){
+    // 대표 두 분 연락처는 항상 표시 (통합관리 파트너 정보에 다른 대표가 있으면 뒤에 덧붙임)
+    const BOSS = [{name:'김현관', phone:'010-5148-3179'}, {name:'송빛나', phone:'010-5730-0614'}];
+    const list = BOSS.concat((view.owners||[]).filter(o=> o.phone && !BOSS.some(b=> b.name===o.name)));
+    if(!list.length) return '';
+    const tel = p=> String(p).replace(/[^0-9+]/g,'');
+    return `<div class="pp-boss"><div class="pp-boss-h"><b>도움이 필요할 때</b><small>현장에서 판단이 어려우면 바로 연락하세요</small></div>
+      ${list.map(o=> `<div class="pp-boss-r"><i>${e(String(o.name||'대표').slice(-2))}</i><div><b>${e(o.name||'대표')}</b><small>${e(o.phone)}</small></div>
+        <a class="pp-boss-btn" href="tel:${e(tel(o.phone))}">📞 전화</a><a class="pp-boss-btn ghost" href="sms:${e(tel(o.phone))}">💬 문자</a></div>`).join('')}</div>`;
+  }
   function homeHTML(){
     if(MGR()) return managerHomeHTML();
-    const t = today(), now = new Date(), mon = t.slice(0,7), nextMon = addDays(t.slice(0,8)+'01', 32).slice(0,7);
+    if(!wx) wx = wxCache();
+    if(wxAllowed() && !wxBusy && (!wx || Date.now()-wx.at > 30*60000)) setTimeout(wxFetch, 0);   // 30분 지나면 새로
+    const t = today(), now = new Date();
     const act = activeEvents(), done = doneEvents(), te = todayEvents().slice().sort(byTime);
-    const next = act.find(ev=> ev.date>t) || act.find(ev=> !isDone(ev) && ev.date===t) || null;
-    const monthEv = view.events.filter(ev=> ev.date.slice(0,7)===mon);
-    const monthPay = monthEv.reduce((s,x)=> s+(x.pay||0), 0), monthPaid = monthEv.filter(x=> x.paid).reduce((s,x)=> s+(x.pay||0), 0);
+    const next = act.find(ev=> ev.date>t) || null;
     const pending = upcoming().filter(ev=> !ev.confirmed && !ev.pinned).sort((a,b)=> (a.respondBy||'9').localeCompare(b.respondBy||'9'));
     const av = view.availability||{}, offDays = Object.keys(av).filter(d=> d>=t).sort();
     const fmtDue = iso=>{ const d=new Date(iso); return `${pd(d.getMonth()+1)}/${pd(d.getDate())} ${pd(d.getHours())}:${pd(d.getMinutes())}`; };
     const multiDay = (()=>{ const c={}; act.forEach(ev=>{ c[ev.date]=(c[ev.date]||0)+1; }); return Object.keys(c).filter(d=> c[d]>1).sort()[0]; })();
     const pinned = (view.notices||[]).filter(n=> n.pinned), latest = (view.notices||[]).slice(0,2);
+    const end = te.length ? hmMin(te[te.length-1].endTime) : null, allDone = te.length && end!==null && nowMin() > end;
+    const live = te.filter(ev=> !isDone(ev)), focus = live[0] || null, tgt = depTarget(te);
+    // 출발 안내: 위치 허용돼 있으면 자동 계산 (10분마다)
+    if(tgt && H.onDepart && wxAllowed() && !depBusy && !(dep && dep.rid===tgt.recordId && Date.now()-dep.got < 10*60000) && !(depErr && depFor===tgt.recordId)) setTimeout(()=> depFetch(tgt.recordId), 0);
     // 오늘의 예식
     const todayBox = te.length ? (()=>{
-      const ev = te[0], end = hmMin(te[te.length-1].endTime), allDone = end!==null && nowMin() > end;
-      const pr = typeof wprog==='function' ? wprog(ev) : null;
+      const pr = typeof wprog==='function' ? wprog(te[0]) : null;
       return `<div class="pp-d-today ${allDone?'fin':''}">
         <div class="h">${allDone? '🎉 오늘 예식 완료' : '💍 오늘의 예식'} <small>${te.length}건</small></div>
         ${te.map(x=> `<div class="r"><b>${e(x.callTime||'-')}</b> 출근 · ${e(x.venueName||'')}<small>예식 ${e(x.weddingTime||'-')} · 종료 예상 ${e(x.endTime||'-')}</small></div>`).join('')}
         ${allDone? `<p>오늘도 정말 수고 많으셨어요! 내역정리 입력을 잊지 마세요.</p><button class="pp-btn" data-pp="tab" data-v="arrange">📝 축의대 내역정리</button>` : `${pr? `<div class="pp-progress"><div style="width:${pr.pct}%"></div></div><div class="pp-progress-l">업무 진행 ${pr.done}/${pr.total}</div>`:''}<button class="pw-start" data-pp="tab" data-v="work"><span>${e(te[0].callTime||'')} 출근</span><b>▶ 오늘 업무 ${pr && pr.done? '이어서 하기':'시작하기'}</b></button>`}
       </div>`; })() : '';
-    // 다음 예식
     const nextBox = next ? `<div class="pp-d-next" data-pp="schGo" data-rid="${e(next.recordId)}">
         <div class="pp-d-dday"><b>${dLabel(next.date)}</b><small>${fdate(next.date)}</small></div>
         <div class="pp-d-nx"><span>다음 예식</span><b>${e(next.venueName||'예식장 미정')}</b><small>출근 ${e(next.callTime||'-')} · 예식 ${e(next.weddingTime||'-')}${next.hallName? ' · '+e(next.hallName):''}</small>
           <div class="pp-d-team">${(next.team||[]).map(m=>`<i style="background:${e(m.color)}" title="${e(m.name)}">${e(String(m.name||'').slice(-2))}</i>`).join('')}${next.pinned? '<em class="ok">📌 지정</em>' : next.confirmed? '<em class="ok">확정</em>' : '<em class="bad">확정 대기</em>'}</div></div>
         <span class="pp-d-go">›</span></div>` : `<div class="pp-d-next empty"><div class="pp-d-nx"><span>다음 예식</span><b>아직 배정된 예식이 없어요</b><small>배정되면 여기에 가장 먼저 보여요</small></div></div>`;
-    // 앞으로 7일
     let week = '';
     for(let i=0;i<7;i++){
       const d = addDays(t, i), dd = parseD(d), evs = act.filter(ev=> ev.date===d), off = av[d];
       week += `<div class="pp-d-day ${i===0?'now':''} ${evs.length?'has':''} ${dd.getDay()===0?'sun':dd.getDay()===6?'sat':''}" ${evs.length? `data-pp="schGo" data-rid="${e(evs[0].recordId)}"`:''}><small>${WD[dd.getDay()]}</small><b>${dd.getDate()}</b>${evs.length? `<i>${evs.length>1? evs.length+'건' : e(evs[0].callTime||'')}</i>` : off? `<i class="off">${off.type==='off'?'휴무':off.type==='am'?'오전':'오후'}</i>` : '<i class="none">·</i>'}</div>`;
     }
+    const sec = (en, ko, extra)=> `<div class="pp-d-sec"><span><em>${en}</em>${ko}</span>${extra||''}</div>`;
+    const tomorrowEv = !focus && next && next.date===addDays(t,1) ? next : null;
     return `
       <section class="pp-d-hero">
         <div class="pp-d-date">${now.getMonth()+1}월 ${now.getDate()}일 ${WD[now.getDay()]}요일</div>
         <h2>${welcomeLine()}</h2>
-        <p>${te.length? `오늘 예식 <b>${te.length}건</b> · 첫 출근 <b>${e(te[0].callTime||'-')}</b>` : next? `다음 예식 <b>${fdate(next.date)} ${e(next.callTime||'')} 출근</b> · ${e(next.venueName||'')}` : '새 배정이 생기면 알림으로 알려드릴게요'}</p>
+        <p>${te.length && !allDone? `오늘 예식 <b>${te.length}건</b> · 첫 출근 <b>${e(te[0].callTime||'-')}</b>` : next? `다음 예식 <b>${fdate(next.date)} ${e(next.callTime||'')} 출근</b> · ${e(next.venueName||'')}` : '새 배정이 생기면 알림으로 알려드릴게요'}</p>
         <button class="pp-d-noticebtn" data-pp="dashNotice">📢 공지 · 유의사항${pinned.length? ` <i>${pinned.length}</i>`:''}</button>
+        ${wxHTML()}
       </section>
       ${H.onInstall && !(H.isInstalled && H.isInstalled()) && !installHidden() ? `<div class="pp-install"><span>📲 <b>홈 화면에 추가</b>하면 앱처럼 바로 열려요</span><button data-pp="install">추가하기</button><button class="x" data-pp="installHide" title="닫기">✕</button></div>` : ''}
       ${pending.length? `<button class="pp-d-alert" data-pp="pendingList"><span>📩 확정이 필요한 새 배정 <b>${pending.length}건</b>${pending[0].respondBy? `<small>가장 빠른 기한 ${fmtDue(pending[0].respondBy)} · 기한이 지나면 자동 취소</small>`:''}</span><b>확정하기 ›</b></button>`:''}
       ${multiDay? `<button class="pp-d-alert soft" data-pp="tab" data-v="route"><span>🗺 ${fdate(multiDay)} 하루 2건 이상 · 이동 동선을 확인하세요</span><b>추천 동선 ›</b></button>`:''}
-      ${todayBox}
+      ${te.length? `${sec('TODAY','오늘')}
+        ${todayBox}
+        ${tgt? depHTML(tgt) : ''}
+        ${focus? rememberHTML(focus, '오늘') : ''}
+        ${focus? teamHTML(focus) : ''}` : ''}
+      ${sec('UPCOMING','다가오는 일정')}
       ${nextBox}
-      <div class="pp-d-sec">앞으로 7일</div>
+      ${tomorrowEv? rememberHTML(tomorrowEv, '내일') : ''}
       <div class="pp-d-week">${week}</div>
-      <div class="pp-d-sec">한눈에 보기</div>
-      <div class="pp-d-grid">
-        <button data-pp="tab" data-v="schedule"><span>예정된 예식</span><b>${act.length}<small>건</small></b><em>확정 ${act.filter(x=>x.confirmed).length} · 대기 ${act.filter(x=>!x.confirmed).length}</em></button>
-        <button data-pp="tab" data-v="schedule"><span>이번 달 예식</span><b>${monthEv.length}<small>건</small></b><em>다음 달 ${view.events.filter(ev=> ev.date.slice(0,7)===nextMon).length}건</em></button>
-        <button data-pp="tab" data-v="pay"><span>이번 달 근무</span><b>${hours(monthEv.reduce((s,x)=>s+x.minutes,0)).replace('시간','')}<small>시간</small></b><em>출근부터 최대 기준</em></button>
-        <button data-pp="tab" data-v="done"><span>완료 예식</span><b>${done.length}<small>건</small></b><em>올해 ${done.filter(x=> x.date.slice(0,4)===t.slice(0,4)).length}건</em></button>
-        <button data-pp="tab" data-v="avail"><span>등록한 휴무</span><b>${offDays.length}<small>일</small></b><em>${offDays[0]? '가까운 날 '+fdate(offDays[0]) : '휴무 신청하기'}</em></button>
-        <button data-pp="tab" data-v="confirm"><span>확정 대기</span><b class="${pending.length?'bad':''}">${pending.length}<small>건</small></b><em>${pending.length? '48시간 안에 확정' : '모두 확정했어요'}</em></button>
-      </div>
-      <button class="pp-d-pay" data-pp="tab" data-v="pay">
-        <div class="h"><span>💳 ${now.getMonth()+1}월 인건비</span><b>${money(monthPay)}</b></div>
-        <div class="bar"><i style="width:${monthPay? Math.round(monthPaid/monthPay*100) : 0}%"></i></div>
-        <div class="f"><span>지급 완료 ${money(monthPaid)}</span><span>지급 예정 ${money(monthPay-monthPaid)}</span></div>
-      </button>
-      <div class="pp-d-sec">공지 <button class="pp-d-link" data-pp="tab" data-v="notice">전체 ›</button></div>
+      ${sec('MY RECORD','나의 기록')}
+      <div class="pp-d-pair">${recordHTML(t, done)}${offInfoHTML(t, offDays)}</div>
+      ${pending.length? '' : ''}
+      ${sec('NOTICE','공지', '<button class="pp-d-link" data-pp="tab" data-v="notice">전체 ›</button>')}
       ${latest.length? `<div class="pp-d-notices">${latest.map(n=>`<button data-pp="dashNotice"><b>${n.pinned?'<em>고정</em>':''}${e(n.title)}</b><small>${e(String(n.body||'').slice(0,60))}${String(n.body||'').length>60?'…':''}</small></button>`).join('')}</div>` : '<div class="pp-empty" style="padding:16px;">등록된 공지가 없어요</div>'}
-      <div class="pp-d-quick">
-        <button data-pp="tab" data-v="schedule">📋<span>내 예식정보</span></button>
-        <button data-pp="tab" data-v="done">✔<span>완료 예식</span></button>
-        <button data-pp="tab" data-v="arrange">📝<span>내역정리</span></button>
-        <button data-pp="tab" data-v="avail">🗓<span>휴무 신청</span></button>
-      </div>`;
+      ${sec('CONTACT','대표 연락')}
+      ${bossHTML()}`;
   }
 
   let schedFilter = null;
@@ -2756,7 +2944,7 @@ const PartnerPortal = (function(){
   }
   function statusChip(ev, done){
     if(MGR()){ const un=(ev.team||[]).filter(m=>!m.confirmed && !m.owner).length; return ev.open? `<i class="st bad">빈 자리 ${ev.open}</i>` : un? `<i class="st wait">미확정 ${un}</i>` : `<i class="st ok">배정 완료</i>`; }
-    if(done) return ev.pay ? (ev.paid? '<i class="st ok">지급완료</i>' : '<i class="st wait">지급대기</i>') : '<i class="st">완료</i>';
+    if(done) return '<i class="st ok">완료</i>';
     if(ev.pinned) return '<i class="st pin">📌 지정</i>';
     return ev.confirmed ? '<i class="st ok">확정</i>' : '<i class="st bad">확정 대기</i>';
   }
@@ -2804,7 +2992,7 @@ const PartnerPortal = (function(){
         <div><span>패키지</span>축의대 ${e(ev.productType||'-')}</div>
         <div><span>예상 하객</span>신랑측 ${ev.groomGuests}명 · 신부측 ${ev.brideGuests}명</div>
         <div><span>운영 설정서</span>${ev.settingsSubmitted?'<b class="ok">제출완료</b>':'<b class="wait">제출 대기</b>'}</div>
-        ${MGR()? '' : `<div><span>근무 · 인건비</span>최대 ${hours(ev.minutes)}${ev.pay? ' · '+money(ev.pay)+(ev.paid?' <b class="ok">지급완료</b>':''):''}${allowanceText(ev)}</div>`}
+        ${MGR()? '' : `<div><span>근무 예상</span>최대 ${hours(ev.minutes)}</div>`}
       </div>
       ${ev.note? `<div class="pp-note">📌 ${e(ev.note)}</div>`:''}
       ${team}
@@ -2984,10 +3172,47 @@ const PartnerPortal = (function(){
         <div class="pp-stat"><span>${y}년</span><b>${thisYear.length}건</b></div>
         <div class="pp-stat"><span>${MGR()? '이번 달' : '누적 근무'}</span><b>${MGR()? list.filter(ev=>ev.date.slice(0,7)===today().slice(0,7)).length+'건' : hours(list.reduce((s,x)=>s+x.minutes,0))}</b></div>
       </div>
-      ${MGR()? '' : `<div class="pp-stats" style="grid-template-columns:repeat(2,1fr);"><div class="pp-stat"><span>누적 인건비</span><b>${money(pay)}</b></div><div class="pp-stat"><span>지급 대기</span><b style="color:${unpaid?'var(--pp-wine)':'var(--pp-sage)'}">${money(unpaid)}</b></div></div>`}
       <div class="pp-ev-list">${monthGroups(list, true)}</div>`;
   }
 
+  /* 「근무·급여」 비밀번호: 처음엔 설정 → 이후엔 입력해야 열림 · 다른 메뉴로 가면 다시 잠김 */
+  let payOk = false;
+  function payLockedHTML(){
+    return `<div class="pp-paylock"><div class="pp-paylock-ic">🔒</div><b>근무·급여는 비밀번호로 보호돼요</b>
+      <p>${view.payPinSet? '비밀번호를 입력하면 볼 수 있어요.' : '처음 한 번 비밀번호(숫자 4~6자리)를 설정해 주세요.'}</p>
+      <button class="pp-btn primary" data-pp="payPinOpen">${view.payPinSet? '비밀번호 입력' : '비밀번호 설정'}</button></div>`;
+  }
+  function payPinSheetHTML(){
+    const setMode = sheet.step==='set';
+    return `<div class="pw-sheet-bg" data-pp="sheetClose"></div><div class="pw-sheet pp-pinsheet"><div class="pw-sheet-h"><b>🔒 ${setMode? '근무·급여 비밀번호 설정' : '근무·급여 비밀번호'}</b><button data-pp="sheetClose">✕</button></div>
+      <p class="pw-sheet-sub">${setMode? '근무·급여 메뉴를 열 때 쓸 숫자 4~6자리를 정해 주세요. 다른 기기에서도 같은 비밀번호로 열려요.' : '숫자 4~6자리 비밀번호를 입력해 주세요.'}</p>
+      <input class="pp-pin" id="ppPin1" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off" placeholder="${setMode?'새 비밀번호':'비밀번호'}" enterkeyhint="${setMode?'next':'done'}">
+      ${setMode? '<input class="pp-pin" id="ppPin2" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off" placeholder="한 번 더 입력" enterkeyhint="done">' : ''}
+      <div class="pp-pin-msg" id="ppPinMsg">${e(sheet.msg||'')}</div>
+      <button class="pp-btn primary pp-pin-go" data-pp="payPinGo" ${sheet.busy?'disabled':''}>${sheet.busy? '확인 중…' : setMode? '설정하고 열기' : '열기'}</button>
+      ${setMode? '' : '<p class="pp-pin-help">비밀번호를 잊으셨다면 대표에게 초기화를 요청해 주세요.</p>'}</div>`;
+  }
+  async function payPinGo(){
+    if(!sheet || sheet.mode!=='paypin' || sheet.busy) return;
+    const p1 = String((document.getElementById('ppPin1')||{}).value||'').replace(/\D/g,''), p2 = String((document.getElementById('ppPin2')||{}).value||'').replace(/\D/g,'');
+    const setMode = sheet.step==='set';
+    const fail = m=>{ sheet.msg = m; render(); setTimeout(()=>{ const i = document.getElementById('ppPin1'); if(i) i.focus(); }, 30); };
+    if(!/^\d{4,6}$/.test(p1)) return fail('숫자 4~6자리로 입력해 주세요');
+    if(setMode && p1!==p2) return fail('두 번 입력한 비밀번호가 달라요');
+    if(H.preview || !H.onOp){ return fail('미리보기에서는 확인할 수 없어요'); }
+    sheet.busy = true; sheet.msg = ''; render();
+    try{
+      const nv = await H.onOp({type:'payPin', action: setMode? 'set':'check', pin: p1});
+      if(nv) view = nv;
+      payOk = true; sheet = null; tab = 'pay'; render(); window.scrollTo(0,0);
+      toast(setMode? '비밀번호를 설정했어요' : '근무·급여를 열었어요');
+    }catch(err){
+      sheet.busy = false;
+      if(/먼저 비밀번호를 설정/.test(err.message||'')){ sheet.step = 'set'; view.payPinSet = false; }
+      fail(err.message || '확인하지 못했어요');
+    }
+  }
+  document.addEventListener('keydown', ev=>{ const t = ev.target; if(ev.key!=='Enter' || !t || !t.classList || !t.classList.contains('pp-pin')) return; ev.preventDefault(); const p2 = document.getElementById('ppPin2'); if(t.id==='ppPin1' && p2) p2.focus(); else payPinGo(); });
   function payHTML(){
     const months=[...new Set(view.events.map(ev=>ev.date.slice(0,7)).concat([today().slice(0,7)]))].sort().reverse();
     if(!payMonth || !months.includes(payMonth)) payMonth = today().slice(0,7);
@@ -3081,7 +3306,7 @@ const PartnerPortal = (function(){
     computeNew();
     if(H.onCache){ try{ H.onCache(view); }catch(e){} }
     const pendingCount = upcoming().filter(ev=>!ev.confirmed).length;
-    const body = tab==='home'?homeHTML(): tab==='work'?workHTML(): tab==='schedule'?scheduleHTML(): tab==='confirm'?confirmHTML(): tab==='done'?doneHTML(): tab==='all'?allHTML(): tab==='day'?dayHTML(): tab==='arrange'?arrangeHTML(): tab==='route'?routeHTML(): tab==='pay'?payHTML(): tab==='avail'?availHTML(): noticeHTML();
+    const body = tab==='home'?homeHTML(): tab==='work'?workHTML(): tab==='schedule'?scheduleHTML(): tab==='confirm'?confirmHTML(): tab==='done'?doneHTML(): tab==='all'?allHTML(): tab==='day'?dayHTML(): tab==='arrange'?arrangeHTML(): tab==='route'?routeHTML(): tab==='pay'?(payOk || MGR()? payHTML() : payLockedHTML()): tab==='avail'?availHTML(): noticeHTML();
     const updated = view.generatedAt ? new Date(view.generatedAt) : new Date();
     // 상단 메뉴바의 가로 스크롤 위치를 기억 → 다시 그린 뒤 그대로 복원 (뒤쪽 메뉴를 눌러도 앞으로 돌아가지 않게)
     const oldNav = root.querySelector('.pp-tabs');
@@ -3177,7 +3402,15 @@ const PartnerPortal = (function(){
       render(); pendingDot(); toast(`${pend.length}건 확정 완료! 대표에게 전달돼요`); flushQueue(); return;
     }
     if(act==='allList'){ schedFilter=null; render(); window.scrollTo(0,0); return; }
-    if(act==='tab'){ schedFilter=null; tab=v; selDay=null; sheet=null; render(); window.scrollTo(0,0); return; }
+    if(act==='tab'){
+      if(v!=='pay') payOk = false;   // 다른 메뉴로 가면 다시 잠김
+      if(v==='pay' && !payOk && !MGR()){ schedFilter=null; selDay=null; sheet = {mode:'paypin', step: view.payPinSet? 'enter':'set'}; render(); setTimeout(()=>{ const i = document.getElementById('ppPin1'); if(i) i.focus(); }, 60); return; }
+      schedFilter=null; tab=v; selDay=null; sheet=null; render(); window.scrollTo(0,0); return; }
+    if(act==='wxGo'){ wxFetch(); return; }
+    if(act==='depGo'){ depFetch(el.dataset.rid); return; }
+    if(act==='depMode'){ try{ localStorage.setItem('pp_dep_mode', v); }catch(_){} depUpd(); return; }
+    if(act==='payPinOpen'){ sheet = {mode:'paypin', step: view.payPinSet? 'enter':'set'}; render(); setTimeout(()=>{ const i = document.getElementById('ppPin1'); if(i) i.focus(); }, 60); return; }
+    if(act==='payPinGo'){ payPinGo(); return; }
     if(act==='wsel'){ workRid=rid; render(); return; }
     if(act==='install'){ if(H.onInstall) H.onInstall(); return; }
     if(act==='installHide'){ try{ localStorage.setItem('pp_install_hide','1'); }catch(e){} render(); return; }
@@ -3292,6 +3525,7 @@ const PartnerPortal = (function(){
     }
   }
   function onInput(ev){
+    if(ev.target && ev.target.classList && ev.target.classList.contains('pp-pin')){ ev.target.value = String(ev.target.value||'').replace(/\D/g,'').slice(0,6); return; }
     if(ev.target.dataset && ev.target.dataset.dayt){ dayEdit[ev.target.dataset.dayt] = ev.target.value; return; }
     if(ev.target.dataset && ev.target.dataset.dayden){
       const k = ev.target.dataset.dayden, [rid, key] = [k.slice(0, k.indexOf(':')), k.slice(k.indexOf(':')+1)];
@@ -3544,6 +3778,7 @@ function openPortal(view){
     onRoute: async (until)=>{ const r = await fetch(apiUrl({action:'routePlan', code: CODE, until: until||''}), {method:'GET'}); return await r.json(); },
     onDayReport: async (rid)=>{ const r = await fetch(apiUrl({action:'dayReport', code: CODE, rid}), {method:'GET'}); return await r.json(); },
     onCloseStats: async (rid)=>{ const r = await fetch(apiUrl({action:'closeStats', code: CODE, rid}), {method:'GET'}); return await r.json(); },
+    onDepart: async (rid, lat, lng)=>{ const r = await fetch(apiUrl({action:'depart', code: CODE, rid, lat: Number(lat).toFixed(4), lng: Number(lng).toFixed(4)}), {method:'GET'}); return await r.json(); },
     onLogout: ()=>{ if(confirm('로그아웃할까요? 자동 로그인도 해제돼요.')){ try{ localStorage.removeItem(viewKey(CODE)); }catch(e){} ls(LS_CODE, null); CODE=''; screenLogin(); } }
   });
 }
