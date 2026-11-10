@@ -688,6 +688,20 @@ body.pp-cam-on{overflow:hidden}
 .pp-gen{margin:10px 0 6px;border:1px solid #EADFD2;border-radius:14px;background:#FFFCF8;padding:0 12px}.pp-gen>summary{cursor:pointer;padding:10px 0;font-weight:800;font-size:13.5px;list-style:none}.pp-gen>summary small{display:block;font-weight:600;font-size:11.5px;color:#7C6F68;margin-top:2px}
 .pp-gen-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:6px;padding:0 0 12px}.pp-gen-row{display:flex;justify-content:space-between;align-items:center;gap:6px;background:#fff;border:1px solid #F0E8E0;border-radius:10px;padding:6px 8px;font-size:13px}.pp-gen-row i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}.pp-gen-row small{color:#9A8F88;font-size:11px}
 .pp-gen-btns{display:inline-flex;gap:4px}.pp-gen-btns button{border:1px solid #E5DBD2;background:#fff;border-radius:999px;padding:3px 10px;font:inherit;font-size:12px;cursor:pointer;color:#7C6F68}.pp-gen-btns button.on.M{background:#E6EEF8;border-color:#9DB6D6;color:#244C78;font-weight:800}.pp-gen-btns button.on.F{background:#FBEAEE;border-color:#E3A9B6;color:#8A2E44;font-weight:800}
+.pp .pp-ar-how{background:#F7F4EF;border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.6;color:#5C5157;margin:8px 0 12px}.pp-ar-leg{display:flex;gap:12px;align-items:center;margin-top:4px;font-size:11.5px;font-weight:700}.pp-ar-leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:-6px}.pp-ar-leg i.g{background:#2F6FD6}.pp-ar-leg i.b{background:#E0558A}
+.pp .pp-ar-ev{background:#fff;border:1px solid #ECE6DF;border-radius:16px;padding:12px;margin-bottom:12px}.pp .pp-ar-h{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;margin-bottom:10px}.pp .pp-ar-h span{width:100%;font-size:12.5px;color:#7C6F68}.pp-ar-h em{font-style:normal;font-size:11px;font-weight:800;color:#9A5B13;background:#FFF1D6;border-radius:999px;padding:1px 8px}.pp-ar-h em.today{color:#fff;background:#B04A2E}
+.pp-ar-sides{display:grid;grid-template-columns:1fr 1fr;gap:8px}.pp-ar-sides.one{grid-template-columns:1fr}
+.pp .pp-ar-side{border:0;padding:0;display:flex;flex-direction:column;gap:6px;min-width:0}
+.pp .pp-ar-go{width:100%;border:0;border-radius:14px;padding:14px 10px;display:flex;flex-direction:column;align-items:center;gap:2px;font:inherit;color:#fff;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.10)}
+.pp .pp-ar-go.groom{background:linear-gradient(160deg,#4A86E8,#2F6FD6)}.pp .pp-ar-go.bride{background:linear-gradient(160deg,#F07AA6,#E0558A)}
+.pp-ar-go .pp-ar-ic{font-size:24px;line-height:1.1}.pp-ar-go b{font-size:16px;font-weight:900}.pp-ar-go small{font-size:11.5px;font-weight:700;opacity:.92;text-align:center;word-break:keep-all}
+.pp .pp-ar-go[disabled]{background:#EEEAE6!important;color:#A59C96;box-shadow:none;cursor:default}
+.pp .pp-ar-code{display:flex;justify-content:space-between;align-items:center;gap:6px;border-radius:10px;padding:6px 8px;font-size:11.5px;margin:0;flex-wrap:nowrap}.pp-ar-side.groom .pp-ar-code{background:#EAF1FC;color:#244C8A}.pp-ar-side.bride .pp-ar-code{background:#FCEAF1;color:#8A2E55}.pp-ar-side.off .pp-ar-code{background:#F5F2EF;color:#9A8F88}
+.pp .pp-ar-code b{font-size:13px;letter-spacing:.3px;user-select:all;margin-left:2px}.pp-ar-code span{min-width:0;display:flex;flex-direction:column;line-height:1.3}.pp-ar-code span small{font-size:10.5px;opacity:.8}.pp .pp-ar-code span b{margin-left:0;word-break:break-all;color:inherit}.pp .pp-ar-code em{font-style:normal}
+.pp-ar-code button{border:0;background:rgba(255,255,255,.85);border-radius:999px;padding:3px 10px;font:inherit;font-size:11px;font-weight:800;color:inherit;cursor:pointer;flex-shrink:0}
+.pw-ic{margin-right:6px}.pw-items{margin:0 0 12px;padding:0;list-style:none;counter-reset:pwi;display:flex;flex-direction:column;gap:6px}.pw-items li{counter-increment:pwi;position:relative;padding:8px 10px 8px 34px;background:#FBF8F4;border-radius:10px;font-size:13.5px;line-height:1.55;color:var(--pp-ink,#241F22)}
+.pw-items li::before{content:counter(pwi);position:absolute;left:9px;top:8px;width:18px;height:18px;border-radius:50%;background:var(--pp-wine,#7A2E3A);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.pw-items.sm{margin:0 14px 10px 50px}.pw-items.sm li{font-size:12.5px;padding:6px 8px 6px 30px;background:#fff;border:1px solid #F0E8E0}.pw-items.sm li::before{width:16px;height:16px;left:7px;top:7px;font-size:10px}
 /* ===== 대시보드 ===== */
 .pp-ev-list,.pp-ev-detail,.pp-ev-head,.pp-ev-tip,.pp-ev-row,.pp-d-next,.pp-d-today,.pp-d-grid button,.pp-d-day,.pp-d-pay,.pp-d-notices button,.pp-d-quick button,.pp-d-sec{color:var(--pp-ink,#241F22)}
 .pp-ev-detail .pp-meta>div{color:var(--pp-ink,#241F22)}
@@ -885,25 +899,21 @@ function pvDefaultSettings(){
 /* 당일 업무 순서 (예식 시작 기준 분 · at=null이면 시간 표시 없음) */
 function pvDefaultWorkflow(){
   return [
-    {id:'w01', title:'출발 보고 (대표)', when:'예식장 출발할 때', at:null, detail:'예식장으로 출발하면서 출발 보고를 카카오톡 톡방에 공유해요.', msgs:['m_depart']},
-    {id:'w02', title:'예식장 도착', at:-90, detail:'예식 시작 1시간 30분 전까지 도착해요. 도착하면 현장 도착 체크인을 눌러주세요.', checkin:true},
-    {id:'w03', title:'도착 보고 (대표)', at:-90, detail:'예식장에 도착하면 도착 보고를 카카오톡 톡방에 공유해요.', msgs:['m_arrive']},
-    {id:'w04', title:'예식장 전경 · 내부 사진 촬영', at:-88, photo:true, detail:'예식장 외부 전경과 로비·홀 내부를 촬영해요.'},
-    {id:'w05', title:'빈 축의대 사진 촬영', at:-84, photo:true, detail:'셋팅 전 빈 축의대를 촬영해요.'},
-    {id:'w06', title:'식권전달자 연락 · 식권 수령', at:-84, detail:'파트너 안내카드에 적힌 식권전달자 분께 연락해 식권을 수령하고, 수령 보고를 카카오톡 톡방에 공유해요.', msgs:['m_ticket']},
-    {id:'w07', title:'축의대 셋팅', at:-80, detail:'방명록, 노트북, 필기구, 고무줄, 축의봉투함, 클립 등 기본 셋팅을 해요.'},
-    {id:'w08', title:'동영상 촬영 셋팅', at:-72, detail:'축의대 운영을 시작하기 전에 동영상 촬영을 시작해요. 녹화 중인지 꼭 확인!'},
-    {id:'w09', title:'식권 실수량 카운팅', at:-68, detail:'받은 식권을 대인 · 소인으로 나눠 실수량을 세고, 수량을 입력해 카카오톡 톡방에 보고해요.', msgs:['m_ticketcount']},
-    {id:'w10', title:'화환 · 웨딩포토존 사진 촬영', at:-64, photo:true, detail:'화환과 웨딩포토존을 촬영해요.'},
-    {id:'w11', title:'축의대 운영 시작', at:-60, detail:'하객 맞이를 시작해요. 밝은 인사와 함께 방명록·축의금 접수를 안내해요.'},
-    {id:'w12', title:'A · B조 역할에 따라 운영', at:null, when:'운영 중', detail:'A조·B조 역할에 맞춰 운영해요. 역할은 대표 안내(전달사항)를 확인해주세요.'},
-    {id:'w13', title:'중간 특이사항 보고', at:null, when:'운영 중 수시로', detail:'특이사항이 생기면 카카오톡 톡방에 바로 보고해요. 아래 "특이사항 보고" 양식을 이용하세요.', msgs:['m_mid'], report:true},
-    {id:'w14', title:'축의대 마감', at:null, when:'하객 입장 마무리 후', detail:'하객 접수가 끝나면 축의대를 마감해요.'},
-    {id:'w15', title:'축의금 봉인 · 식권 잔량 · 정리 사진', at:null, photo:true, detail:'축의금 봉인 상태, 남은 식권 수량, 정리된 축의대를 촬영해요.'},
-    {id:'w16', title:'축의금 인계', at:null, detail:'지정된 분께 축의금을 인계하고 인계받은 분 성함을 기록해요.'},
-    {id:'w17', title:'동영상 종료 및 확인', at:null, detail:'동영상 촬영을 종료하고 파일이 정상 저장됐는지 확인해요.'},
-    {id:'w18', title:'마감 보고 (대표)', at:null, detail:'마감 보고를 카카오톡 톡방에 공유해요.', msgs:['m_close']},
-    {id:'w19', title:'업무 종료', at:null, detail:'오늘도 수고 많으셨어요! 업무 종료를 체크하면 대표에게 공유돼요.'}
+    {id:'s1', icon:'🚗', title:'출발', when:'출근 시간에 맞춰 집에서 출발할 때', at:null, msgs:['m_depart'],
+      detail:'출발 전에 오늘 예식 정보를 한 번 더 확인하고, 출발하면서 출발 보고를 공유해요.',
+      items:['파트너 안내카드로 예식장 · 홀 · 출근 시간 확인','준비물 챙기기 (노트북 · 충전기 · 필기구 · 고무줄 · 클립 · 축의봉투함)','출발하면서 「출발 보고」 카카오톡 공유']},
+    {id:'s2', icon:'📍', title:'도착 · 식권 수령', at:-90, checkin:true, msgs:['m_arrive','m_ticketcount'],
+      detail:'예식 1시간 30분 전까지 도착해 체크인하고, 식권을 받아 실수량을 확인해요.',
+      items:['도착하면 「📍 도착 체크인」 → 「도착 보고」 공유','식권전달자에게 연락해 식권 받기 (연락처는 내 예식정보)','대인 · 소인 식권 실수량을 세어 「식권 실수량 보고」 공유']},
+    {id:'s3', icon:'📷', title:'사진 촬영 · 축의대 셋팅', at:-85, photo:true,
+      detail:'현장 사진을 찍으면서 축의대를 셋팅해요. 사진은 여러 장 모아 한 번에 공유하면 돼요.',
+      items:['예식장 외부 전경 · 로비 · 홀 내부 촬영','빈 축의대 촬영 → 축의대 셋팅 (방명록 · 노트북 · 필기구 · 고무줄 · 봉투함 · 클립)','화환 · 웨딩포토존 촬영 후 사진 한 번에 공유']},
+    {id:'s4', icon:'🎊', title:'축의대 운영', at:-60, report:true,
+      detail:'동영상 녹화를 켜고 하객 맞이를 시작해요. 운영 중 생긴 일은 바로 보고해요.',
+      items:['동영상 녹화 시작 · 녹화 중인지 꼭 확인','밝은 인사로 하객 맞이 · 방명록 · 축의금 접수 (A · B조 역할대로)','특이사항은 「🚨 특이사항 보고」로 바로 공유']},
+    {id:'s5', icon:'🤝', title:'마감 정리 · 인수인계', when:'하객 접수가 끝나면', at:null, photo:true, msgs:['m_close'],
+      detail:'축의대를 마감하고 축의금을 인계한 뒤, 마감 보고를 보내면 오늘 업무가 끝나요.',
+      items:['축의대 마감 · 축의금 봉인','봉인 상태 · 식권 잔량 · 정리된 축의대 사진 공유','지정된 분께 축의금 인계 (인계받은 분 성함 기록)','동영상 종료 · 저장 확인 → 「마감 보고」 공유하면 업무 끝']}
   ];
 }
 /* 메시지 양식 · to: client(계약자) / owner(대표) / both(둘 다) / ticket(식권전달자 · 번호 직접 입력) */
@@ -1132,7 +1142,7 @@ function buildPartnerView(records, db, code, todayStr){
     assignables: (typeof assignables!=='undefined') ? assignables : undefined,
     notices: notices,
     template: db.template || [],
-    workflow: (db.settings && Array.isArray(db.settings.workflow) && db.settings.workflow.length) ? db.settings.workflow : pvDefaultWorkflow(),
+    workflow: (db.settings && Array.isArray(db.settings.workflow) && db.settings.workflow.some(function(st){ return st && Array.isArray(st.items); })) ? db.settings.workflow : pvDefaultWorkflow(),   // 예전 19단계 순서는 새 5단계로
     messages: (db.settings && Array.isArray(db.settings.msgTemplates) && db.settings.msgTemplates.length) ? db.settings.msgTemplates : pvDefaultMessages(),
     owners: members.filter(function(m){ return m.active!==false && (m.kind==='owner' || m.title==='대표'); }).map(function(m){ return {name: m.name, phone: m.phone||''}; }),
     reportPhone: (db.settings && db.settings.reportPhone) || '010-5730-0614', // 대표 전화
@@ -2105,6 +2115,7 @@ const PartnerPortal = (function(){
   const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent||'');
   function wf(){
     let w = Array.isArray(view.workflow) && view.workflow.length ? view.workflow : ((typeof pvDefaultWorkflow==='function') ? pvDefaultWorkflow() : []);
+    if(!w.some(st=> st && Array.isArray(st.items)) && typeof pvDefaultWorkflow==='function') w = pvDefaultWorkflow();   // 예전 19단계 → 새 5단계 흐름
     if(Number(view.v||0) < 8) w = w.map(st=> (st.id==='w09' && !(st.msgs||[]).length) ? Object.assign({}, st, {msgs:['m_ticketcount'], detail:'받은 식권을 대인 · 소인으로 나눠 실수량을 세고, 수량을 입력해 카카오톡 톡방에 보고해요.'}) : st); // 서버 업데이트 전에도 식권 실수량 보고 사용
     return w;
   }
@@ -2210,14 +2221,14 @@ const PartnerPortal = (function(){
     const doneAt = done ? new Date(ev.checks[wkey(st)]) : null;
     return `<div class="pw-step ${done?'done':''} ${cur?'cur':''}" ${live?`data-pp="wtoggle" data-v="${e(st.id)}"`:''}>
       <span class="pw-no">${done?'✓':i+1}</span>
-      <div class="pw-st"><b>${e(st.title)}</b><small>${tm?'목표 '+tm:(st.when?e(st.when):'')}${st.photo?' · 📷 사진':''}${(st.msgs||[]).length?' · 💬 메시지':''}${doneAt&&!isNaN(doneAt)?' · '+pd(doneAt.getHours())+':'+pd(doneAt.getMinutes())+' 완료':''}</small></div>
+      <div class="pw-st"><b>${st.icon? e(st.icon)+' ':''}${e(st.title)}</b><small>${tm?'목표 '+tm:(st.when?e(st.when):'')}${st.photo?' · 📷 사진':''}${(st.msgs||[]).length?' · 💬 메시지':''}${doneAt&&!isNaN(doneAt)?' · '+pd(doneAt.getHours())+':'+pd(doneAt.getMinutes())+' 완료':''}</small></div>
     </div>`;
   }
   function workHTML(){
     const {ev, live, list} = workEvent();
     const steps = wf();
-    const guide = `<div class="pp-h">업무 순서 한눈에 보기 <small>${steps.length}단계</small></div>
-      <div class="pw-guide">${steps.map((st,i)=>`<details class="pw-g"><summary><span class="pw-no">${i+1}</span>${e(st.title)}<small>${st.at!==null&&st.at!==undefined&&st.at!==''? (Number(st.at)<0? '예식 '+Math.abs(st.at)+'분 전' : '예식 '+st.at+'분 후') : e(st.when||'')}</small></summary><p>${e(st.detail||'')}</p>${(st.msgs||[]).map(id=>{ const m=msgById(id); return m?`<div class="pw-msgprev"><b>💬 ${e(m.label)}</b>${e(m.body).replace(/\n/g,'<br>')}</div>`:''; }).join('')}</details>`).join('')}</div>`;
+    const guide = `<div class="pp-h">업무 흐름 한눈에 보기 <small>${steps.map(st=> st.title.split(' ')[0]).join(' → ')}</small></div>
+      <div class="pw-guide">${steps.map((st,i)=>`<details class="pw-g"><summary><span class="pw-no">${i+1}</span>${st.icon? e(st.icon)+' ':''}${e(st.title)}<small>${st.at!==null&&st.at!==undefined&&st.at!==''? (Number(st.at)<0? '예식 '+Math.abs(st.at)+'분 전' : '예식 '+st.at+'분 후') : e(st.when||'')}</small></summary><p>${e(st.detail||'')}</p>${(st.items||[]).length? `<ol class="pw-items sm">${st.items.map(x=>`<li>${e(x)}</li>`).join('')}</ol>`:''}${(st.msgs||[]).map(id=>{ const m=msgById(id); return m?`<div class="pw-msgprev"><b>💬 ${e(m.label)}</b>${e(m.body).replace(/\n/g,'<br>')}</div>`:''; }).join('')}</details>`).join('')}</div>`;
     if(!ev) return `<div class="pp-empty">아직 배정된 예식이 없어요. 업무 순서를 미리 익혀두세요!</div>${guide}`;
     if(!live) return `<div class="pw-intro"><b>오늘은 예식이 없어요</b><p>예식 당일 이 화면에 접속하면 업무 순서대로 하나씩 체크하며 진행할 수 있어요. 다음 예식은 <b>${fdate(ev.date)} ${e(ev.callTime)} 출근</b> · ${e(ev.venueName)}이에요.</p></div>${guide}`;
     const pr = wprog(ev);
@@ -2225,8 +2236,9 @@ const PartnerPortal = (function(){
     const cur = curIdx>=0 ? steps[curIdx] : null;
     const curCard = cur ? `<div class="pw-cur">
         <div class="pw-cur-top"><span>STEP ${curIdx+1} / ${steps.length}</span>${stepTime(ev,cur)?`<b>목표 ${stepTime(ev,cur)}</b>`:(cur.when?`<b>${e(cur.when)}</b>`:'')}</div>
-        <h3>${e(cur.title)}</h3>
+        <h3>${cur.icon? `<span class="pw-ic">${e(cur.icon)}</span>`:''}${e(cur.title)}</h3>
         <p>${e(cur.detail||'')}</p>
+        ${(cur.items||[]).length? `<ol class="pw-items">${cur.items.map(x=>`<li>${e(x)}</li>`).join('')}</ol>`:''}
         ${cur.photo?`<button class="pw-photo-btn" data-pp="photo" data-v="${e(cur.id)}">📷 사진 여러 장 촬영 · 앨범 업로드 · 공유</button>`:''}
         <div class="pw-acts">
           ${(cur.msgs||[]).map(id=>{ const m=msgById(id); return m?`<button class="pp-btn gold" data-pp="compose" data-v="${e(m.id)}">💬 ${e(m.label)}</button>`:''; }).join('')}
@@ -2793,20 +2805,24 @@ const PartnerPortal = (function(){
   const ARRANGE_URL = 'https://momentworks.github.io/arrange/';
   function arrangeHTML(){
     const up = upcoming().slice().sort((a,b)=> (a.date+(a.weddingTime||''))<(b.date+(b.weddingTime||''))?-1:1);
-    const side = (ev, k, lab)=>{
-      const c = ev.arrange && ev.arrange[k];
-      return `<div class="pp-ar-side"><div class="pp-ar-code"><span>${lab} 접속코드</span>${c? `<b>${e(c)}</b><button class="pp-btn" data-pp="arrCopy" data-rid="${e(ev.recordId)}" data-v="${k}">📋 코드 복사</button>` : '<em>아직 등록 전이에요</em>'}</div>
-        <button class="pp-btn primary pp-ar-go" data-pp="arrGo" data-rid="${e(ev.recordId)}" data-v="${k}" ${c?'':'disabled'}>${lab}측 내역정리 시작하기</button></div>`;
+    const SIDE = {groom:['🤵','신랑측'], bride:['👰','신부측']};
+    const side = (ev, k)=>{
+      const c = ev.arrange && ev.arrange[k], [ic, lab] = SIDE[k], inf = ev.info || {}, who = k==='groom' ? inf.groomName : inf.brideName;
+      return `<div class="pp-ar-side ${k} ${c?'':'off'}">
+        <button class="pp-ar-go ${k}" data-pp="arrGo" data-rid="${e(ev.recordId)}" data-v="${k}" ${c?'':'disabled'}><span class="pp-ar-ic">${ic}</span><b>${lab}</b><small>${who? e(who)+'님<br>':''}${c? '내역정리 시작하기 ›' : '코드 등록 전'}</small></button>
+        <div class="pp-ar-code">${c? `<span><small>${lab} 코드</small><b>${e(c)}</b></span><button data-pp="arrCopy" data-rid="${e(ev.recordId)}" data-v="${k}">복사</button>` : '<em>대표가 코드를 만들면 열려요</em>'}</div></div>`;
     };
     const card = ev=>{
-      const d = parseD(ev.date), dow = '일월화수목금토'[d.getDay()], inf = ev.info || {};
-      const nm = (inf.groomName||inf.brideName) ? `${inf.groomName? '신랑 '+e(inf.groomName):''}${inf.groomName&&inf.brideName?' · ':''}${inf.brideName? '신부 '+e(inf.brideName):''}` : '';
-      return `<section class="pp-ar-ev"><div class="pp-ar-h"><b>${pd(d.getMonth()+1)}.${pd(d.getDate())} (${dow}) ${e(ev.weddingTime||'')}</b> <span>${e(ev.venueName||'예식장 미정')}</span>${nm? `<small>${nm}</small>`:''}</div>${side(ev,'groom','신랑')}${side(ev,'bride','신부')}</section>`;
+      const d = parseD(ev.date), dow = '일월화수목금토'[d.getDay()], dd = Math.round((d - parseD(today()))/86400000);
+      const has = ['groom','bride'].filter(k=> ev.arrange && ev.arrange[k]);
+      const ks = has.length===1 && /한측|통합/.test(String(ev.productType||'')) ? has : ['groom','bride'];
+      return `<section class="pp-ar-ev"><div class="pp-ar-h"><b>${pd(d.getMonth()+1)}.${pd(d.getDate())} (${dow}) ${e(ev.weddingTime||'')}</b>${dd===0? '<em class="today">오늘</em>' : dd>0 && dd<=7? `<em>D-${dd}</em>`:''}<span>${e(ev.venueName||'예식장 미정')}${ev.hallName? ' · '+e(ev.hallName):''}</span></div>
+        <div class="pp-ar-sides ${ks.length===1?'one':''}">${ks.map(k=> side(ev, k)).join('')}</div></section>`;
     };
-    return `<div class="pp-cfhead"><div><b>축의대 내역정리</b> <small>배정된 예식의 정리 시트 접속코드</small></div></div>
-      <p class="pp-ar-url">내역정리 사이트: <a href="${ARRANGE_URL}" target="_blank" rel="noopener">${ARRANGE_URL}</a></p>
+    return `<div class="pp-cfhead"><div><b>축의대 내역정리</b> <small>배정된 예식의 정리 시트</small></div></div>
+      <div class="pp-ar-how"><b>시작하기를 누르면</b> 새 창으로 정리 시트가 열리고, 그 측의 코드와 <b>${e(view.member.name||'')}</b>님 이름(담당자)으로 바로 로그인돼요.<div class="pp-ar-leg"><i class="g"></i>신랑측 · 블루 <i class="b"></i>신부측 · 핑크</div></div>
       ${up.length? up.map(card).join('') : '<div class="pp-empty">배정된 예정 일정이 없어요</div>'}
-      <p class="pp-cf-note">「시작하기」를 누르면 내역정리 시트가 열리고 접속코드와 <b>${e(view.member.name||'')}</b>님 이름으로 바로 로그인돼요.</p>`;
+      <p class="pp-ar-url">정리 시트 주소: <a href="${ARRANGE_URL}" target="_blank" rel="noopener">${ARRANGE_URL}</a></p>`;
   }
   /* ---------- 추천 동선: 같은 날 2건 이상 배정된 경우 ---------- */
   const ROUTE_BUFFER = 10; // 다음 예식 출근 전 확보할 여유(분)
@@ -3377,7 +3393,7 @@ const PartnerPortal = (function(){
         <div class="pp-brandrow">
           ${typeof MW_LOGO_MARK!=='undefined' ? `<button class="pp-logo-btn" data-pp="home" title="홈으로 · 새로고침" aria-label="홈으로 · 새로고침"><img class="pp-mark" src="${MW_LOGO_MARK}" alt="MW"></button>` : ''}
           <div>
-          <div class="pp-brand">Partners Office</div>
+          <div class="pp-brand">Partner Office</div>
           <div class="pp-who"><span class="pp-dot" style="background:${e(view.member.color)}"></span>${e(view.member.name)}<span class="pp-role">${e(view.member.title||'파트너')}</span></div>
           </div>
         </div>
