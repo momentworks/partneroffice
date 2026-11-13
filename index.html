@@ -1489,7 +1489,9 @@ function buildCustomerView(records, db, code, todayStr, withFile){
 
   // 짝꿍코드: 내 코드로 계약한 분들 (본식 종료 건만 확정 · 내 예식 전 확정분은 잔금 할인, 이후는 페이백)
   var myCode = String(r.contractCode||'').trim();
-  var referred = myCode ? all.filter(function(x){ return x!==r && !x.cancelled && String(x.partnerCode||'').trim()===myCode; }) : [];
+  // 짝꿍코드를 바꾼 경우: 예전 코드로 적힌 계약도 새 코드로 연결 (settings.codeAlias = {예전코드: 새코드})
+  var codeAl = (s && s.codeAlias) || {}, canon = function(c){ c = String(c||'').trim(); var g = 0; while(c && codeAl[c] && codeAl[c]!==c && g++<10) c = String(codeAl[c]).trim(); return c; };
+  var referred = myCode ? all.filter(function(x){ return x!==r && !x.cancelled && canon(x.partnerCode)===myCode; }) : [];
   referred.sort(function(a,b){ return String(a.weddingDate||'').localeCompare(String(b.weddingDate||'')); });
   var refRows = referred.map(function(x){
     var done = !!(x.weddingDate && today && x.weddingDate < today);
@@ -1518,7 +1520,9 @@ function buildCustomerView(records, db, code, todayStr, withFile){
   var base = n(r.baseAmount), eb = r.earlyBird!=='O' ? 0 : String(r.contractDate||'') >= '2026-09-01' ? (String(r.productType||'').trim()==='양측' ? 50000 : 30000) : (n(r.earlyBirdDiscount)||20000);
   var pd = (r.partnerCode && String(r.partnerCode).trim() && String(r.partnerCode).trim()!=='-') ? n(r.partnerDiscount) : 0;
   var rd = discountCnt * UNIT, revC = n(r.reviewDiscountContract), deposit = n(r.deposit), travel = n(r.travelFee);
-  var balance = base - eb - pd - rd - revC - gsd - deposit + travel + sur;
+  var TKP = {c200:19900, c500:39900, b20:2000, b50:4000, b100:7000}, tko = settle.ticket || {}, tkt = 0;   // 식권 제작 서비스 (커스텀 200·500장 · 기본 20·50·100장)
+  Object.keys(TKP).forEach(function(k){ tkt += Math.max(0, Math.floor(n(tko[k]))) * TKP[k]; });
+  var balance = base - eb - pd - rd - revC - gsd - deposit + travel + sur + tkt;
   var revD = n(r.reviewDiscountDay);
 
   return {
@@ -1530,7 +1534,7 @@ function buildCustomerView(records, db, code, todayStr, withFile){
     wedding: {date: r.weddingDate||'', time: r.weddingTime||'', venue: r.venueName||'', hall: r.hallName||'', region: r.region||'',
       product: r.productType||'', groomGuests: n(r.groomGuests), brideGuests: n(r.brideGuests), settingsSubmitted: !!r.settingsSubmitted},
     contract: {date: r.contractDate||'', code: myCode, hasFile: !!String(client.contractUrl||'').trim(),
-      amounts: {base: base, earlyBird: eb, partnerDiscount: pd, referralDiscount: rd, reviewContract: revC, guestScaleDiscount: gsd, surcharge: sur, deposit: deposit, travel: travel, balance: balance, reviewDay: revD, final: balance - revD},
+      amounts: {base: base, earlyBird: eb, partnerDiscount: pd, referralDiscount: rd, reviewContract: revC, guestScaleDiscount: gsd, surcharge: sur, deposit: deposit, travel: travel, ticket: tkt, balance: balance, reviewDay: revD, final: balance - revD},
       settled: !!r.settlementDone},
     live: (function(){
       var base = String(s.giftBaseUrl || 'https://momentworks.github.io/arrange/').trim();
