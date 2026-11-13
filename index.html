@@ -3234,8 +3234,13 @@ const PartnerPortal = (function(){
     }
     if(act==='daySms'){
       const p = ((dayData[rid]||{}).people||[])[Number(el.dataset.i)] || {};
-      copyPlain(text); dayMark(rid, key, 'sms');
-      if(isPhoneUA()){ location.href = smsHrefTo(p.phone, text); }
+      let st2 = text;   // 받는 분(신랑 · 신부)의 마이모먼트 접속코드로
+      if(dst && dst.texts && p.side){
+        if(dayEdit[rid+':'+key]===undefined && !dst.denom) st2 = dst.texts[p.side] || text;
+        else if(dst.codeAll && dst.codes && dst.codes[p.side] && dst.codeAll!==dst.codes[p.side]) st2 = text.split(dst.codeAll).join(dst.codes[p.side]);
+      }
+      copyPlain(st2); dayMark(rid, key, 'sms');
+      if(isPhoneUA()){ location.href = smsHrefTo(p.phone, st2); }
       else toast('문구를 복사했어요 · 휴대폰에서 누르면 문자 앱이 바로 열려요');
       render(); return true;
     }
