@@ -1073,7 +1073,7 @@ function buildPartnerView(records, db, code, todayStr){
       clientName: settings.showClientName ? (r.clientName||'') : mask(r.clientName),
       clientPhone: (db.settings && db.settings.showClientPhone===true) ? (r.phone||'') : '',
       groomGuests: Number(r.groomGuests)||0, brideGuests: Number(r.brideGuests)||0,
-      settingsSubmitted: !!r.settingsSubmitted,
+      settingsSubmitted: !!r.settingsSubmitted || !!((db.referralPay||{})['sfdone:'+r.id]),
       roles: mine.map(function(s){ return s.role||''; }),
       pay: pay,
       payDetail: payDetail,
@@ -1451,6 +1451,7 @@ function applySettingsGuide(records, db, payload, trusted){
       if(touched){ var c2 = {}; Object.keys(cl).forEach(function(q){ c2[q] = cl[q]; }); c2.sides = sides; c2.updatedAt = new Date().toISOString(); db.referralPay[ck] = c2; }
     }
   }
+  if(trusted!=='admin'){ var sfPrev = db.referralPay['sfdone:'+hit.id] || {}; db.referralPay['sfdone:'+hit.id] = {at: new Date().toISOString(), first: sfPrev.first || sfPrev.at || new Date().toISOString(), source: trusted==='pdf' ? 'pdf' : 'form'}; }   // 고객이 설정서를 제출함 → 고객페이지 · 파트너 화면 '제출 완료'
   return {ok:true, db:db, recordId: hit.id, contractCode: hit.contractCode||'', items: Object.keys(g.items).length};
 }
 
@@ -1532,7 +1533,7 @@ function buildCustomerView(records, db, code, todayStr, withFile){
     client: {name: (function(){ var gd = rp['guide:'+recordId] || {}; var nn = (side && side.name) || (sideKey==='groom' ? gd.groomName : sideKey==='bride' ? gd.brideName : '') || r.clientName || '';
       return String(nn).replace(/\s+(신랑|신부)(측)?\s*(님)?\s*$/, '').replace(/\s*님$/, '').trim() || String(r.clientName||''); })(), contractName: r.clientName||'', code: myCode, side: sideKey, sideLabel: ''},
     wedding: {date: r.weddingDate||'', time: r.weddingTime||'', venue: r.venueName||'', hall: r.hallName||'', region: r.region||'',
-      product: r.productType||'', groomGuests: n(r.groomGuests), brideGuests: n(r.brideGuests), settingsSubmitted: !!r.settingsSubmitted},
+      product: r.productType||'', groomGuests: n(r.groomGuests), brideGuests: n(r.brideGuests), settingsSubmitted: !!r.settingsSubmitted || !!rp['sfdone:'+recordId], settingsSubmittedAt: (rp['sfdone:'+recordId]||{}).at || ''},
     contract: {date: r.contractDate||'', code: myCode, hasFile: !!String(client.contractUrl||'').trim(),
       amounts: {base: base, earlyBird: eb, partnerDiscount: pd, referralDiscount: rd, reviewContract: revC, guestScaleDiscount: gsd, surcharge: sur, deposit: deposit, travel: travel, ticket: tkt, balance: balance, reviewDay: revD, final: balance - revD},
       settled: !!r.settlementDone},
