@@ -736,6 +736,25 @@ body.pp-cam-on{overflow:hidden}
 .pp .pw-info summary small{font-size:11px;color:var(--pp-slate);font-weight:600;margin-left:4px;}
 .pp .pw-info[open] summary{border-bottom:1px solid var(--pp-line);}
 .pp .pw-info > :not(summary){margin:10px 12px;}
+/* 마감보고 최종 확인 */
+.pp .pw-cs{background:#fff;border:1px solid var(--pp-line);border-radius:12px;padding:12px;margin:0 0 10px;}
+.pp .pw-cs-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+.pp .pw-cs-h span{flex:0 0 24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--pp-wine);color:#fff;font-size:12px;font-weight:800;}
+.pp .pw-cs-h.ok span{background:var(--pp-sage);}
+.pp .pw-cs-h b{font-size:14.5px;} .pp .pw-cs-h small{flex-basis:100%;font-size:11.5px;color:var(--pp-slate);padding-left:32px;margin-top:-4px;}
+.pp .pw-cs-side + .pw-cs-side{border-top:1px dashed var(--pp-line);margin-top:10px;padding-top:10px;}
+.pp .pw-cs-lb{font-size:12.5px;font-weight:800;color:var(--pp-wine);margin-bottom:6px;}
+.pp .pw-cs-stat{display:grid;grid-template-columns:1.4fr 1fr 1.2fr;gap:6px;margin-bottom:8px;}
+.pp .pw-cs-stat div{background:var(--pp-gold-s);border-radius:10px;padding:8px 10px;min-width:0;}
+.pp .pw-cs-stat small{display:block;font-size:10.5px;color:var(--pp-soft);}
+.pp .pw-cs-stat b{font-size:15px;}
+.pp .pw-cs-amt{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;}
+.pp .pw-cs-amt input{flex:1;min-width:0;border:2px solid var(--pp-line);border-radius:10px;padding:10px 12px;font:inherit;font-size:18px;font-weight:800;text-align:right;}
+.pp .pw-cs-ck{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700;padding:9px 2px;}
+.pp .pw-cs-ck input{width:22px;height:22px;accent-color:var(--pp-sage);}
+.pp .pw-cs-in{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--pp-soft);padding:4px 0 6px 32px;}
+.pp .pw-cs-in input{flex:1;min-width:0;border:1px solid var(--pp-line);border-radius:8px;padding:9px 10px;font:inherit;font-size:14px;}
+.pp .pw-cs-re{border:none;background:none;color:var(--pp-slate);font:inherit;font-size:12px;text-decoration:underline;padding:8px 0 0;cursor:pointer;}
 /* ===== 대시보드 ===== */
 .pp-ev-list,.pp-ev-detail,.pp-ev-head,.pp-ev-tip,.pp-ev-row,.pp-d-next,.pp-d-today,.pp-d-grid button,.pp-d-day,.pp-d-pay,.pp-d-notices button,.pp-d-quick button,.pp-d-sec{color:var(--pp-ink,#241F22)}
 .pp-ev-detail .pp-meta>div{color:var(--pp-ink,#241F22)}
@@ -942,7 +961,7 @@ function pvDefaultWorkflow(){   // 오늘 업무 5단계 (kind로 새 형식 구
     {id:'s4', kind:'issue', icon:'🚨', title:'특이사항', at:-60, report:true, items:[],
       detail:'축의대 운영 중 생긴 일(분실 · 금액 오류 · 식권 부족 · 장비 문제 등)을 바로 보고해요. 없으면 「특이사항 없음」을 눌러요.'},
     {id:'s5', kind:'close', icon:'📝', title:'마감보고', when:'하객 접수가 끝나면', at:null, msgs:['m_close'], items:[],
-      detail:'축의금 봉인 · 인계, 동영상 저장을 확인하고 마감 보고를 보내면 오늘 업무가 끝나요.'}
+      detail:'축의대 내역정리에 입력된 금액을 자동으로 불러와 실물과 한 번 더 맞춰봐요. 권종별 정리 계약은 모든 권종 장수까지 검산한 뒤 최종 보고를 보내면 오늘 업무가 끝나요.'}
   ];
 }
 /* 메시지 양식 · to: client(계약자) / owner(대표) / both(둘 다) / ticket(식권전달자 · 번호 직접 입력) */
@@ -2288,7 +2307,7 @@ const PartnerPortal = (function(){
       main.push(`<button class="pw-go ok" data-pp="wdone" data-v="${id}">✓ 특이사항 없음</button>`);
       sub.push(`<button class="pp-btn" data-pp="compose" data-v="m_mid">💬 중간 보고</button>`);
     } else if(m0){
-      const lb = (st.checkin && !ev.checkinAt) ? `📍 도착 체크인 · ${m0.label} 보내기` : `💬 ${m0.label} 보내기`;
+      const lb = st.kind==='close' ? '📝 금액 확인 · 최종 마감보고' : (st.checkin && !ev.checkinAt) ? `📍 도착 체크인 · ${m0.label} 보내기` : `💬 ${m0.label} 보내기`;
       main.push(`<button class="pw-go" data-pp="stepGo" data-v="${id}">${e(lb)}</button>`);
     } else if(st.photo){
       main.push(`<button class="pw-go" data-pp="stepGo" data-v="${id}">📷 사진 찍고 공유하기</button>`);
@@ -2391,27 +2410,84 @@ const PartnerPortal = (function(){
     catch(err){ if(sheet && sheet.rid===rid) sheet.err = err.message || '집계를 불러오지 못했어요'; }
     finally{ if(sheet && sheet.rid===rid){ sheet.loading = false; render(); } }
   }
-  function closeAll(){ const st = (sheet && sheet.steps) || []; return {ok: st.length>0 && st.every(x=> denCheck(x, sheet.den[x.key]).ok), text: st.map(x=> denCheck(x, sheet.den[x.key]).fill(x.text)).join('\n\n')}; }
+  /* 마감보고 최종 확인: ① 내역정리 금액 자동 불러오기 → 실제 센 금액으로 더블체크 ② (권종별 정리 계약) 모든 권종 장수 검산 ③ 봉인 · 인계 · 동영상 확인 ④ 최종 보고 공유 */
+  const wonF = n=> String(Math.round(Number(n)||0)).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  function closeStat(x){ const s = x.stats || {}; const t = (s.total!==undefined && s.total!==null) ? s.total : (x.denom ? x.denom.total : null); return Object.assign({}, s, {total: t}); }
+  function amtCheck(x){
+    const t = closeStat(x).total, v = String((sheet.amt||{})[x.key]||'').replace(/[^0-9]/g,'');
+    const has = t!==null && t!==undefined && t!=='', ok = has && v!=='' && Number(v)===Number(t);
+    const msg = !has ? '⚠️ 내역정리 총액을 불러오지 못했어요 · 새로고침해 주세요'
+      : v==='' ? `봉투 · 현금을 직접 확인한 금액을 입력하면 내역정리 총액 ${wonF(t)}원과 맞춰봐요`
+      : ok ? `✅ 금액 일치 · ${wonF(v)}원 = 내역정리 총액`
+      : `❌ ${wonF(v)}원 · 내역정리 총액 ${wonF(t)}원과 ${wonF(Math.abs(Number(v)-Number(t)))}원 ${Number(v)>Number(t)?'많아요':'모자라요'} · 내역정리 입력을 다시 확인해 주세요`;
+    return {v, ok, msg, bad: v!=='' && has && !ok};
+  }
+  function closeAll(){
+    const st = (sheet && sheet.steps) || [], x0 = eventById(sheet && sheet.rid), dn = isDenomEv(x0), ck = sheet.ck || {};
+    const recv = String(sheet.recv||'').trim(), issue = String(sheet.issue||'').trim() || '없음';
+    const amtOk = st.length>0 && st.every(x=> amtCheck(x).ok), denOk = !dn || (st.length>0 && st.every(x=> denCheck(x, sheet.den[x.key]).ok));
+    const ckOk = !!(ck.seal && ck.video && recv);
+    const L = [`[마감 보고] ${x0? fdate(x0.date)+' '+(x0.venueName||'')+' '+(x0.clientName||'')+'님 예식' : ''}`];
+    st.forEach(x=>{
+      const s = closeStat(x), a = amtCheck(x), n = v=> (v===undefined || v===null || v==='') ? '-' : v;
+      L.push('', `■ 축의금 집계${st.length>1? ' · '+x.label : ''}`, `· 접수금액: ${s.total!==null && s.total!==undefined? wonF(s.total)+'원' : '-'}${a.ok? ' (실물 확인 일치 ✓)' : ''}`, `· 접수하객: ${n(s.guests)}명`, `· 대인 식권 사용/잔량: ${n(s.useAdult)}장/${n(s.remainAdult)}장`, `· 소인 식권 사용/잔량: ${n(s.useChild)}장/${n(s.remainChild)}장`);
+      if(dn){ const c = denCheck(x, sheet.den[x.key]), nz = v=> Number(v)||0;
+        const p = [['5만원권', c.a], ['1만원권', c.b], ['5천원권', c.c], ['1천원권', c.d]].filter(q=> nz(q[1])).map(q=> `${q[0]} ${nz(q[1])}장`);
+        if(nz(c.chk)) p.push(`수표 ${wonF(c.chk)}원`); if(Number(c.usd)) p.push(`달러 ${c.usd} USD`); if(c.etc) p.push(`기타 ${c.etc}`);
+        L.push(`· 권종별 정리: ${p.length? p.join(' · ') : '-'}${c.ok? ' (검산 일치 ✓)' : ''}`); }
+    });
+    L.push('', '■ 마감 확인', `· 축의금 봉인 · 인계: ${ck.seal && recv? '완료' : '-'} (인계받은 분: ${recv || ' '})`, `· 동영상: ${ck.video? '종료 · 저장 확인 완료' : '-'}`, `· 특이사항: ${issue}`);
+    if(view && view.member && view.member.name) L.push('', `- ${view.member.name}`);
+    const need = !st.length ? '내역정리 집계를 먼저 불러와야 해요' : !amtOk ? '① 확인한 금액이 내역정리 총액과 맞아야 해요' : !denOk ? '② 모든 권종의 장수(+수표)가 총액과 맞아야 해요' : !ckOk ? `${dn?'③':'②'} 봉인 · 인계받은 분 · 동영상 확인을 체크해 주세요` : '';
+    return {ok: !need, need, amtOk, denOk, ckOk, dn, text: L.join('\n')};
+  }
+  function closeHint(all){ return all.ok ? '모든 확인이 끝났어요. 카카오톡 개인 톡방에 공유하면 오늘 업무가 끝나요.' : '🔒 '+all.need; }
   function closeSheetHTML(){
-    const st = sheet.steps || [], all = closeAll();
-    const body = sheet.loading ? '<div class="pp-day-wait">축의대 내역정리 집계를 불러오는 중…</div>'
-      : sheet.err ? `<div class="pp-day-wait">⚠️ ${e(sheet.err)} <button class="pp-btn" data-pp="closeReload">다시 시도</button></div>`
-      : st.map(x=>{ const c = denCheck(x, sheet.den[x.key]); return `<div class="pp-den"><b>💴 권종별 집계${st.length>1? ' · '+e(x.label):''}</b><small>설정서: 금액 확인·기록 후 지폐 권종별 정리 · 지폐를 세어 장수를 입력해 주세요</small>
-          ${x.warn? `<div class="pp-day-warn">⚠️ ${e(x.warn)}</div>`:''}
-          <div class="pp-den-in"><label>5만원권<input inputmode="numeric" data-closeden="${e(x.key)}" data-f="a" value="${e(c.a)}" placeholder="0">장</label><label>1만원권<input inputmode="numeric" data-closeden="${e(x.key)}" data-f="b" value="${e(c.b)}" placeholder="0">장</label><label>5천원권<input inputmode="numeric" data-closeden="${e(x.key)}" data-f="c" value="${e(c.c)}" placeholder="0">장</label><label>1천원권<input inputmode="numeric" data-closeden="${e(x.key)}" data-f="d" value="${e(c.d)}" placeholder="0">장</label><label>수표<input class="w" inputmode="numeric" data-closeden="${e(x.key)}" data-f="chk" value="${e(c.chk)}" placeholder="0">원</label><label>달러<input inputmode="decimal" data-closeden="${e(x.key)}" data-f="usd" value="${e(c.usd)}" placeholder="0">USD</label><label class="etc">기타 권종<input class="t" data-closeden="${e(x.key)}" data-f="etc" value="${e(c.etc)}" placeholder="예: 엔화 1만엔 1장"></label></div><div class="den-note">5천원권 · 1천원권 · 수표는 있을 때만 · 달러와 기타 권종은 보고 문구에만 들어가고 검산 금액에서는 빠져요</div>
-          <div class="pp-den-msg ${c.ok?'ok':(c.a!==''&&c.b!==''?'bad':'')}" data-closemsg="${e(x.key)}">${e(c.msg)}</div></div>`; }).join('');
-    return `<div class="pw-sheet-bg" data-pp="sheetClose"></div><div class="pw-sheet"><div class="pw-sheet-h"><b>💬 마감 보고 · 권종별 검산</b><button data-pp="sheetClose">✕</button></div>
-      ${body}
-      ${st.length? `<button class="pp-btn" data-pp="closeReload" style="margin-top:8px;">↻ 최신 집계로 새로고침</button>
-      <textarea id="pwMsg" rows="12">${e(all.text)}</textarea>
-      <div class="pw-close-acts ${all.ok?'':'locked'}"><button class="pw-kakao-btn" data-pp="shareText">카카오톡으로 공유하기</button>
-      <button class="pp-btn" data-pp="copyMsg" style="width:100%;margin-top:8px;">내용 복사</button></div>
-      <p class="pw-sheet-sub" data-closehint>${all.ok? '검산이 끝났어요. 카카오톡 개인 톡방에 공유해 주세요.' : '지폐 장수(+수표)가 내역정리 총액과 맞아야 공유할 수 있어요.'}</p>`:''}</div>`;
+    const st = sheet.steps || [], all = closeAll(), dn = all.dn, ck = sheet.ck || {};
+    const no = k=> ({amt:'①', den:'②', ck: dn?'③':'②', fin: dn?'④':'③'})[k];
+    const head = (k, t, ok, sub)=> `<div class="pw-cs-h ${ok?'ok':''}"><span>${ok?'✓':no(k)}</span><b>${t}</b>${sub? `<small>${sub}</small>`:''}</div>`;
+    if(sheet.loading) return `<div class="pw-sheet-bg" data-pp="sheetClose"></div><div class="pw-sheet"><div class="pw-sheet-h"><b>📝 마감보고 · 최종 확인</b><button data-pp="sheetClose">✕</button></div><div class="pp-day-wait">축의대 내역정리에 입력된 금액을 불러오는 중…</div></div>`;
+    if(sheet.err || !st.length) return `<div class="pw-sheet-bg" data-pp="sheetClose"></div><div class="pw-sheet"><div class="pw-sheet-h"><b>📝 마감보고 · 최종 확인</b><button data-pp="sheetClose">✕</button></div>
+      <div class="pp-day-wait">⚠️ ${e(sheet.err || '내역정리 집계가 없어요')}<br><button class="pp-btn" data-pp="closeReload" style="margin-top:8px;">↻ 다시 불러오기</button></div>
+      <button class="pp-btn" data-pp="closeManual" style="width:100%;margin-top:10px;">집계 없이 직접 작성해서 보내기</button>
+      <p class="pw-sheet-sub">내역정리 입력이 끝났는지 먼저 확인해 주세요. 계속 안 되면 직접 작성해서 보내고 대표에게 알려주세요.</p></div>`;
+    const amt = st.map(x=>{ const s = closeStat(x), a = amtCheck(x); return `<div class="pw-cs-side">
+        ${st.length>1? `<div class="pw-cs-lb">${e(x.label)}</div>`:''}
+        ${x.warn? `<div class="pp-day-warn">⚠️ ${e(x.warn)}</div>`:''}
+        <div class="pw-cs-stat"><div><small>내역정리 접수금액</small><b>${s.total!==null&&s.total!==undefined? wonF(s.total)+'원':'-'}</b></div><div><small>하객</small><b>${s.guests!==undefined? e(s.guests)+'명':'-'}</b></div><div><small>식권 잔량 대인/소인</small><b>${s.remainAdult!==undefined? e(s.remainAdult)+'/'+e(s.remainChild):'-'}</b></div></div>
+        <label class="pw-cs-amt">직접 확인한 금액<input inputmode="numeric" data-closeamt="${e(x.key)}" value="${e(a.v? wonF(a.v):'')}" placeholder="0"><em>원</em></label>
+        <div class="pp-den-msg ${a.ok?'ok':(a.bad?'bad':'')}" data-amtmsg="${e(x.key)}">${e(a.msg)}</div></div>`; }).join('');
+    const den = dn ? st.map(x=>{ const c = denCheck(x, sheet.den[x.key]); return `<div class="pp-den">${st.length>1? `<b>${e(x.label)}</b>`:''}
+          <div class="pp-den-in"><label>5만원권<input inputmode="numeric" data-closeden="${e(x.key)}" data-f="a" value="${e(c.a)}" placeholder="0">장</label><label>1만원권<input inputmode="numeric" data-closeden="${e(x.key)}" data-f="b" value="${e(c.b)}" placeholder="0">장</label><label>5천원권<input inputmode="numeric" data-closeden="${e(x.key)}" data-f="c" value="${e(c.c)}" placeholder="0">장</label><label>1천원권<input inputmode="numeric" data-closeden="${e(x.key)}" data-f="d" value="${e(c.d)}" placeholder="0">장</label><label>수표<input class="w" inputmode="numeric" data-closeden="${e(x.key)}" data-f="chk" value="${e(c.chk)}" placeholder="0">원</label><label>달러<input inputmode="decimal" data-closeden="${e(x.key)}" data-f="usd" value="${e(c.usd)}" placeholder="0">USD</label><label class="etc">기타 권종<input class="t" data-closeden="${e(x.key)}" data-f="etc" value="${e(c.etc)}" placeholder="예: 엔화 1만엔 1장"></label></div>
+          <div class="pp-den-msg ${c.ok?'ok':(c.a!==''&&c.b!==''?'bad':'')}" data-closemsg="${e(x.key)}">${e(c.msg)}</div></div>`; }).join('') : '';
+    return `<div class="pw-sheet-bg" data-pp="sheetClose"></div><div class="pw-sheet"><div class="pw-sheet-h"><b>📝 마감보고 · 최종 확인</b><button data-pp="sheetClose">✕</button></div>
+      <p class="pw-sheet-sub" style="margin:0 0 10px;">축의대 내역정리에 마지막으로 입력된 금액을 자동으로 불러왔어요. 실물과 한 번 더 맞춰본 뒤 보고해요.</p>
+      <div class="pw-cs" data-cs="amt">${head('amt', '금액 더블체크', all.amtOk, '내역정리 총액 = 직접 확인한 금액')}${amt}<button class="pw-cs-re" data-pp="closeReload">↻ 최신 금액 다시 불러오기</button></div>
+      ${dn? `<div class="pw-cs" data-cs="den">${head('den', '권종별 장수 검산', all.denOk, '계약자가 권종별 정리를 선택했어요 · 모든 권종을 세어 입력')}${den}<div class="pw-sheet-sub">5만 · 1만 · 5천 · 1천원권 장수 + 수표 = 내역정리 총액 · 달러와 기타 권종은 보고에만 적고 검산에서는 빠져요</div></div>`:''}
+      <div class="pw-cs" data-cs="ck">${head('ck', '마감 확인', all.ckOk, '')}
+        <label class="pw-cs-ck"><input type="checkbox" data-closeck="seal" ${ck.seal?'checked':''}> 축의금 봉인 · 인계 완료</label>
+        <label class="pw-cs-in">인계받은 분<input data-closef="recv" value="${e(sheet.recv||'')}" placeholder="예: 신랑 어머님 김OO"></label>
+        <label class="pw-cs-ck"><input type="checkbox" data-closeck="video" ${ck.video?'checked':''}> 동영상 종료 · 저장 확인</label>
+        <label class="pw-cs-in">특이사항<input data-closef="issue" value="${e(sheet.issue||'')}" placeholder="없음"></label></div>
+      <div class="pw-cs" data-cs="fin">${head('fin', '최종 보고', all.ok, '')}
+        <textarea id="pwMsg" rows="12">${e(all.text)}</textarea>
+        <div class="pw-close-acts ${all.ok?'':'locked'}"><button class="pw-kakao-btn" data-pp="shareText">카카오톡으로 최종 보고 공유</button>
+        <button class="pp-btn" data-pp="copyMsg" style="width:100%;margin-top:8px;">내용 복사</button></div>
+        <p class="pw-sheet-sub" data-closehint>${e(closeHint(all))}</p></div></div>`;
+  }
+  function closeRefresh(){
+    const all = closeAll();
+    (sheet.steps||[]).forEach(x=>{ const a = amtCheck(x), m = root.querySelector(`[data-amtmsg="${CSS.escape(x.key)}"]`); if(m){ m.textContent = a.msg; m.className = 'pp-den-msg '+(a.ok?'ok':(a.bad?'bad':'')); } });
+    const mark = (k, ok)=>{ const h = root.querySelector(`[data-cs="${k}"] .pw-cs-h`); if(h){ h.classList.toggle('ok', !!ok); const sp = h.querySelector('span'); if(sp) sp.textContent = ok? '✓' : ({amt:'①', den:'②', ck: all.dn?'③':'②', fin: all.dn?'④':'③'})[k]; } };
+    mark('amt', all.amtOk); mark('den', all.denOk); mark('ck', all.ckOk); mark('fin', all.ok);
+    const ta = document.getElementById('pwMsg'); if(ta) ta.value = all.text;
+    const ac = root.querySelector('.pw-close-acts'); if(ac) ac.classList.toggle('locked', !all.ok);
+    const h = root.querySelector('[data-closehint]'); if(h) h.textContent = closeHint(all);
   }
   function openCompose(mid, step){
     const {ev} = workEvent(); const rid = (sheet && sheet.rid) || (ev && ev.recordId); const x = eventById(rid); step = step || '';
     const m = msgById(mid); if(!m || !x){ toast('예식 정보를 찾지 못했어요'); return; }
-    if(mid==='m_close' && isDenomEv(x)){ sheet = {mode:'close', rid, mid, step, den:{}, steps:null, err:'', loading:false}; render(); closeLoad(); return; }
+    if(mid==='m_close' && !(sheet && sheet.manual)){ sheet = {mode:'close', rid, mid, step, den:{}, amt:{}, ck:{}, recv:'', issue:'', steps:null, err:'', loading:false}; render(); closeLoad(); return; }
     sheet = {mode:'compose', rid, mid, step, base: fillMsg(m.body, x), vals: {}, ticket: ''};
     sheet.text = fillFields(sheet.base, Object.fromEntries((m.fields||[]).map(f=>[f.key,'']))) ;
     render();
@@ -3640,7 +3716,8 @@ const PartnerPortal = (function(){
       return;
     }
     if(act==='closeReload'){ closeLoad(); return; }
-    if((act==='copyMsg' || act==='shareText') && sheet && sheet.mode==='close' && !closeAll().ok){ toast('권종별 장수를 입력하고 총액과 검산이 맞아야 공유할 수 있어요'); return; }
+    if(act==='closeManual'){ const s0 = sheet; sheet = {manual:true, rid: s0.rid}; openCompose('m_close', s0.step); return; }
+    if((act==='copyMsg' || act==='shareText') && sheet && sheet.mode==='close' && !closeAll().ok){ toast(closeAll().need || '확인을 모두 마쳐야 공유할 수 있어요'); return; }
     if(act==='copyMsg' || act==='shareText'){
       const ta = document.getElementById('pwMsg'); const text = ta ? ta.value : (sheet && sheet.text) || '';
       if(sheet) sheet.text = text;
@@ -3721,16 +3798,15 @@ const PartnerPortal = (function(){
       return;
     }
     if(!sheet) return;
-    if(sheet.mode==='close' && ev.target.dataset && ev.target.dataset.closeden){
-      const k = ev.target.dataset.closeden; ev.target.value = ev.target.dataset.f==='etc' ? ev.target.value : ev.target.dataset.f==='usd' ? String(ev.target.value||'').replace(/[^0-9.]/g,'') : String(ev.target.value||'').replace(/[^0-9]/g,'');
-      sheet.den[k] = Object.assign({}, sheet.den[k], {[ev.target.dataset.f]: ev.target.value});
-      const x = (sheet.steps||[]).find(q=> q.key===k); if(!x) return;
-      const c = denCheck(x, sheet.den[k]), all = closeAll();
-      const m = root.querySelector(`[data-closemsg="${CSS.escape(k)}"]`); if(m){ m.textContent = c.msg; m.className = 'pp-den-msg '+(c.ok?'ok':(c.a!==''&&c.b!==''?'bad':'')); }
-      const ta = document.getElementById('pwMsg'); if(ta) ta.value = all.text;
-      const ac = root.querySelector('.pw-close-acts'); if(ac) ac.classList.toggle('locked', !all.ok);
-      const h = root.querySelector('[data-closehint]'); if(h) h.textContent = all.ok ? '검산이 끝났어요. 카카오톡 개인 톡방에 공유해 주세요.' : '지폐 장수(+수표)가 내역정리 총액과 맞아야 공유할 수 있어요.';
-      return;
+    if(sheet.mode==='close' && ev.target.dataset && (ev.target.dataset.closeden || ev.target.dataset.closeamt || ev.target.dataset.closeck || ev.target.dataset.closef)){
+      const d = ev.target.dataset;
+      if(d.closeden){ ev.target.value = d.f==='etc' ? ev.target.value : d.f==='usd' ? String(ev.target.value||'').replace(/[^0-9.]/g,'') : String(ev.target.value||'').replace(/[^0-9]/g,'');
+        sheet.den[d.closeden] = Object.assign({}, sheet.den[d.closeden], {[d.f]: ev.target.value});
+        const x = (sheet.steps||[]).find(q=> q.key===d.closeden); if(x){ const c = denCheck(x, sheet.den[d.closeden]); const m = root.querySelector(`[data-closemsg="${CSS.escape(d.closeden)}"]`); if(m){ m.textContent = c.msg; m.className = 'pp-den-msg '+(c.ok?'ok':(c.a!==''&&c.b!==''?'bad':'')); } } }
+      if(d.closeamt){ const raw = String(ev.target.value||'').replace(/[^0-9]/g,''); sheet.amt = sheet.amt||{}; sheet.amt[d.closeamt] = raw; const f = raw? wonF(raw) : ''; if(ev.target.value!==f){ ev.target.value = f; try{ ev.target.setSelectionRange(f.length, f.length); }catch(_){} } }
+      if(d.closeck){ sheet.ck = Object.assign({}, sheet.ck, {[d.closeck]: ev.target.checked}); }
+      if(d.closef){ sheet[d.closef] = ev.target.value; }
+      closeRefresh(); return;
     }
     const fk = ev.target.dataset && ev.target.dataset.ppfield;
     if(fk){ // 대인·소인 수량 입력 → 보고 문구에 바로 반영
